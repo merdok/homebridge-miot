@@ -84,6 +84,7 @@ Example configuration:
 For the plugin to work the device token is required. For methods on how to find the token refer to this guide [obtaining mi device token](https://github.com/merdok/homebridge-miot/blob/master/obtain_token.md).
 
 ### Configuration
+Keep in mind that your device needs to support the feature which you enable, otherwise you will not see any effect.
 #### Platform configuration fields
 - `platform` [required]
 Should always be **"miot"**.
@@ -107,7 +108,6 @@ The device state background polling interval in seconds. **Default: 5**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 #### Fan specific configuration fields
-Keep in mind that your fan needs to support the feature which you enable, otherwise you will not see any effect.
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the fan buzzer. **Default: true**
 - `ledControl` [optional]
@@ -136,7 +136,6 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
   - Tapping the active oscillation angle button will disable oscillation completely
 #### Heater specific configuration fields
-Keep in mind that your fan needs to support the feature which you enable, otherwise you will not see any effect.
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the heater buzzer. **Default: true**
 - `ledControl` [optional]
