@@ -146,6 +146,13 @@
             "items": {
               "type": "integer"
             }
+          },
+          "childLockControl": {
+            "title": "Buzzer control service",
+            "description": "Whether to show a child lock control button.",
+            "type": "boolean",
+            "default": false,
+            "required": false
           }
         }
       }

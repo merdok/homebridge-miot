@@ -10,7 +10,7 @@
 
 </span>
 
-`homebridge-miot` is a plugin for homebridge which allows you to control any device supporting the miot protocol from Xiaomi! Currently only fans are supported but more devices will be added over time.
+`homebridge-miot` is a plugin for homebridge which allows you to control any device supporting the miot protocol from Xiaomi! Currently only fans and heaters are supported but more devices will be added over time.
 The goal is to add Homekit support to miot devices and make them fully controllable from the native Homekit iOS app and Siri.
 
 #### Since the plugin was made with the intention to implement new devices easy and fast, it should be pretty straight forward to do that. If your device is not supported please create a request and specify the device model and type.
@@ -22,6 +22,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 
 ### Supported device types
 * Fans
+* Heaters
 
 More device types will be added!
 
@@ -108,7 +109,7 @@ Enables additional more detailed debug log. Useful when trying to figure out iss
 #### Fan specific configuration fields
 Keep in mind that your fan needs to support the feature which you enable, otherwise you will not see any effect.
 - `buzzerControl` [optional]
-Whether the buzzer service is enabled. This allows to turn on/off the fan buzzer. On Smartmi fans the rotation direction switch can be used to select between loud or quiet buzzer level. **Default: true**
+Whether the buzzer service is enabled. This allows to turn on/off the fan buzzer. **Default: true**
 - `ledControl` [optional]
 Whether the led service is enabled. This allows to turn on/off the fan LED. **Default: true**
 - `horizontalSwingControl` [optional]
@@ -134,6 +135,16 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Set an array of numeric values. Possible values depend on the fan model
   - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
   - Tapping the active oscillation angle button will disable oscillation completely
+#### Heater specific configuration fields
+Keep in mind that your fan needs to support the feature which you enable, otherwise you will not see any effect.
+- `buzzerControl` [optional]
+Whether the buzzer service is enabled. This allows to turn on/off the heater buzzer. **Default: true**
+- `ledControl` [optional]
+Whether the led service is enabled. This allows to turn on/off the heater LED. **Default: true**
+- `childLockControl` [optional]
+Whether the child lock service is enabled. This allows to turn on/off the child lock. **Default: false**
+- `shutdownTimer` [optional]
+Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

@@ -9,3 +9,6 @@
 * dmaker.fan.p10 (Mi Smart Standing Fan 2)
 * dmaker.fan.p11 (Mi Smart Standing Fan Pro)
 * dmaker.fan.p15 (Mi Smart Standing Fan Pro EU)
+
+### Heaters
+* zhimi.heater.za2 (Smartmi Electric Heater 1S)
