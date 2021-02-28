@@ -1,0 +1,39 @@
+{
+  "name": "homebridge-miot",
+  "version": "0.1.0",
+  "description": "Homebridge plugin for Xiaomi Smartmi Fans",
+  "main": "index.js",
+  "engines": {
+    "node": ">=12.9.0",
+    "homebridge": ">=1.0.0"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "xiaomi",
+    "smartmi",
+    "fan",
+    "smart",
+    "mi",
+    "zhimi",
+    "dmaker",
+    "homekit"
+  ],
+  "author": "merdok",
+  "funding": {
+    "type" : "paypal",
+    "url" : "https://paypal.me/merdokdev"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "miio": "^0.15.6",
+    "mkdirp": "^0.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/merdok/homebridge-xiaomi-fan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/merdok/homebridge-xiaomi-fan/issues"
+  },
+  "homepage": "https://github.com/merdok/homebridge-xiaomi-fan#readme"
+}
