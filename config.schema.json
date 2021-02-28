@@ -153,6 +153,20 @@
             "type": "boolean",
             "default": false,
             "required": false
+          },
+          "screenControl": {
+            "title": "Screen control service",
+            "description": "Whether to show screen dim/brighten control button.",
+            "type": "boolean",
+            "default": true,
+            "required": false
+          },
+          "dryModeControl": {
+            "title": "Dry mode control service",
+            "description": "Whether to show a dry mode control button.",
+            "type": "boolean",
+            "default": true,
+            "required": false
           }
         }
       }

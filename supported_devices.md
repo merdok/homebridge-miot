@@ -12,3 +12,7 @@
 
 ### Heaters
 * zhimi.heater.za2 (Smartmi Electric Heater 1S)
+
+### Humidifiers
+* zhimi.humidifier.ca4 (Smartmi Evaporative Humidifier 2)
+* deerma.humidifier.jsq4 (Mijia Pure Smart Humidifier)
