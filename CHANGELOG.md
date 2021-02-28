@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2021-03-01
+### Added
+- Humidifier support
+
+### Changed
+- Lots of under the hood improvements
+
+### Fixed
+- Fixed some issue with fan accessories
+- Fixed some issues with heater accessories
+
 
 ## [0.1.0] - 2021-02-28
 ### Initial release
