@@ -147,13 +147,6 @@
               "type": "integer"
             }
           },
-          "childLockControl": {
-            "title": "Buzzer control service",
-            "description": "Whether to show a child lock control button.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
           "screenControl": {
             "title": "Screen control service",
             "description": "Whether to show screen dim/brighten control button.",
@@ -166,6 +159,27 @@
             "description": "Whether to show a dry mode control button.",
             "type": "boolean",
             "default": true,
+            "required": false
+          },
+          "autoModeControl": {
+            "title": "Auto mode control service",
+            "description": "Whether to show a auto mode control button.",
+            "type": "boolean",
+            "default": false,
+            "required": false
+          },
+          "sleepModeControl": {
+            "title": "Sleep mode control service",
+            "description": "Whether to show a sleep mode control button.",
+            "type": "boolean",
+            "default": false,
+            "required": false
+          },
+          "favoriteModeControl": {
+            "title": "Favorite mode control service",
+            "description": "Whether to show a favorite mode control button.",
+            "type": "boolean",
+            "default": false,
             "required": false
           }
         }

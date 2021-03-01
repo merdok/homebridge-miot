@@ -143,8 +143,6 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
 Whether the buzzer service is enabled. This allows to turn on/off the heater buzzer. **Default: true**
 - `ledControl` [optional]
 Whether the led service is enabled. This allows to turn on/off the heater LED. **Default: true**
-- `childLockControl` [optional]
-Whether the child lock service is enabled. This allows to turn on/off the child lock. **Default: false**
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 #### Humidifier specific configuration fields
