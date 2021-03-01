@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.3.0] - 2021-03-02
+### Added
+- Air Purifier support
+- Added 5 new heater devices
+
+### Changed
+- Improved heater support
+- More under the hood improvements
+
+### Fixed
+- Fixed some issues with heater accessories
+
+
 ## [0.2.0] - 2021-03-01
 ### Added
 - Humidifier support

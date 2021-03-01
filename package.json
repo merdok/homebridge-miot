@@ -1,6 +1,6 @@
 {
   "name": "homebridge-miot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Homebridge plugin for devices supporting the miot protocol",
   "main": "index.js",
   "engines": {
@@ -19,7 +19,10 @@
     "dmaker",
     "homekit",
     "heater",
-    "humidifier"
+    "humidifier",
+    "air purifier",
+    "air",
+    "purifier"
   ],
   "author": "merdok",
   "funding": {
