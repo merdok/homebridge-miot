@@ -10,9 +10,10 @@
 
 </span>
 
-`homebridge-miot` is a plugin for homebridge which allows you to control any device supporting the miot protocol from Xiaomi! Currently only fans, heaters and humidifiers are supported but more devices will be added over time.
+`homebridge-miot` is a plugin for homebridge which allows you to control any device supporting the miot protocol from Xiaomi! More devices will be added over time.
 The goal is to add Homekit support to miot devices and make them fully controllable from the native Homekit iOS app and Siri.
 
+#### This is a Work in Progress. Feedback and contribution is helpful and will improve the plugin!
 #### Since the plugin was made with the intention to implement new devices easy and fast, it should be pretty straight forward to do that. If your device is not supported please create a request and specify the device model and type.
 
 ### Features
@@ -24,6 +25,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Fans
 * Heaters
 * Humidifiers
+* Air Purifiers
 
 More device types will be added!
 
@@ -156,6 +158,19 @@ Whether the screen service is enabled. This allows to dim or brighten up the scr
 Whether the dry mode service is enabled. This allows to quickly turn on/off the dry mode. **Default: true**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
+#### Air Purifier specific configuration fields
+- `buzzerControl` [optional]
+Whether the buzzer service is enabled. This allows to turn on/off the humidifier buzzer. **Default: true**
+- `ledControl` [optional]
+Whether the led service is enabled. This allows to turn on/off the humidifier LED. **Default: true**
+- `autoModeControl` [optional]
+Whether the auto mode service is enabled. This allows quickly enable the auto mode. **Default: false**
+- `sleepModeControl` [optional]
+Whether the sleep mode service is enabled. This allows quickly enable the sleep mode. **Default: false**
+- `favoriteModeControl` [optional]
+Whether the favorite mode service is enabled. This allows quickly enable the favorite mode. **Default: false**
+- `fanLevelControl` [optional]
+Show fan level switches which allow to change the fan level. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

@@ -16,3 +16,9 @@
 ### Humidifiers
 * zhimi.humidifier.ca4 (Smartmi Evaporative Humidifier 2)
 * deerma.humidifier.jsq4 (Mijia Pure Smart Humidifier)
+
+### Air Purifiers
+* zhimi.airpurifier.mb4 (Xiaomi Mi Air Purifier 3C)
+* zhimi.airpurifier.mb3 (Xiaomi Mi Air Purifier 3H)
+* zhimi.airpurifier.vb2 (Xiaomi Mi Air Purifier Pro H)
+* zhimi.airpurifier.za1 (Smartmi Air Purifier)
