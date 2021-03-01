@@ -12,6 +12,11 @@
 
 ### Heaters
 * zhimi.heater.za2 (Smartmi Electric Heater 1S)
+* zhimi.heater.ma2 (Xiaomi Mi Smart Space Heater S)
+* zhimi.heater.ma3 (Xiaomi Mi Smart Baseboard Heater E)
+* zhimi.heater.mc2 (Xiaomi Mi Smart Space Heater S CN)
+* zhimi.heater.nb1 (Smartmi Smart Fan Heater )
+* zhimi.heater.zb1 (Smartmi Smart Convector Heater 1S)
 
 ### Humidifiers
 * zhimi.humidifier.ca4 (Smartmi Evaporative Humidifier 2)

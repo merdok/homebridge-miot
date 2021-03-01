@@ -145,6 +145,8 @@ Whether the buzzer service is enabled. This allows to turn on/off the heater buz
 Whether the led service is enabled. This allows to turn on/off the heater LED. **Default: true**
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
+- `heatLevelControl` [optional]
+Show heat level switches which allow to change the heat level. **Default: false**
 #### Humidifier specific configuration fields
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the humidifier buzzer. **Default: true**

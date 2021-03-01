@@ -123,6 +123,7 @@
             "title": "Fan level service",
             "description": "Show fan level switches which allow to change the fan level.",
             "type": "boolean",
+            "default": true,
             "required": false
           },
           "ioniserControl": {
@@ -146,6 +147,13 @@
             "items": {
               "type": "integer"
             }
+          },
+          "heatLevelControl": {
+            "title": "Heat level service",
+            "description": "Show heat level switches which allow to change the heat level.",
+            "type": "boolean",
+            "default": false,
+            "required": false
           },
           "screenControl": {
             "title": "Screen control service",
