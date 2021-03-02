@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [0.3.0] - 2021-03-02
+### Fixed
+- Fixed some protocol typos which caused issues
+
+
+## [0.3.0] - 2021-03-02
 ### Added
 - Air Purifier support
 - Added 5 new heater devices
