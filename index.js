@@ -167,7 +167,7 @@ class xiaomiMiotDevice {
   saveDeviceInfo() {
     // save model name and deviceId
     if (this.miotDevice) {
-      this.cachedDeviceInfo.model = this.miotDevice.getFanModel();
+      this.cachedDeviceInfo.model = this.miotDevice.getModel();
       this.cachedDeviceInfo.deviceId = this.miotDevice.getDeviceId();
       fs.writeFile(this.deviceInfoFile, JSON.stringify(this.cachedDeviceInfo), (err) => {
         if (err) {
