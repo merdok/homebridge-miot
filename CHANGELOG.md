@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.3.5] - 2021-03-06
+### Fixed
+- Use proper property for favorite speed on Air Purifier devices
+
+
 ## [0.3.4] - 2021-03-06
 ### Fixed
 - Fixed a naming issue
