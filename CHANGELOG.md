@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.3.11] - 2021-03-06
+### Fixed
+- Fixed air purifier led control status
+
+
 ## [0.3.10] - 2021-03-06
 ### Fixed
 - Fixed air purifier led control
