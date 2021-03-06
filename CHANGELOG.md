@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.3.7] - 2021-03-06
+### Fixed
+- Fixed a small typo
+
+
 ## [0.3.6] - 2021-03-06
 ### Fixed
 - Calculate the favorite speed as percentage based on the supported range on supported air purifier devices
