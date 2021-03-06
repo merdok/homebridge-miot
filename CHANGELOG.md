@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.3.1] - 2021-03-06
+### Fixed
+- Fixed some more protocol typos which caused issues
+
+### Changed
+- Improved "use time" handling on supported devices
+
+
 ## [0.3.1] - 2021-03-02
 ### Fixed
 - Fixed some protocol typos which caused issues
