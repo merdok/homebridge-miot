@@ -7,12 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.3.4] - 2021-03-06
+### Fixed
+- Fixed a naming issue
+
+
 ## [0.3.3] - 2021-03-06
 ### Fixed
 - Fixed accessory creation issue
 
 
-## [0.3.1] - 2021-03-06
+## [0.3.2] - 2021-03-06
 ### Fixed
 - Fixed some more protocol typos which caused issues
 
