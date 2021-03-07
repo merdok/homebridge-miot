@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.4.0] - 2021-03-07
+### Fixed
+- Fixed some issue with Heater devices
+- Fixed small issue with fan levels on Fan devices
+
+### Changed
+- Improve the LED control service for all devices
+- Cleanup the device modules
+
+
 ## [0.3.12] - 2021-03-06
 ### Fixed
 - Fixed a typo
