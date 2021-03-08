@@ -110,11 +110,11 @@ The directory where the device info will be stored. **Default: "~/.homebridge/.x
 The device state background polling interval in seconds. **Default: 5**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
-#### Fan specific configuration fields
 - `buzzerControl` [optional]
-Whether the buzzer service is enabled. This allows to turn on/off the fan buzzer. **Default: true**
+Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
-Whether the led service is enabled. This allows to turn on/off the fan LED. **Default: true**
+Whether the led service is enabled. This allows to turn on/off the device LED. **Default: true**
+#### Fan specific configuration fields
 - `horizontalSwingControl` [optional]
 Shows an additional switch to quickly enable/disable horizontal swing mode. **Default: false**
 - `verticalSwingControl` [optional]
@@ -139,19 +139,11 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
   - Tapping the active oscillation angle button will disable oscillation completely
 #### Heater specific configuration fields
-- `buzzerControl` [optional]
-Whether the buzzer service is enabled. This allows to turn on/off the heater buzzer. **Default: true**
-- `ledControl` [optional]
-Whether the led service is enabled. This allows to turn on/off the heater LED. **Default: true**
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `heatLevelControl` [optional]
 Show heat level switches which allow to change the heat level. **Default: false**
 #### Humidifier specific configuration fields
-- `buzzerControl` [optional]
-Whether the buzzer service is enabled. This allows to turn on/off the humidifier buzzer. **Default: true**
-- `ledControl` [optional]
-Whether the led service is enabled. This allows to turn on/off the humidifier LED. **Default: true**
 - `screenControl` [optional]
 Whether the screen service is enabled. This allows to dim or brighten up the screen. **Default: true**
 - `dryModeControl` [optional]
@@ -159,10 +151,6 @@ Whether the dry mode service is enabled. This allows to quickly turn on/off the 
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
 #### Air Purifier specific configuration fields
-- `buzzerControl` [optional]
-Whether the buzzer service is enabled. This allows to turn on/off the humidifier buzzer. **Default: true**
-- `ledControl` [optional]
-Whether the led service is enabled. This allows to turn on/off the humidifier LED. **Default: true**
 - `autoModeControl` [optional]
 Whether the auto mode service is enabled. This allows quickly enable the auto mode. **Default: false**
 - `sleepModeControl` [optional]
