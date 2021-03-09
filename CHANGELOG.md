@@ -7,12 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.4.5] - 2021-03-10
+### Added
+- Added filter maintenance info to air purifier devices
+
+### Changed
+- Improve the miot protocol
+- Store more info for miot properties
+- Remove some capabilities in favor of property information
+- Adjusted README
+- Code cleanup
+
+
 ## [0.4.0] - 2021-03-07
 ### Fixed
 - Fixed some issue with Heater devices
 - Fixed small issue with fan levels on Fan devices
 
 ### Changed
+- Improve the LED control service for all devices
 - Improve the LED control service for all devices
 - Cleanup the device modules
 
