@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.4.6] - 2021-03-11
+### Fixed
+- Fix protocol property setting
+
+
 ## [0.4.5] - 2021-03-10
 ### Added
 - Added filter maintenance info to air purifier devices
