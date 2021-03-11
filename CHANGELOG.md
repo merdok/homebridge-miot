@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.4.7] - 2021-03-12
+### Added
+- Emulate stepless fan control on fans not supporting that feature
+
+### Fixed
+- Fix warnings on heater devices
+
+### Changed
+- Improved heater module
+
+
 ## [0.4.6] - 2021-03-11
 ### Fixed
 - Fix protocol property setting
