@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.4.8] - 2021-03-15
+### Changed
+- Improvements to the protocol
+
+
 ## [0.4.7] - 2021-03-12
 ### Added
 - Emulate stepless fan control on fans not supporting that feature
