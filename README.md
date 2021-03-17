@@ -139,6 +139,8 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
   - Tapping the active oscillation angle button will disable oscillation completely
 #### Heater specific configuration fields
+- `swingControl` [optional]
+Shows an additional switch to quickly enable/disable swing mode. **Default: false**
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `heatLevelControl` [optional]
