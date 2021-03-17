@@ -114,6 +114,8 @@ Enables additional more detailed debug log. Useful when trying to figure out iss
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
 Whether the led service is enabled. This allows to turn on/off the device LED. **Default: true**
+- `childLockControl` [optional]
+Whether it is possible to control the child lock. Shows a switch on the device accessory to enable/disable the child lock. **Default: true**
 #### Fan specific configuration fields
 - `horizontalSwingControl` [optional]
 Shows an additional switch to quickly enable/disable horizontal swing mode. **Default: false**

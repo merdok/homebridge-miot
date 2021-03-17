@@ -70,6 +70,13 @@
             "default": true,
             "required": false
           },
+          "childLockControl": {
+            "title": "Control the child lock",
+            "description": "Shows a switch on the device accessory which control the child lock.",
+            "type": "boolean",
+            "default": true,
+            "required": false
+          },
           "ledControl": {
             "title": "Led control service",
             "description": "Whether to show led control buttons.",
