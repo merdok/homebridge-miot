@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.5.0] - 2021-03-22
+### Added
+- Added support for ceiling fan devices (opple.light.fanlight, yeelink.light.fancl1, yeelink.light.fancl2)
+
+### Changed
+- Implemented proper idle state for air purifiers
+- Implemented proper idle state for fans
+- Heaters now have a swing mode service
+- Child Lock control can now be disabled
+- When setting rotation speed on air purifiers, the device will not automatically switch to favorite mode if supported
+- Improved air quality sensor on air purifiers
+
+
 ## [0.4.9] - 2021-03-18
 ### Added
 - Added support for the zhimi.heater.na1 heater device
