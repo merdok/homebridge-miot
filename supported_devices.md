@@ -10,6 +10,11 @@
 * dmaker.fan.p11 (Mi Smart Standing Fan Pro)
 * dmaker.fan.p15 (Mi Smart Standing Fan Pro EU)
 
+### Ceiling Fans
+* opple.light.fanlight (Opple Ceiling Fan Light)
+* yeelink.light.fancl1 (Yeelight Smart Ceiling Fan)
+* yeelink.light.fancl2 (Yeelight Smart Ceiling Fan S2001)
+
 ### Heaters
 * zhimi.heater.za2 (Smartmi Electric Heater 1S)
 * zhimi.heater.ma2 (Xiaomi Mi Smart Space Heater S)

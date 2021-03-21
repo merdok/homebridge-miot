@@ -23,6 +23,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 
 ### Supported device types
 * Fans
+* Ceiling Fans
 * Heaters
 * Humidifiers
 * Air Purifiers
@@ -140,6 +141,9 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Set an array of numeric values. Possible values depend on the fan model
   - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
   - Tapping the active oscillation angle button will disable oscillation completely
+#### Ceiling Fan specific configuration fields
+- `fanLevelControl` [optional]
+Show fan level switches which allow to change the fan level. **Default: true**
 #### Heater specific configuration fields
 - `swingControl` [optional]
 Shows an additional switch to quickly enable/disable swing mode. **Default: false**
