@@ -41,7 +41,7 @@
           },
           "model": {
             "title": "The device model",
-            "description": "The model of the device. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
+            "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
             "type": "string",
             "required": false
           },
