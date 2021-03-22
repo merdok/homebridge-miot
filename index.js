@@ -56,6 +56,8 @@ class xiaomiMiotDevice {
 
     this.logger.info(`Got device configuration, initializing device with name: ${this.name}`);
 
+    // set deep debug log
+    this.logger.setDeepDebugLogEnabled(this.deepDebugLog);
 
     // check if prefs directory ends with a /, if not then add it
     if (this.prefsDir.endsWith('/') === false) {
