@@ -118,7 +118,7 @@ class xiaomiMiotDevice {
       }
     });
 
-    this.miotController.on(Events.DEVICE_PROPERTIES_UPDATED, (miotDevice) => {
+    this.miotController.on(Events.DEVICE_ALL_PROPERTIES_UPDATED, (miotDevice) => {
       if (this.deviceAccesoryObj) {
         this.deviceAccesoryObj.updateDeviceStatus();
       }
