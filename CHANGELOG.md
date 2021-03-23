@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.5.1] - 2021-03-24
+### Changed
+- Lots of under the hood improvements which should enable more features in the future
+
+### Fixed
+- Fixed an illegal value warning for ceiling fans
+- Fixed an error which occurred when tried to control ceiling fans
+- Fixed deepDebugLog actually not having any effect
+
+
 ## [0.5.0] - 2021-03-22
 ### Added
 - Added support for ceiling fan devices (opple.light.fanlight, yeelink.light.fancl1, yeelink.light.fancl2)
