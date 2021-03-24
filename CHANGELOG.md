@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.5.2] - 2021-03-25
+### Fixed
+- Fixed deepDebugLog causing a crash
+
+
 ## [0.5.1] - 2021-03-24
 ### Changed
 - Lots of under the hood improvements which should enable more features in the future
