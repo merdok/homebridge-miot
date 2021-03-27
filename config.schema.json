@@ -203,6 +203,20 @@
             "type": "boolean",
             "default": false,
             "required": false
+          },
+          "fanModeControl": {
+            "title": "Fan mode service",
+            "description": "Show fan mode switches which allow to change the fan mode.",
+            "type": "boolean",
+            "default": false,
+            "required": false
+          },
+          "lightModeControl": {
+            "title": "Light mode service",
+            "description": "Show light mode switches which allow to change the light mode.",
+            "type": "boolean",
+            "default": false,
+            "required": false
           }
         }
       }

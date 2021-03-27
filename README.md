@@ -144,6 +144,10 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
 #### Ceiling Fan specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
+- `fanModeControl` [optional]
+Show fan mode switches which allow to change the fan mode. **Default: false**
+- `lightModeControl` [optional]
+Show light mode switches which allow to change the light mode. **Default: false**
 #### Heater specific configuration fields
 - `swingControl` [optional]
 Shows an additional switch to quickly enable/disable swing mode. **Default: false**
