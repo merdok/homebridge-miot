@@ -5,221 +5,341 @@
   "headerDisplay": "Homebridge plugin for devices using the miot protocol",
   "footerDisplay": "For a detailed description, see the [README](https://github.com/merdok/homebridge-miot#platform-configuration-fields)",
   "schema": {
-    "devices": {
-      "title": "Devices",
-      "type": "array",
-      "required": true,
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "title": "Name",
-            "description": "The name of the device.",
-            "type": "string",
-            "default": "Miot device",
-            "minLength": 1,
-            "required": true
-          },
-          "ip": {
-            "title": "Device ip address",
-            "description": "The ip address of the device.",
-            "type": "string",
-            "format": "ipv4",
-            "required": true
-          },
-          "token": {
-            "title": "Device token",
-            "description": "The token of the device.",
-            "type": "string",
-            "required": true
-          },
-          "deviceId": {
-            "title": "Device id",
-            "description": "The device id of the device.",
-            "type": "string",
-            "required": false
-          },
-          "model": {
-            "title": "The device model",
-            "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
-            "type": "string",
-            "required": false
-          },
-          "prefsDir": {
-            "title": "Prefs directory",
-            "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
-            "type": "string",
-            "required": false
-          },
-          "pollingInterval": {
-            "title": "Background polling interval",
-            "description": "How often to check the status of the device in seconds.",
-            "type": "number",
-            "default": 5,
-            "required": false
-          },
-          "deepDebugLog": {
-            "title": "Enable deep debug log",
-            "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
-            "type": "boolean"
-          },
-          "buzzerControl": {
-            "title": "Buzzer control service",
-            "description": "Whether to show buzzer control buttons.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "childLockControl": {
-            "title": "Control the child lock",
-            "description": "Shows a switch on the device accessory which control the child lock.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "ledControl": {
-            "title": "Led control service",
-            "description": "Whether to show led control buttons.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "horizontalSwingControl": {
-            "title": "Horizontal swing control service",
-            "description": "Shows an additional switch to quickly enable/disable horizontal swing mode.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "verticalSwingControl": {
-            "title": "Vertical swing control service",
-            "description": "Shows a switch to enable/disable vertical swing mode.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "naturalModeControl": {
-            "title": "Natural mode control service",
-            "description": "Whether to show a switch which allows to quickly enable/disable the natural mode.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "sleepModeControl": {
-            "title": "Sleep mode control service",
-            "description": "Whether to show a switch which allows to quickly enable/disable the sleep mode.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "horizontalMoveControl": {
-            "title": "Horizontal move control service",
-            "description": "Whether to show switches which allows to move the fan left or right.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "verticalMoveControl": {
-            "title": "Vertical move control service",
-            "description": "Whether to show switches which allows to move the fan up or down.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "fanLevelControl": {
-            "title": "Fan level service",
-            "description": "Show fan level switches which allow to change the fan level.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "ioniserControl": {
-            "title": "Ioniser control service",
-            "description": "Show a switch which allows to quickly enable/disable the ioniser on your fan.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "shutdownTimer": {
-            "title": "Shutdown timer service",
-            "description": "Show a slider (light bulb) to control the auto shutdown timer.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "horizontalAngleButtons": {
-            "title": "Horizontal angle buttons",
-            "description": "Allows to create buttons that can switch between horizontal oscillation angles.",
-            "type": "array",
-            "items": {
-              "type": "integer"
+    "type": "object",
+    "properties": {
+      "devices": {
+        "title": "Devices",
+        "type": "array",
+        "required": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "description": "The name of the device.",
+              "type": "string",
+              "default": "Miot device",
+              "minLength": 1,
+              "required": true
+            },
+            "ip": {
+              "title": "Device ip address",
+              "description": "The ip address of the device.",
+              "type": "string",
+              "format": "ipv4",
+              "required": true
+            },
+            "token": {
+              "title": "Device token",
+              "description": "The token of the device.",
+              "type": "string",
+              "required": true
+            },
+            "deviceId": {
+              "title": "Device id",
+              "description": "The device id of the device.",
+              "type": "string",
+              "required": false
+            },
+            "model": {
+              "title": "The device model",
+              "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
+              "type": "string",
+              "required": false
+            },
+            "prefsDir": {
+              "title": "Prefs directory",
+              "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
+              "type": "string",
+              "required": false
+            },
+            "pollingInterval": {
+              "title": "Background polling interval",
+              "description": "How often to check the status of the device in seconds.",
+              "type": "number",
+              "default": 5,
+              "required": false
+            },
+            "deepDebugLog": {
+              "title": "Enable deep debug log",
+              "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
+              "type": "boolean"
+            },
+            "buzzerControl": {
+              "title": "Buzzer control service",
+              "description": "Whether to show buzzer control buttons.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "childLockControl": {
+              "title": "Control the child lock",
+              "description": "Shows a switch on the device accessory which control the child lock.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "ledControl": {
+              "title": "Led control service",
+              "description": "Whether to show led control buttons.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "horizontalSwingControl": {
+              "title": "Horizontal swing control service",
+              "description": "Shows an additional switch to quickly enable/disable horizontal swing mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "verticalSwingControl": {
+              "title": "Vertical swing control service",
+              "description": "Shows a switch to enable/disable vertical swing mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "naturalModeControl": {
+              "title": "Natural mode control service",
+              "description": "Whether to show a switch which allows to quickly enable/disable the natural mode.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "sleepModeControl": {
+              "title": "Sleep mode control service",
+              "description": "Whether to show a switch which allows to quickly enable/disable the sleep mode.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "horizontalMoveControl": {
+              "title": "Horizontal move control service",
+              "description": "Whether to show switches which allows to move the fan left or right.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "verticalMoveControl": {
+              "title": "Vertical move control service",
+              "description": "Whether to show switches which allows to move the fan up or down.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "fanLevelControl": {
+              "title": "Fan level service",
+              "description": "Show fan level switches which allow to change the fan level.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "ioniserControl": {
+              "title": "Ioniser control service",
+              "description": "Show a switch which allows to quickly enable/disable the ioniser on your fan.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "shutdownTimer": {
+              "title": "Shutdown timer service",
+              "description": "Show a slider (light bulb) to control the auto shutdown timer.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "horizontalAngleButtons": {
+              "title": "Horizontal angle buttons",
+              "description": "Allows to create buttons that can switch between horizontal oscillation angles.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 360
+              }
+            },
+            "heatLevelControl": {
+              "title": "Heat level service",
+              "description": "Show heat level switches which allow to change the heat level.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "swingControl": {
+              "title": "Heater swing control service",
+              "description": "Shows an additional switch to quickly enable/disable swing mode on supported heaters.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "screenControl": {
+              "title": "Screen control service",
+              "description": "Whether to show screen dim/brighten control button.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "dryModeControl": {
+              "title": "Dry mode control service",
+              "description": "Whether to show a dry mode control button.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "autoModeControl": {
+              "title": "Auto mode control service",
+              "description": "Whether to show a auto mode control button.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "sleepModeControl": {
+              "title": "Sleep mode control service",
+              "description": "Whether to show a sleep mode control button.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "favoriteModeControl": {
+              "title": "Favorite mode control service",
+              "description": "Whether to show a favorite mode control button.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "fanModeControl": {
+              "title": "Fan mode service",
+              "description": "Show fan mode switches which allow to change the fan mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "lightModeControl": {
+              "title": "Light mode service",
+              "description": "Show light mode switches which allow to change the light mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
             }
-          },
-          "heatLevelControl": {
-            "title": "Heat level service",
-            "description": "Show heat level switches which allow to change the heat level.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "swingControl": {
-            "title": "Heater swing control service",
-            "description": "Shows an additional switch to quickly enable/disable swing mode on supported heaters.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "screenControl": {
-            "title": "Screen control service",
-            "description": "Whether to show screen dim/brighten control button.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "dryModeControl": {
-            "title": "Dry mode control service",
-            "description": "Whether to show a dry mode control button.",
-            "type": "boolean",
-            "default": true,
-            "required": false
-          },
-          "autoModeControl": {
-            "title": "Auto mode control service",
-            "description": "Whether to show a auto mode control button.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "sleepModeControl": {
-            "title": "Sleep mode control service",
-            "description": "Whether to show a sleep mode control button.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "favoriteModeControl": {
-            "title": "Favorite mode control service",
-            "description": "Whether to show a favorite mode control button.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "fanModeControl": {
-            "title": "Fan mode service",
-            "description": "Show fan mode switches which allow to change the fan mode.",
-            "type": "boolean",
-            "default": false,
-            "required": false
-          },
-          "lightModeControl": {
-            "title": "Light mode service",
-            "description": "Show light mode switches which allow to change the light mode.",
-            "type": "boolean",
-            "default": false,
-            "required": false
           }
         }
       }
     }
-  }
+  },
+  "layout": [{
+    "key": "devices",
+    "type": "tabarray",
+    "title": "{{ value.name || 'new device' }}",
+    "items": [
+      "devices[].name",
+      "devices[].ip",
+      "devices[].token",
+      {
+        "key": "devices[]",
+        "type": "fieldset",
+        "title": "{{ value.title }}",
+        "items": [{
+            "type": "fieldset",
+            "title": "Advanced Settings",
+            "description": "Configure advanced plugin settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].deviceId",
+              "devices[].model",
+              "devices[].prefsDir",
+              "devices[].pollingInterval",
+              "devices[].deepDebugLog"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "General device settings",
+            "description": "Configure general device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].buzzerControl",
+              "devices[].childLockControl",
+              "devices[].ledControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Fan specific settings",
+            "description": "Configure fan specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].horizontalSwingControl",
+              "devices[].verticalSwingControl",
+              "devices[].naturalModeControl",
+              "devices[].sleepModeControl",
+              "devices[].horizontalMoveControl",
+              "devices[].verticalMoveControl",
+              "devices[].fanLevelControl",
+              "devices[].ioniserControl",
+              "devices[].shutdownTimer",
+              {
+                "key": "devices[].horizontalAngleButtons",
+                "type": "array",
+                "items": {
+                  "title": "Angle",
+                  "type": "integer"
+                }
+              }
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Ceiling Fan specific settings",
+            "description": "Configure ceiling fan specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].fanLevelControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Heater specific settings",
+            "description": "Configure heater specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].swingControl",
+              "devices[].shutdownTimer",
+              "devices[].heatLevelControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Humidifier specific settings",
+            "description": "Configure humidifier specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].screenControl",
+              "devices[].dryModeControl",
+              "devices[].fanLevelControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Air Purifier specific settings",
+            "description": "Configure air purifier specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].autoModeControl",
+              "devices[].sleepModeControl",
+              "devices[].favoriteModeControl",
+              "devices[].fanLevelControl"
+            ]
+          }
+        ]
+      }
+    ]
+  }]
 }
