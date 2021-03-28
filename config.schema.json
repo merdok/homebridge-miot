@@ -208,15 +208,22 @@
               "default": false,
               "required": false
             },
+            "modeControl": {
+              "title": "Mode control service",
+              "description": "Show mode switches which allow to change the device mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
             "fanModeControl": {
-              "title": "Fan mode service",
+              "title": "Fan mode control service",
               "description": "Show fan mode switches which allow to change the fan mode.",
               "type": "boolean",
               "default": false,
               "required": false
             },
             "lightModeControl": {
-              "title": "Light mode service",
+              "title": "Light mode control service",
               "description": "Show light mode switches which allow to change the light mode.",
               "type": "boolean",
               "default": false,

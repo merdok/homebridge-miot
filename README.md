@@ -171,6 +171,8 @@ Whether the sleep mode service is enabled. This allows quickly enable the sleep 
 Whether the favorite mode service is enabled. This allows quickly enable the favorite mode. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: false**
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
