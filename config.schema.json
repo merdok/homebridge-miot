@@ -100,20 +100,6 @@
               "default": false,
               "required": false
             },
-            "naturalModeControl": {
-              "title": "Natural mode control service",
-              "description": "Whether to show a switch which allows to quickly enable/disable the natural mode.",
-              "type": "boolean",
-              "default": true,
-              "required": false
-            },
-            "sleepModeControl": {
-              "title": "Sleep mode control service",
-              "description": "Whether to show a switch which allows to quickly enable/disable the sleep mode.",
-              "type": "boolean",
-              "default": true,
-              "required": false
-            },
             "horizontalMoveControl": {
               "title": "Horizontal move control service",
               "description": "Whether to show switches which allows to move the fan left or right.",
@@ -253,8 +239,6 @@
             "items": [
               "devices[].horizontalSwingControl",
               "devices[].verticalSwingControl",
-              "devices[].naturalModeControl",
-              "devices[].sleepModeControl",
               "devices[].horizontalMoveControl",
               "devices[].verticalMoveControl",
               "devices[].fanLevelControl",
