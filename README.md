@@ -149,8 +149,6 @@ Show fan mode switches which allow to change the fan mode. **Default: false**
 - `lightModeControl` [optional]
 Show light mode switches which allow to change the light mode. **Default: false**
 #### Heater specific configuration fields
-- `swingControl` [optional]
-Shows an additional switch to quickly enable/disable swing mode. **Default: false**
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `heatLevelControl` [optional]

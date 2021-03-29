@@ -166,13 +166,6 @@
               "default": false,
               "required": false
             },
-            "swingControl": {
-              "title": "Heater swing control service",
-              "description": "Shows an additional switch to quickly enable/disable swing mode on supported heaters.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
             "screenControl": {
               "title": "Screen control service",
               "description": "Whether to show screen dim/brighten control button.",
@@ -317,7 +310,6 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].swingControl",
               "devices[].shutdownTimer",
               "devices[].heatLevelControl",
               "devices[].modeControl"
