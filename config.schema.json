@@ -258,6 +258,7 @@
               "devices[].horizontalMoveControl",
               "devices[].verticalMoveControl",
               "devices[].fanLevelControl",
+              "devices[].modeControl",
               "devices[].ioniserControl",
               "devices[].shutdownTimer",
               {

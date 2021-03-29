@@ -132,6 +132,8 @@ Whether the horizontal move service is enabled. This allows to move the fan in 5
 Whether the vertical move service is enabled. This allows to move the fan in 5° to the up or down. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: true**
 - `ioniserControl` [optional]
 Show a switch which allows to quickly enable/disable the ioniser on your fan. **Default: false**
 - `shutdownTimer` [optional]
