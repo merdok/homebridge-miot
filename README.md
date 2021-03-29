@@ -155,6 +155,8 @@ Shows an additional switch to quickly enable/disable swing mode. **Default: fals
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `heatLevelControl` [optional]
 Show heat level switches which allow to change the heat level. **Default: false**
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: false**
 #### Humidifier specific configuration fields
 - `screenControl` [optional]
 Whether the screen service is enabled. This allows to dim or brighten up the screen. **Default: true**

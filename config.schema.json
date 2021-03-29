@@ -305,7 +305,9 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].fanLevelControl"
+              "devices[].fanLevelControl",
+              "devices[].fanModeControl",
+              "devices[].lightModeControl"
             ]
           },
           {
@@ -317,7 +319,8 @@
             "items": [
               "devices[].swingControl",
               "devices[].shutdownTimer",
-              "devices[].heatLevelControl"
+              "devices[].heatLevelControl",
+              "devices[].modeControl"
             ]
           },
           {
@@ -342,7 +345,8 @@
               "devices[].autoModeControl",
               "devices[].sleepModeControl",
               "devices[].favoriteModeControl",
-              "devices[].fanLevelControl"
+              "devices[].fanLevelControl",
+              "devices[].modeControl"
             ]
           }
         ]
