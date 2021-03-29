@@ -180,27 +180,6 @@
               "default": true,
               "required": false
             },
-            "autoModeControl": {
-              "title": "Auto mode control service",
-              "description": "Whether to show a auto mode control button.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
-            "sleepModeControl": {
-              "title": "Sleep mode control service",
-              "description": "Whether to show a sleep mode control button.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
-            "favoriteModeControl": {
-              "title": "Favorite mode control service",
-              "description": "Whether to show a favorite mode control button.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
             "modeControl": {
               "title": "Mode control service",
               "description": "Show mode switches which allow to change the device mode.",
@@ -334,9 +313,6 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].autoModeControl",
-              "devices[].sleepModeControl",
-              "devices[].favoriteModeControl",
               "devices[].fanLevelControl",
               "devices[].modeControl"
             ]

@@ -163,12 +163,6 @@ Whether the dry mode service is enabled. This allows to quickly turn on/off the 
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
 #### Air Purifier specific configuration fields
-- `autoModeControl` [optional]
-Whether the auto mode service is enabled. This allows quickly enable the auto mode. **Default: false**
-- `sleepModeControl` [optional]
-Whether the sleep mode service is enabled. This allows quickly enable the sleep mode. **Default: false**
-- `favoriteModeControl` [optional]
-Whether the favorite mode service is enabled. This allows quickly enable the favorite mode. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: false**
 - `modeControl` [optional]
