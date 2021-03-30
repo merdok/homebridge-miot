@@ -69,7 +69,7 @@ Example configuration:
           "horizontalMoveControl": true,
           "buzzerControl": true,
           "ledControl": true,
-          "naturalModeControl": true,
+          "modeControl": true,
           "shutdownTimer": true,
           "ioniserControl": true,
           "horizontalAngleButtons": [
