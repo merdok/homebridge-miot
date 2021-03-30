@@ -9,7 +9,7 @@ let Service, Characteristic, Homebridge, Accessory;
 
 const PLUGIN_NAME = 'homebridge-miot';
 const PLATFORM_NAME = 'miot';
-const PLUGIN_VERSION = '0.5.2';
+const PLUGIN_VERSION = '0.5.5';
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.5.5] - 2021-03-31
+### Added
+- Ceiling fans now support rotation speed for easier speed setting
+- New modeControl property for certain devices which allows to quickly switch between the device modes
+
+### Changed
+- Lots of improvements to the miot protocol
+- Use property value list instead of capabilities
+- Due to the protocol improvements changed some of the properties
+- Improved config.schema.json
+
+### Fixed
+- Fixed a bug in generic accessory which prevented the possibility to turn on the device
+
+
 ## [0.5.2] - 2021-03-25
 ### Fixed
 - Fixed deepDebugLog causing a crash
