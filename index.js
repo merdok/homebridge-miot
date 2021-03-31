@@ -94,7 +94,7 @@ class xiaomiMiotDevice {
     this.miotController.on(Events.DEVICE_READY, (miotDevice) => {
       this.miotDevice = miotDevice;
       //prepare the accessory and  do initial accessory information service update
-      if (!this.deviceAccesoryObj) {
+      if (!this.deviceAccessoryObj) {
         this.logger.info('Initializing accessory!');
         this.initAccessory();
         this.updateInformationService();
@@ -104,7 +104,7 @@ class xiaomiMiotDevice {
     this.miotController.on(Events.DEVICE_CONNECTED, (miotDevice) => {
       this.logger.debug('Device connected!');
       // update device information
-      if (this.deviceAccesoryObj) {
+      if (this.deviceAccessoryObj) {
         this.updateInformationService();
       }
       // save device information
@@ -113,14 +113,14 @@ class xiaomiMiotDevice {
 
     this.miotController.on(Events.DEVICE_DISCONNECTED, (miotDevice) => {
       this.logger.debug('Device diconnected!');
-      if (this.deviceAccesoryObj) {
-        this.deviceAccesoryObj.updateDeviceStatus();
+      if (this.deviceAccessoryObj) {
+        this.deviceAccessoryObj.updateDeviceStatus();
       }
     });
 
     this.miotController.on(Events.DEVICE_ALL_PROPERTIES_UPDATED, (miotDevice) => {
-      if (this.deviceAccesoryObj) {
-        this.deviceAccesoryObj.updateDeviceStatus();
+      if (this.deviceAccessoryObj) {
+        this.deviceAccessoryObj.updateDeviceStatus();
       }
     });
 
@@ -135,10 +135,10 @@ class xiaomiMiotDevice {
     this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip);
 
     // prepare the fan accessory
-    this.deviceAccesoryObj = AccessoryFactory.createAccessory(this.name, this.miotDevice, this.UUID, this.log, this.config, this.api, this.logger);
+    this.deviceAccessoryObj = AccessoryFactory.createAccessory(this.name, this.miotDevice, this.UUID, this.log, this.config, this.api, this.logger);
 
-    if (this.deviceAccesoryObj) {
-      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.deviceAccesoryObj.getAccessory()]);
+    if (this.deviceAccessoryObj) {
+      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.deviceAccessoryObj.getAccessory()]);
       this.logger.info('Accessory successfully initialized!');
     } else {
       this.logger.error('Something went. Could not initialize accessory!');
@@ -147,7 +147,7 @@ class xiaomiMiotDevice {
 
   updateInformationService() {
     // remove the preconstructed information service, since i will be adding my own
-    this.deviceAccesoryObj.getAccessory().removeService(this.deviceAccesoryObj.getAccessory().getService(Service.AccessoryInformation));
+    this.deviceAccessoryObj.getAccessory().removeService(this.deviceAccessoryObj.getAccessory().getService(Service.AccessoryInformation));
 
     let model = this.miotDevice.getModel() || 'Unknown';
     let deviceId = this.miotDevice.getDeviceId() || 'Unknown';
@@ -160,7 +160,7 @@ class xiaomiMiotDevice {
       .setCharacteristic(Characteristic.SerialNumber, deviceId)
       .setCharacteristic(Characteristic.FirmwareRevision, PLUGIN_VERSION);
 
-    this.deviceAccesoryObj.getAccessory().addService(this.informationService);
+    this.deviceAccessoryObj.getAccessory().addService(this.informationService);
   }
 
 
