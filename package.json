@@ -1,6 +1,6 @@
 {
   "name": "homebridge-miot",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Homebridge plugin for devices supporting the miot protocol",
   "main": "index.js",
   "engines": {
@@ -22,7 +22,8 @@
     "humidifier",
     "air purifier",
     "air",
-    "purifier"
+    "purifier",
+    "ceiling"
   ],
   "author": "merdok",
   "funding": {

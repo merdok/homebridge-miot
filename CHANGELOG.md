@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.5.6] - 2021-04-02
+### Fixed
+- Fixed some issues with ceiling fans
+
+### Changed
+- Some minor under the hood changes
+
+
 ## [0.5.5] - 2021-03-31
 ### Added
 - Ceiling fans now support rotation speed for easier speed setting
