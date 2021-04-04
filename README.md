@@ -27,6 +27,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Heaters
 * Humidifiers
 * Air Purifiers
+* Outlets
 
 More device types will be added!
 

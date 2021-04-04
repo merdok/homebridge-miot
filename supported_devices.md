@@ -32,3 +32,6 @@
 * zhimi.airpurifier.mb3 (Xiaomi Mi Air Purifier 3H)
 * zhimi.airpurifier.vb2 (Xiaomi Mi Air Purifier Pro H)
 * zhimi.airpurifier.za1 (Smartmi Air Purifier)
+
+### Outlets
+* cuco.plug.cp1 (Gosund Smart Plug)
