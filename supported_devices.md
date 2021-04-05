@@ -35,3 +35,6 @@
 
 ### Outlets
 * cuco.plug.cp1 (Gosund Smart Plug)
+
+### Curtains
+* dooya.curtain.m2 (Dooya Curtain)

@@ -28,6 +28,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Humidifiers
 * Air Purifiers
 * Outlets
+* Curtains
 
 More device types will be added!
 
@@ -166,6 +167,11 @@ Show fan level switches which allow to change the fan level. **Default: true**
 Show fan level switches which allow to change the fan level. **Default: false**
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
+#### Curtain specific configuration fields
+- `motorControl` [optional]
+Show motor control switches which allow to control the curtains. **Default: true**
+- `motorReverseSwitch` [optional]
+Show a switch which allows to quickly reverse the motor. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

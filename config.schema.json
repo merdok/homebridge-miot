@@ -186,6 +186,20 @@
               "type": "boolean",
               "default": false,
               "required": false
+            },
+            "motorControl": {
+              "title": "Motor control service",
+              "description": "Show motor control switches which allow to control the curtains.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "motorReverseSwitch": {
+              "title": "Motor reverse control service",
+              "description": "Show a switch which allows to quickly reverse the motor.",
+              "type": "boolean",
+              "default": false,
+              "required": false
             }
           }
         }
@@ -300,6 +314,17 @@
             "items": [
               "devices[].fanLevelControl",
               "devices[].modeControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Curtain specific settings",
+            "description": "Configure curtain specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].motorControl",
+              "devices[].motorReverseSwitch"
             ]
           }
         ]
