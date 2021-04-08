@@ -38,3 +38,6 @@
 
 ### Curtains
 * dooya.curtain.m2 (Dooya Curtain)
+
+### Fresh Air Systems
+* zhimi.airfresh.ua1 (Mi Fresh Air Ventilator C1-80)

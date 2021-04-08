@@ -29,6 +29,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Air Purifiers
 * Outlets
 * Curtains
+* Fresh Air Systems
 
 More device types will be added!
 
@@ -170,8 +171,13 @@ Show mode switches which allow to change the device mode. **Default: false**
 #### Curtain specific configuration fields
 - `motorControl` [optional]
 Show motor control switches which allow to control the curtains. **Default: true**
-- `motorReverseSwitch` [optional]
+- `motorReverseControl` [optional]
 Show a switch which allows to quickly reverse the motor. **Default: false**
+#### Frash Air Systems specific configuration fields
+- `fanLevelControl` [optional]
+Show fan level switches which allow to change the fan level. **Default: true**
+- `heaterControl` [optional]
+Show a switch which allows to quickly enable the heater. **Default: true**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
