@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.6.0] - 2021-04-09
+### Added
+- Added support for outlet devices (cuco.plug.cp1)
+- Added support for curtain devices (dooya.curtain.m2)
+- Added support for fresh air system devices (zhimi.airfresh.ua1)
+
+### Changed
+- Lots of code cleanup and under the hood improvements
+
+### Fixed
+- Air quality and filter change reporting on air purifiers now also works when power is off
+
+
 ## [0.5.6] - 2021-04-02
 ### Fixed
 - Fixed some issues with ceiling fans
