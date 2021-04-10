@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.6.1] - 2021-04-11
+### Added
+- Added new property `lightShutdownTimer` to ceiling fans
+
+### Changed
+- Improvements to ceiling fans
+
+### Fixed
+- Air quality and filter change reporting on air purifiers now also works when power is off
+
+
 ## [0.6.0] - 2021-04-09
 ### Added
 - Added support for outlet devices (cuco.plug.cp1)
