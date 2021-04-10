@@ -2,7 +2,7 @@
 
 # homebridge-miot
 
-<!---[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins#verified-plugins)--->
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 [![homebridge-miot](https://badgen.net/npm/v/homebridge-miot?icon=npm)](https://www.npmjs.com/package/homebridge-miot)
 [![mit-license](https://badgen.net/npm/license/lodash)](https://github.com/merdok/homebridge-miot/blob/master/LICENSE)
 [![follow-me-on-twitter](https://badgen.net/twitter/follow/merdok_dev?icon=twitter)](https://twitter.com/merdok_dev)
@@ -149,6 +149,8 @@ Show fan level switches which allow to change the fan level. **Default: true**
 Show fan mode switches which allow to change the fan mode. **Default: false**
 - `lightModeControl` [optional]
 Show light mode switches which allow to change the light mode. **Default: false**
+- `lightShutdownTimer` [optional]
+Show a slider (as light bulb) which allows to set a shutdown timer in minutes for the light. **Default: false**
 #### Heater specific configuration fields
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**

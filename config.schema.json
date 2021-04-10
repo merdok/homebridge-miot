@@ -187,6 +187,13 @@
               "default": false,
               "required": false
             },
+            "lightShutdownTimer": {
+              "title": "Light shutdown timer service",
+              "description": "Show a slider (light bulb) to control the auto shutdown timer for the light.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
             "motorControl": {
               "title": "Motor control service",
               "description": "Show motor control switches which allow to control the curtains.",
@@ -285,7 +292,8 @@
             "items": [
               "devices[].fanLevelControl",
               "devices[].fanModeControl",
-              "devices[].lightModeControl"
+              "devices[].lightModeControl",
+              "devices[].lightShutdownTimer"
             ]
           },
           {
