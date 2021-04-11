@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.6.2] - 2021-04-12
+### Changed
+- Improvements to air purifiers
+- Renamed `fanModeControl` property to `modeControl` for ceiling fans
+- Improvements to the miot protocol, skip property update for properties which are marked as write only
+- Code cleanup
+
+### Fixed
+- Fixed curtain devices status update
+
+
 ## [0.6.1] - 2021-04-11
 ### Added
 - Added new property `lightShutdownTimer` to ceiling fans
@@ -15,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improvements to ceiling fans
 
 ### Fixed
-- Air quality and filter change reporting on air purifiers now also works when power is off
+- Fixed a small issue with the shutdownTimer service
 
 
 ## [0.6.0] - 2021-04-09
