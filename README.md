@@ -145,8 +145,8 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
 #### Ceiling Fan specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
-- `fanModeControl` [optional]
-Show fan mode switches which allow to change the fan mode. **Default: false**
+- `modeControl` [optional]
+Show mode switches which allow to change the fan mode. **Default: false**
 - `lightModeControl` [optional]
 Show light mode switches which allow to change the light mode. **Default: false**
 - `lightShutdownTimer` [optional]

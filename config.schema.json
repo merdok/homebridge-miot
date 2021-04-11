@@ -173,13 +173,6 @@
               "default": false,
               "required": false
             },
-            "fanModeControl": {
-              "title": "Fan mode control service",
-              "description": "Show fan mode switches which allow to change the fan mode.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
             "lightModeControl": {
               "title": "Light mode control service",
               "description": "Show light mode switches which allow to change the light mode.",
@@ -291,7 +284,7 @@
             "expanded": false,
             "items": [
               "devices[].fanLevelControl",
-              "devices[].fanModeControl",
+              "devices[].modeControl",
               "devices[].lightModeControl",
               "devices[].lightShutdownTimer"
             ]
