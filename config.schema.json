@@ -207,6 +207,19 @@
               "type": "boolean",
               "default": true,
               "required": false
+            },
+            "pm25Breakpoints": {
+              "title": "Pm25 breakpoints",
+              "description": "Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minItems": 4,
+                "maxItems": 4,
+                "uniqueItems": true
+              },
+              "default": false,
+              "required": false
             }
           }
         }
@@ -321,7 +334,16 @@
             "expanded": false,
             "items": [
               "devices[].fanLevelControl",
-              "devices[].modeControl"
+              "devices[].modeControl",
+              {
+                "key": "devices[].pm25Breakpoints",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "maxItems": 4,
+                  "uniqueItems": true
+                }
+              }
             ]
           },
           {

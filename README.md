@@ -170,6 +170,8 @@ Show fan level switches which allow to change the fan level. **Default: true**
 Show fan level switches which allow to change the fan level. **Default: false**
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
+- `pm25Breakpoints` [optional]
+Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers. **Default: [7, 15, 30, 55]**
 #### Curtain specific configuration fields
 - `motorControl` [optional]
 Show motor control switches which allow to control the curtains. **Default: true**
