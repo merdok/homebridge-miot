@@ -159,9 +159,9 @@
               "default": true,
               "required": false
             },
-            "dryModeControl": {
-              "title": "Dry mode control service",
-              "description": "Whether to show a dry mode control button.",
+            "dryControl": {
+              "title": "Dry control service",
+              "description": "Whether to show a dry control button.",
               "type": "boolean",
               "default": true,
               "required": false
@@ -322,7 +322,7 @@
             "expanded": false,
             "items": [
               "devices[].screenControl",
-              "devices[].dryModeControl",
+              "devices[].dryControl",
               "devices[].fanLevelControl"
             ]
           },
