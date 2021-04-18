@@ -159,10 +159,10 @@ Show heat level switches which allow to change the heat level. **Default: false*
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
 #### Humidifier specific configuration fields
-- `screenControl` [optional]
-Whether the screen service is enabled. This allows to dim or brighten up the screen. **Default: true**
 - `dryControl` [optional]
 Whether the dry control service is enabled. This allows to quickly turn control the dry state. **Default: true**
+- `screenBrightnessControl` [optional]
+Show screen brightness switches which allow to change the screen brightness. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
 #### Air Purifier specific configuration fields

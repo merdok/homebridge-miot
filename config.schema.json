@@ -152,11 +152,11 @@
               "default": false,
               "required": false
             },
-            "screenControl": {
-              "title": "Screen control service",
-              "description": "Whether to show screen dim/brighten control button.",
+            "screenBrightnessControl": {
+              "title": "Screen brightness control service",
+              "description": "Show screen brightness switches which allow to change the screen brightness.",
               "type": "boolean",
-              "default": true,
+              "default": false,
               "required": false
             },
             "dryControl": {
@@ -321,8 +321,8 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].screenControl",
               "devices[].dryControl",
+              "devices[].screenBrightnessControl",
               "devices[].fanLevelControl"
             ]
           },
