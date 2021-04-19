@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.6.4] - 2021-04-20
+### Changed
+- Improvements to humidifiers
+- Renamed `dryModeControl` property to `dryControl` for humidifiers
+- Greatly improved the `screenControl` service
+- A warning will now be shown in the homebridge console if the `pm25Breakpoints` property has a wrong value
+
+### Fixed
+- Fixed wrong mapping of some properties
+
+
 ## [0.6.3] - 2021-04-15
 ### Added
 - Added new property `pm25Breakpoints` to air purifiers
