@@ -134,9 +134,9 @@ Show a switch which allows to quickly enable/disable the ioniser on your fan. **
 - `shutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `horizontalAngleButtons` [optional]
-Whether the angle buttons service is enabled. This allows to create buttons which can switch between different horizontal oscillation angles. **Default: "" (disabled)**
+Whether the angle buttons service is enabled. This allows to create buttons which can change between different horizontal oscillation angles. **Default: "" (disabled)**
   - Set an array of numeric values. Possible values depend on the fan model
-  - Some fans support predefined angle buttons, in the case if the property is not specified the angle buttons are retrieved from the fan and displayed as switches. If you want to prevent that behaviour set the property value as an empty array **[]** or **false**
+  - Some fans support predefined angle buttons, in the case the specified angles are ignored and the supported angle buttons are retrieved from the fan and displayed as switches
   - Tapping the active oscillation angle button will disable oscillation completely
 #### Ceiling Fan specific configuration fields
 - `fanLevelControl` [optional]
