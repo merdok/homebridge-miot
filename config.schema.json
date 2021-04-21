@@ -100,16 +100,9 @@
               "default": false,
               "required": false
             },
-            "horizontalMoveControl": {
-              "title": "Horizontal move control service",
-              "description": "Whether to show switches which allows to move the fan left or right.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
-            "verticalMoveControl": {
-              "title": "Vertical move control service",
-              "description": "Whether to show switches which allows to move the fan up or down.",
+            "moveControl": {
+              "title": "Move control service",
+              "description": "Whether to show switches which allows to move the fan left, right, up or down.",
               "type": "boolean",
               "default": false,
               "required": false
@@ -273,8 +266,7 @@
             "items": [
               "devices[].horizontalSwingControl",
               "devices[].verticalSwingControl",
-              "devices[].horizontalMoveControl",
-              "devices[].verticalMoveControl",
+              "devices[].moveControl",
               "devices[].fanLevelControl",
               "devices[].modeControl",
               "devices[].ioniserControl",

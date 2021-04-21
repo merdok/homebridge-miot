@@ -125,10 +125,8 @@ Whether it is possible to control the child lock. Shows a switch on the device a
 Shows an additional switch to quickly enable/disable horizontal swing mode. **Default: false**
 - `verticalSwingControl` [optional]
 Shows a switch to enable/disable vertical swing mode. **Default: false**
-- `horizontalMoveControl` [optional]
-Whether the horizontal move service is enabled. This allows to move the fan in 5° to the left or right. **Default: false**
-- `verticalMoveControl` [optional]
-Whether the vertical move service is enabled. This allows to move the fan in 5° to the up or down. **Default: false**
+- `moveControl` [optional]
+Whether the move control service is enabled. This allows to move the fan in 5° to the left, right, up or down. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
 - `modeControl` [optional]
