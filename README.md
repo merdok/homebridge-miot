@@ -121,10 +121,8 @@ Whether the led service is enabled. This allows to turn on/off the device LED. *
 - `childLockControl` [optional]
 Whether it is possible to control the child lock. Shows a switch on the device accessory to enable/disable the child lock. **Default: true**
 #### Fan specific configuration fields
-- `horizontalSwingControl` [optional]
-Shows an additional switch to quickly enable/disable horizontal swing mode. **Default: false**
-- `verticalSwingControl` [optional]
-Shows a switch to enable/disable vertical swing mode. **Default: false**
+- `swingControl` [optional]
+Show switches to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
 - `moveControl` [optional]
 Whether the move control service is enabled. This allows to move the fan in 5° to the left, right, up or down. **Default: false**
 - `fanLevelControl` [optional]

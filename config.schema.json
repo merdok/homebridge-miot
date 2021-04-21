@@ -86,16 +86,9 @@
               "default": true,
               "required": false
             },
-            "horizontalSwingControl": {
-              "title": "Horizontal swing control service",
-              "description": "Shows an additional switch to quickly enable/disable horizontal swing mode.",
-              "type": "boolean",
-              "default": false,
-              "required": false
-            },
-            "verticalSwingControl": {
-              "title": "Vertical swing control service",
-              "description": "Shows a switch to enable/disable vertical swing mode.",
+            "swingControl": {
+              "title": "Swing control service",
+              "description": "Show switches to quickly enable/disable horizontal and/or vertical swing mode.",
               "type": "boolean",
               "default": false,
               "required": false
@@ -264,8 +257,7 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].horizontalSwingControl",
-              "devices[].verticalSwingControl",
+              "devices[].swingControl",
               "devices[].moveControl",
               "devices[].fanLevelControl",
               "devices[].modeControl",
