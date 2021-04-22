@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.6.5] - 2021-04-23
+### Changed
+- Improvements to fans
+- Merged `horizontalSwingControl` and `verticalSwingControl` properties into `swingcontrol` for fans
+- Merged `verticalMoveControl` and `horizontalMoveControl` properties into `moveControl` for fans
+- Greatly improved the `screenControl` service
+- Optimizations to other services
+
+### Fixed
+- Fixed an issue with the `screenControl` service
+- Fixed some issues in heater devices
+
+
 ## [0.6.4] - 2021-04-20
 ### Changed
 - Improvements to humidifiers
