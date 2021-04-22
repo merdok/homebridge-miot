@@ -146,21 +146,15 @@ class xiaomiMiotDevice {
   }
 
   updateInformationService() {
-    // remove the preconstructed information service, since i will be adding my own
-    this.deviceAccessoryObj.getAccessory().removeService(this.deviceAccessoryObj.getAccessory().getService(Service.AccessoryInformation));
-
-    let model = this.miotDevice.getModel() || 'Unknown';
-    let deviceId = this.miotDevice.getDeviceId() || 'Unknown';
-
-    this.informationService = new Service.AccessoryInformation();
-    this.informationService
-      .setCharacteristic(Characteristic.Name, this.name)
-      .setCharacteristic(Characteristic.Manufacturer, 'Xiaomi')
-      .setCharacteristic(Characteristic.Model, model)
-      .setCharacteristic(Characteristic.SerialNumber, deviceId)
-      .setCharacteristic(Characteristic.FirmwareRevision, PLUGIN_VERSION);
-
-    this.deviceAccessoryObj.getAccessory().addService(this.informationService);
+    if (this.deviceAccessoryObj) {
+      let model = 'Unknown';
+      let deviceId = 'Unknown';
+      if (this.miotDevice) {
+        model = this.miotDevice.getModel() || model;
+        deviceId = this.miotDevice.getDeviceId() || deviceId;
+      }
+      this.deviceAccessoryObj.updateInformationService(this.name, 'Xiaomi', model, deviceId, PLUGIN_VERSION);
+    }
   }
 
 
