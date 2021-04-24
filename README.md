@@ -22,14 +22,15 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Homekit automations for your miot devices
 
 ### Supported device types
-* Fans
-* Ceiling Fans
-* Heaters
-* Humidifiers
-* Air Purifiers
-* Outlets
-* Curtains
-* Fresh Air Systems
+* Fan
+* Ceiling Fan
+* Heater
+* Humidifier
+* Air Purifier
+* Outlet
+* Curtain
+* Fresh Air System
+* Robot Cleaner
 
 More device types will be added!
 
@@ -175,11 +176,18 @@ Define a custom array of pm25 breakpoints. Provide an array with exactly 4 uniqu
 Show motor control switches which allow to control the curtains. **Default: true**
 - `motorReverseControl` [optional]
 Show a switch which allows to quickly reverse the motor. **Default: false**
-#### Frash Air Systems specific configuration fields
+#### Frash Air System specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
 - `heaterControl` [optional]
 Show a switch which allows to quickly enable the heater. **Default: true**
+#### Robot Cleaner specific configuration fields
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: false**
+- `dndControl` [optional]
+Show a switch which allows to quickly enable do not disturb mode. **Default: false**
+- `actionButtons` [optional]
+Show additional action switches. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
