@@ -326,6 +326,17 @@
           },
           {
             "type": "fieldset",
+            "title": "Dehumidifier specific settings",
+            "description": "Configure dehumidifier specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].modeControl",
+              "devices[].fanLevelControl"
+            ]
+          },
+          {
+            "type": "fieldset",
             "title": "Air Purifier specific settings",
             "description": "Configure air purifier specific device settings.",
             "expandable": true,
