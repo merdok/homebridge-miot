@@ -166,6 +166,13 @@
               "default": false,
               "required": false
             },
+            "mopModeControl": {
+              "title": "Mop mode control service",
+              "description": "Show mop mode switches which allow to change the device mop mode.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
             "lightShutdownTimer": {
               "title": "Light shutdown timer service",
               "description": "Show a slider (light bulb) to control the auto shutdown timer for the light.",
@@ -385,6 +392,8 @@
             "expandable": true,
             "expanded": false,
             "items": [
+              "devices[].modeControl",
+              "devices[].mopModeControl",
               "devices[].dndControl",
               "devices[].actionButtons"
             ]

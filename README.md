@@ -190,6 +190,8 @@ Show a switch which allows to quickly enable the heater. **Default: true**
 #### Robot Cleaner specific configuration fields
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
+- `mopModeControl` [optional]
+Show mop mode switches which allow to change the device mop mode. **Default: false**
 - `dndControl` [optional]
 Show a switch which allows to quickly enable do not disturb mode. **Default: false**
 - `actionButtons` [optional]
