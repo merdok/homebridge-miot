@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.7.0] - 2021-04-28
+### Added
+- Added support for robot cleaner devices (dreame.vacuum.p2008)
+- Added support for dehumidifier devices (nwt.derh.312en)
+
+### Changed
+- Improvements to humidifier devices
+- Many under the hood changes and improvements
+
+### Fixed
+- Fixed some small issue which might have caused a crash
+
+
 ## [0.6.5] - 2021-04-23
 ### Changed
 - Improvements to fans
