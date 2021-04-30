@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.7.1] - 2021-05-01
+### Added
+- Added support for zhimi.airpurifier.va1 air purifier
+
+### Changed
+- Improvements to favorite speed for air purifier devices
+
+### Fixed
+- Fixed a couple of minor typos which might have caused crashes
+
+
 ## [0.7.0] - 2021-04-28
 ### Added
 - Added support for robot cleaner devices (dreame.vacuum.p2008)
