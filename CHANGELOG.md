@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.7.2] - 2021-05-02
+### Fixed
+- Air purifier favorite speed has now the correct value range (0-100%)
+
+
 ## [0.7.1] - 2021-05-01
 ### Added
 - Added support for zhimi.airpurifier.va1 air purifier
