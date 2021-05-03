@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.7.3] - 2021-05-04
+### Fixed
+- Fixed a warning for air purifier devices
+- Fixed property mapping for nwt.derh.312en dehumidifer device
+
+
 ## [0.7.2] - 2021-05-02
 ### Fixed
 - Air purifier favorite speed has now the correct value range (0-100%)
