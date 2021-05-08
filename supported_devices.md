@@ -49,3 +49,4 @@
 ### Robot Cleaner
 * dreame.vacuum.p2008 (Dreame F9)
 * dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
+* roborock.vacuum.a15 (Roborock Vacuum S7)
