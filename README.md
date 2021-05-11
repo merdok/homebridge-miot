@@ -124,6 +124,8 @@ Whether the buzzer service is enabled. This allows to turn on/off the device buz
 Whether the led service is enabled. This allows to turn on/off the device LED. **Default: true**
 - `childLockControl` [optional]
 Whether it is possible to control the child lock. Shows a switch on the device accessory to enable/disable the child lock. **Default: true**
+- `actionButtons` [optional]
+Show additional action switches if the device supports any. **Default: false**
 #### Fan specific configuration fields
 - `swingControl` [optional]
 Show switches to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
@@ -196,8 +198,6 @@ Show mode switches which allow to change the device mode. **Default: false**
 Show mop mode switches which allow to change the device mop mode. **Default: false**
 - `dndControl` [optional]
 Show a switch which allows to quickly enable do not disturb mode. **Default: false**
-- `actionButtons` [optional]
-Show additional action switches. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

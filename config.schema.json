@@ -246,9 +246,10 @@
             "expandable": true,
             "expanded": false,
             "items": [
+              "devices[].ledControl",
               "devices[].buzzerControl",
               "devices[].childLockControl",
-              "devices[].ledControl"
+              "devices[].actionButtons"
             ]
           },
           {
@@ -374,8 +375,7 @@
             "items": [
               "devices[].modeControl",
               "devices[].mopModeControl",
-              "devices[].dndControl",
-              "devices[].actionButtons"
+              "devices[].dndControl"
             ]
           }
         ]
