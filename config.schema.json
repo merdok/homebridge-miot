@@ -203,11 +203,30 @@
               "required": false
             },
             "actionButtons": {
-              "title": "Action buttons service",
-              "description": "Show additional action switches. For advanced configuration, edit the config.json directly.",
+              "title": "Action buttons",
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "title": "action",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "params": {
+                    "title": "params",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "required": false
+                  }
+                }
               },
               "required": false
             }
@@ -254,11 +273,23 @@
               "devices[].childLockControl",
               {
                 "key": "devices[].actionButtons",
-                "type": "array",
-                "items": {
-                  "title": "action name",
-                  "type": "string"
-                }
+                "description": "Configure action buttons. For details check README.",
+                "buttonText": "Add action button",
+                "type": "fieldset",
+                "expandable": true,
+                "expanded": false,
+                "items": [
+                  "devices[].actionButtons[].action",
+                  "devices[].actionButtons[].name",
+                  {
+                    "key": "devices[].actionButtons[].params",
+                    "type": "array",
+                    "buttonText": "Add param",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                ]
               }
             ]
           },

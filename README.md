@@ -78,10 +78,23 @@ Example configuration:
           "shutdownTimer": true,
           "ioniserControl": true,
           "horizontalAngleButtons": [
-             5,
-             60,
-             100
-           ]
+            5,
+            60,
+            100
+          ],
+          "actionButtons": [
+            {
+              "action": "toggle_power",
+              "name": "Toggle power action",
+              "params": [
+                123
+              ]
+            },
+            {
+              "action": "toggle_mode",
+              "name": "Toggle mode action"
+            }
+          ]
         }
       ]
     }
@@ -128,6 +141,10 @@ Whether it is possible to control the child lock. Shows a switch on the device a
 Show additional action switches if the device supports any. **Default: false**
   - Set to *true* or *false* to show/hide all actions available on the device
   - Set an array of action names to only show the desired actions
+  - You can also set an array of objects as the value which enables advanced configuration. An object can have the following properties:
+    - *action* - [required] the action name
+    - *name* - [optional] the name of the switch
+    - *params* - [optional] parameters to be used for the action, not all actions support parameters
   - To get the action names available for the device simply check the homebridge debug console. The action names will be printed there during initialization
 #### Fan specific configuration fields
 - `swingControl` [optional]
