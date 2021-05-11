@@ -126,6 +126,9 @@ Whether the led service is enabled. This allows to turn on/off the device LED. *
 Whether it is possible to control the child lock. Shows a switch on the device accessory to enable/disable the child lock. **Default: true**
 - `actionButtons` [optional]
 Show additional action switches if the device supports any. **Default: false**
+  - Set to *true* or *false* to show/hide all actions available on the device
+  - Set an array of action names to only show the desired actions
+  - To get the action names available for the device simply check the homebridge debug console. The action names will be printed there during initialization
 #### Fan specific configuration fields
 - `swingControl` [optional]
 Show switches to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**

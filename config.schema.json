@@ -204,8 +204,11 @@
             },
             "actionButtons": {
               "title": "Action buttons service",
-              "description": "Show additional action switches.",
-              "type": "boolean",
+              "description": "Show additional action switches. For advanced configuration, edit the config.json directly.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
               "required": false
             }
           }
@@ -249,7 +252,14 @@
               "devices[].ledControl",
               "devices[].buzzerControl",
               "devices[].childLockControl",
-              "devices[].actionButtons"
+              {
+                "key": "devices[].actionButtons",
+                "type": "array",
+                "items": {
+                  "title": "action name",
+                  "type": "string"
+                }
+              }
             ]
           },
           {
