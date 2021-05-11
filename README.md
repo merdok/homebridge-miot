@@ -92,6 +92,8 @@ Example configuration:
 ### Token
 For the plugin to work the device token is required. For methods on how to find the token refer to this guide [obtaining mi device token](https://github.com/merdok/homebridge-miot/blob/master/obtain_token.md).
 
+You can also use this tool to easily retrieve the token: [Xiaomi Cloud Tokens Extractor](https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor).
+
 ### Configuration
 Keep in mind that your device needs to support the feature which you enable, otherwise you will not see any effect.
 #### Platform configuration fields
