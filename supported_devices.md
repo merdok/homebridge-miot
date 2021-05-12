@@ -42,6 +42,7 @@
 
 ### Curtain
 * dooya.curtain.m2 (Dooya Curtain)
+* leshi.curtain.v0001 (Scene Curtain WIFI X)
 
 ### Fresh Air System
 * zhimi.airfresh.ua1 (Mi Fresh Air Ventilator C1-80)
