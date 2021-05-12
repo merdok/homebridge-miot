@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.8.0] - 2021-05-13
+### Added
+- Added support for roborock.vacuum.a15 (Roborock Vacuum S7) vacuum cleaner
+- Added support for roborock.vacuum.a11 (Roborock Vacuum T7) vacuum cleaner
+- Added support for leshi.curtain.v0001 (Scene Curtain WIFI X) curtains
+- `actionButtons` property is now available for all devices and allows to show additional actions for devices that support any
+
+### Changed
+- `actionButtons` property has now an advanced configuration which allows to show/hide certain buttons, rename buttons or add parameters to actions
+- More under the hood changes and improvements
+- Some improvements in the config.schema.json
+
+### Fixed
+- Fixed some small issues and typos
+
+
 ## [0.7.4] - 2021-05-08
 ### Added
 - Added support for dreame.vacuum.mc1808 vacuum cleaner
