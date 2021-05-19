@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.8.1] - 2021-05-20
+### Fixed
+- Fixed a visual error which was displayed in the debug homebridge console when setting a property
+- Fixed property fetching for device with many properties
+
+
 ## [0.8.0] - 2021-05-13
 ### Added
 - Added support for roborock.vacuum.a15 (Roborock Vacuum S7) vacuum cleaner
