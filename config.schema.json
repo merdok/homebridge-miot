@@ -86,7 +86,7 @@
             },
             "swingControl": {
               "title": "Swing control service",
-              "description": "Show switches to quickly enable/disable horizontal and/or vertical swing mode.",
+              "description": "Show a switch to quickly enable/disable horizontal and/or vertical swing mode.",
               "type": "boolean",
               "required": false
             },

@@ -148,7 +148,7 @@ Show additional action switches if the device supports any. **Default: false**
   - To get the action names available for the device simply check the homebridge debug console. The action names will be printed there during initialization
 #### Fan specific configuration fields
 - `swingControl` [optional]
-Show switches to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
+Show a switch to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
 - `moveControl` [optional]
 Whether the move control service is enabled. This allows to move the fan in 5° to the left, right, up or down. **Default: false**
 - `fanLevelControl` [optional]
