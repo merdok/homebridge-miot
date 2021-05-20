@@ -3,6 +3,7 @@
 ### Fan
 * zhimi.fan.za5 (Smartmi Standing Fan 3)
 * zhimi.fan.fa1 (Mijia DC Circulating Fan)
+* zhimi.fan.fb1 (Mi Smart Air Circulator Fan)
 * dmaker.fan.1c (Mi Smart Standing Fan 1C)
 * dmaker.fan.p8 (Mi Smart Standing Fan 1C CN)
 * dmaker.fan.p9 (Mi Smart Tower Fan)
