@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.2] - 2021-05-24
+### Added
+- Added support for zhimi.fan.fb1 (Mi Smart Air Circulator Fan) fan
+- New `verticalAngleButtons` property for fans that support vertical oscillation angles
+
+### Changed
+- Improved status reporting of some switches
+
+### Fixed
+- Fixed an issue where creating a custom list of `actionButtons` would fail
+
 
 ## [0.8.1] - 2021-05-20
 ### Fixed
