@@ -164,6 +164,8 @@ Whether the angle buttons service is enabled. This allows to create buttons whic
   - Set an array of numeric values. Possible values depend on the fan model
   - Some fans support predefined angle buttons, in the case the specified angles are ignored and the supported angle buttons are retrieved from the fan and displayed as switches
   - Tapping the active oscillation angle button will disable oscillation completely
+- `verticalAngleButtons` [optional]
+Same as above but for vertical oscillation angles. **Default: "" (disabled)**
 #### Ceiling Fan specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**

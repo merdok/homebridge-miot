@@ -124,6 +124,16 @@
                 "maximum": 360
               }
             },
+            "verticalAngleButtons": {
+              "title": "Vertical angle buttons",
+              "description": "Allows to create buttons that can switch between vertical oscillation angles.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 360
+              }
+            },
             "heatLevelControl": {
               "title": "Heat level service",
               "description": "Show heat level switches which allow to change the heat level.",
@@ -308,6 +318,14 @@
               "devices[].shutdownTimer",
               {
                 "key": "devices[].horizontalAngleButtons",
+                "type": "array",
+                "items": {
+                  "title": "Angle",
+                  "type": "integer"
+                }
+              },
+              {
+                "key": "devices[].verticalAngleButtons",
                 "type": "array",
                 "items": {
                   "title": "Angle",
