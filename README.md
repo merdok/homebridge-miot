@@ -125,6 +125,13 @@ The token of your device.
 The deviceId will be automatically retrieved by the plugin but if there is trouble you can manually specify it. **Default: "" (not specified)**
 - `model` [optional]
 The device model if known. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device. **Default: "" (not specified)**
+- `micloud` [optional]
+This is a configuration object for the MiCloud. Some older devices require a MiCloud connection in order to be controlled! **Default: "" (not specified)**
+- Can also be specified even when the device does not require the MiCloud, in that case additional information for the device will be retrieved.
+- An object should have the following properties:
+  - *username* - [required] the MiCloud username
+  - *password* - [required] the MiCloud password
+  - *country* - [optional] the country where the servers are located for your devices. **Default: "cn"**
 - `prefsDir` [optional]
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]

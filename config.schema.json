@@ -47,6 +47,33 @@
               "type": "string",
               "required": false
             },
+            "micloud": {
+              "title": "MiCloud connection",
+              "type": "object",
+              "properties": {
+                "username": {
+                  "title": "Username",
+                  "type": "string"
+                },
+                "password": {
+                  "title": "Password",
+                  "type": "string"
+                },
+                "country": {
+                  "title": "Country",
+                  "type": "string",
+                  "enum": [
+                    "cn",
+                    "de",
+                    "sg",
+                    "tw",
+                    "us",
+                    "ru"
+                  ]
+                }
+              },
+              "required": false
+            },
             "prefsDir": {
               "title": "Prefs directory",
               "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
@@ -266,6 +293,17 @@
             "items": [
               "devices[].deviceId",
               "devices[].model",
+              {
+                "key": "devices[].micloud",
+                "type": "fieldset",
+                "expandable": true,
+                "expanded": false,
+                "items": [
+                  "devices[].micloud.username",
+                  "devices[].micloud.password",
+                  "devices[].micloud.country"
+                ]
+              },
               "devices[].prefsDir",
               "devices[].pollingInterval",
               "devices[].deepDebugLog"

@@ -89,7 +89,7 @@ class xiaomiMiotDevice {
 
   initMiotDevice() {
     // if the user specified a model then use that, else try to get cached model
-    this.miotController = new MiotController(this.ip, this.token, this.deviceId, this.model || this.cachedDeviceInfo.model, this.name, this.pollingInterval, this.logger);
+    this.miotController = new MiotController(this.ip, this.token, this.deviceId, this.model || this.cachedDeviceInfo.model, this.name, this.pollingInterval, this.config, this.logger);
 
     this.miotController.on(Events.DEVICE_READY, (miotDevice) => {
       this.miotDevice = miotDevice;
@@ -104,9 +104,8 @@ class xiaomiMiotDevice {
     this.miotController.on(Events.DEVICE_CONNECTED, (miotDevice) => {
       this.logger.debug('Device connected!');
       // update device information
-      if (this.deviceAccessoryObj) {
-        this.updateInformationService();
-      }
+      this.updateInformationService();
+
       // save device information
       this.saveDeviceInfo();
     });

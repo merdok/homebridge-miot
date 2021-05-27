@@ -14,6 +14,7 @@
 ### Ceiling Fan
 * yeelink.light.fancl1 (Yeelight Smart Ceiling Fan)
 * yeelink.light.fancl2 (Yeelight Smart Ceiling Fan S2001)
+* opple.light.fanlight (Opple Ceiling Fan Light) [MiCloud]
 
 ### Heater
 * zhimi.heater.za2 (Smartmi Electric Heater 1S)
@@ -53,3 +54,4 @@
 * dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
 * roborock.vacuum.a15 (Roborock Vacuum S7)
 * roborock.vacuum.a11 (Roborock Vacuum T7)
+* roborock.vacuum.m1s (Xiaomi Mi Robot 1S) [MiCloud]
