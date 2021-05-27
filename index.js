@@ -81,27 +81,33 @@ class xiaomiMiotDevice {
     this.loadDeviceInfo();
 
     //start the device discovery
-    this.initMiotDevice();
+    this.initMiotController();
   }
 
 
   /*----------========== SETUP ==========----------*/
 
-  initMiotDevice() {
+  initMiotController() {
     // if the user specified a model then use that, else try to get cached model
     this.miotController = new MiotController(this.ip, this.token, this.deviceId, this.model || this.cachedDeviceInfo.model, this.name, this.pollingInterval, this.config, this.logger);
 
-    this.miotController.on(Events.DEVICE_READY, (miotDevice) => {
-      this.miotDevice = miotDevice;
-      //prepare the accessory and  do initial accessory information service update
-      if (!this.deviceAccessoryObj) {
-        this.logger.info('Initializing accessory!');
-        this.initAccessory();
-        this.updateInformationService();
-      }
+    this.miotController.on(Events.CONTROLLER_DEVICE_READY, (miotDevice) => {
+      this.setupMiotDevice(miotDevice);
     });
 
-    this.miotController.on(Events.DEVICE_CONNECTED, (miotDevice) => {
+    this.miotController.connectToDevice();
+  }
+
+  setupMiotDevice(miotDevice) {
+    this.miotDevice = miotDevice;
+    //prepare the accessory and do initial accessory information service update
+    if (!this.deviceAccessoryObj) {
+      this.logger.info('Initializing accessory!');
+      this.initAccessory();
+      this.updateInformationService();
+    }
+
+    this.miotDevice.on(Events.DEVICE_CONNECTED, (miotDevice) => {
       this.logger.debug('Device connected!');
       // update device information
       this.updateInformationService();
@@ -110,20 +116,25 @@ class xiaomiMiotDevice {
       this.saveDeviceInfo();
     });
 
-    this.miotController.on(Events.DEVICE_DISCONNECTED, (miotDevice) => {
+    this.miotDevice.on(Events.DEVICE_DISCONNECTED, (miotDevice) => {
       this.logger.debug('Device diconnected!');
       if (this.deviceAccessoryObj) {
         this.deviceAccessoryObj.updateDeviceStatus();
       }
     });
 
-    this.miotController.on(Events.DEVICE_ALL_PROPERTIES_UPDATED, (miotDevice) => {
+    this.miotDevice.on(Events.DEVICE_ALL_PROPERTIES_UPDATED, (miotDevice) => {
       if (this.deviceAccessoryObj) {
         this.deviceAccessoryObj.updateDeviceStatus();
       }
     });
 
-    this.miotController.connectToDevice();
+    this.miotDevice.on(Events.DEVICE_PROPERTY_UPDATED, (property) => {
+      if (this.deviceAccessoryObj) {
+        this.deviceAccessoryObj.updateDeviceStatus();
+      }
+    });
+
   }
 
 
