@@ -227,6 +227,9 @@ Show mode switches which allow to change the device mode. **Default: false**
 Show mop mode switches which allow to change the device mop mode. **Default: false**
 - `dndControl` [optional]
 Show a switch which allows to quickly enable do not disturb mode. **Default: false**
+#### Outlet specific configuration fields
+- `offMemoryControl` [optional]
+Show switches which allow to change the device off memory behaviour. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

@@ -43,6 +43,7 @@
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
+* cuco.plug.cp5 (Gosund Smart Power Strip)
 
 ### Curtain
 * dooya.curtain.m2 (Dooya Curtain)

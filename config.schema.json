@@ -272,6 +272,12 @@
                 }
               },
               "required": false
+            },
+            "offMemoryControl": {
+              "title": "Off memory control service",
+              "description": "Show switches which allow to change the device off memory behaviour.",
+              "type": "boolean",
+              "required": false
             }
           }
         }
@@ -481,6 +487,16 @@
               "devices[].modeControl",
               "devices[].mopModeControl",
               "devices[].dndControl"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Outlet specific settings",
+            "description": "Configure outlet specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].offMemoryControl"
             ]
           }
         ]
