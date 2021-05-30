@@ -42,6 +42,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * zhimi.airpurifier.va1 (Xiaomi Mi Air Purifier Pro H CN)
 * zhimi.airpurifier.za1 (Smartmi Air Purifier)
 * zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) 🔵[MiCloud]
+* zhimi.airpurifier.ma2 (Xiaomi Air Purifier 2S) 🔵[MiCloud]
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
