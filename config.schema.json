@@ -70,6 +70,12 @@
                     "us",
                     "ru"
                   ]
+                },
+                "forceMiCloud": {
+                  "title": "Force MiCloud connection.",
+                  "description": "Use MiCloud instead of local connection even for devices that do not require it.",
+                  "type": "boolean",
+                  "default": false
                 }
               },
               "required": false
@@ -293,20 +299,22 @@
             "items": [
               "devices[].deviceId",
               "devices[].model",
-              {
-                "key": "devices[].micloud",
-                "type": "fieldset",
-                "expandable": true,
-                "expanded": false,
-                "items": [
-                  "devices[].micloud.username",
-                  "devices[].micloud.password",
-                  "devices[].micloud.country"
-                ]
-              },
               "devices[].prefsDir",
               "devices[].pollingInterval",
               "devices[].deepDebugLog"
+            ]
+          },
+          {
+            "type": "fieldset",
+            "title": "MiCloud Settings",
+            "description": "Configure connection details for the MiCloud.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].micloud.username",
+              "devices[].micloud.password",
+              "devices[].micloud.country",
+              "devices[].micloud.forceMiCloud"
             ]
           },
           {
