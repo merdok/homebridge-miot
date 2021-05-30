@@ -6,6 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [0.9.0] - 2021-05-31
+### Added
+- The plugin now supports connection to the MiCloud allowing older devices to also be controlled with the miot protocol
+- Added support for zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) air purifier
+- Added support for dmaker.fan.p5 (Mi Smart Fan 1X) fan
+- Added support for cuco.plug.cp5 (Gosund Smart Power Strip) outlet
+- New `micloud` property for specifying the MiCloud credentials, only required for older devices
+- New `offMemoryControl` property for supported Outlet devices
+
+### Changed
+- Lots of improvements to the miot protocol
+- Devices will now not reconnect immediately on the first failed request, but instead after 3 consecutive fails, this should sort out sporadic packet loss
+- Improved fan speed emulation on devices which only support fan levels
+- More under the hood changes and improvements
+- Some improvements in the config.schema.json
+
+### Fixed
+- Fixed a warning which appeared on air purifier devices
+- Fixed a bug where devices would appear online even when no connection was established to the device
+- Fixed a bug where devices would not reconnect when the connection was lost
+
+
 ## [0.8.2] - 2021-05-24
 ### Added
 - Added support for zhimi.fan.fb1 (Mi Smart Air Circulator Fan) fan

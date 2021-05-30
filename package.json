@@ -1,6 +1,6 @@
 {
   "name": "homebridge-miot",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "description": "Homebridge plugin for devices supporting the miot protocol",
   "main": "index.js",
   "engines": {
@@ -11,6 +11,7 @@
     "homebridge-plugin",
     "xiaomi",
     "miot",
+    "micloud",
     "smartmi",
     "fan",
     "smart",
