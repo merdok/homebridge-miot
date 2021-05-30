@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0] - 2021-05-31
 ### Added
 - The plugin now supports connection to the MiCloud allowing older devices to also be controlled with the miot protocol
+- Added support for roborock.vacuum.m1s (Xiaomi Mi Robot 1S) robot cleaner
 - Added support for zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) air purifier
 - Added support for dmaker.fan.p5 (Mi Smart Fan 1X) fan
 - Added support for cuco.plug.cp5 (Gosund Smart Power Strip) outlet

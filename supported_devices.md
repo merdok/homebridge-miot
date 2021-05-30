@@ -1,5 +1,7 @@
 ## Supported devices
 
+Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the `micloud` property in the `config.json`
+
 ### Fan
 * zhimi.fan.za5 (Smartmi Standing Fan 3)
 * zhimi.fan.fa1 (Mijia DC Circulating Fan)
@@ -10,12 +12,12 @@
 * dmaker.fan.p10 (Mi Smart Standing Fan 2)
 * dmaker.fan.p11 (Mi Smart Standing Fan Pro)
 * dmaker.fan.p15 (Mi Smart Standing Fan Pro EU)
-* dmaker.fan.p5 (Mi Smart Fan 1X) [MiCloud]
+* dmaker.fan.p5 (Mi Smart Fan 1X) 🔵[MiCloud]
 
 ### Ceiling Fan
 * yeelink.light.fancl1 (Yeelight Smart Ceiling Fan)
 * yeelink.light.fancl2 (Yeelight Smart Ceiling Fan S2001)
-* opple.light.fanlight (Opple Ceiling Fan Light) [MiCloud]
+* opple.light.fanlight (Opple Ceiling Fan Light) 🔵[MiCloud]
 
 ### Heater
 * zhimi.heater.za2 (Smartmi Electric Heater 1S)
@@ -39,7 +41,7 @@
 * zhimi.airpurifier.vb2 (Xiaomi Mi Air Purifier Pro H)
 * zhimi.airpurifier.va1 (Xiaomi Mi Air Purifier Pro H CN)
 * zhimi.airpurifier.za1 (Smartmi Air Purifier)
-* zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) [MiCloud]
+* zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) 🔵[MiCloud]
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
@@ -57,4 +59,4 @@
 * dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
 * roborock.vacuum.a15 (Roborock Vacuum S7)
 * roborock.vacuum.a11 (Roborock Vacuum T7)
-* roborock.vacuum.m1s (Xiaomi Mi Robot 1S) [MiCloud]
+* roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
