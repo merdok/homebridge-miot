@@ -106,7 +106,7 @@
               "required": false
             },
             "childLockControl": {
-              "title": "Control the child lock",
+              "title": "Child lock control service",
               "description": "Shows a switch on the device accessory which control the child lock.",
               "type": "boolean",
               "required": false

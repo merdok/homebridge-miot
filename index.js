@@ -112,7 +112,7 @@ class xiaomiMiotDevice {
     this.miotDevice.on(Events.DEVICE_CONNECTED, (miotDevice) => {
       this.logger.debug('Device connected!');
       // update device information since we have more information about the device now. Only if no cached data available!
-      if (Object.keys(this.cachedDeviceInfo).length === 0) {
+      if (!this.cachedDeviceInfo || Object.keys(this.cachedDeviceInfo).length === 0) {
         this.updateInformationService();
       }
 
