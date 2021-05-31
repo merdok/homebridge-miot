@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.1] - 2021-06-01
+### Added
+- Added support for zhimi.airpurifier.ma2 (Xiaomi Air Purifier 2S) air purifier
+
+### Changed
+- Removed `childLockControl` property
+- Improvements to logging
+
+### Fixed
+- Fixed an issue where the country for MiCloud was ignored
+- Fixed an issue in the config.schema.json with buzzer and led control
+
+
 ## [0.9.0] - 2021-05-31
 ### Added
 - The plugin now supports connection to the MiCloud allowing older devices to also be controlled with the miot protocol
