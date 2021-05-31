@@ -47,6 +47,25 @@
               "type": "string",
               "required": false
             },
+            "prefsDir": {
+              "title": "Prefs directory",
+              "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
+              "type": "string",
+              "required": false
+            },
+            "pollingInterval": {
+              "title": "Background polling interval",
+              "description": "How often to check the status of the device in seconds.",
+              "type": "number",
+              "default": 5,
+              "required": false
+            },
+            "deepDebugLog": {
+              "title": "Enable deep debug log",
+              "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
+              "type": "boolean",
+              "default": false
+            },
             "micloud": {
               "title": "MiCloud connection",
               "type": "object",
@@ -75,46 +94,30 @@
                   "title": "Force MiCloud connection.",
                   "description": "Use MiCloud instead of local connection even for devices that do not require it.",
                   "type": "boolean",
-                  "default": false
+                  "required": false
                 }
               },
               "required": false
-            },
-            "prefsDir": {
-              "title": "Prefs directory",
-              "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
-              "type": "string",
-              "required": false
-            },
-            "pollingInterval": {
-              "title": "Background polling interval",
-              "description": "How often to check the status of the device in seconds.",
-              "type": "number",
-              "default": 5,
-              "required": false
-            },
-            "deepDebugLog": {
-              "title": "Enable deep debug log",
-              "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
-              "type": "boolean",
-              "default": false
             },
             "buzzerControl": {
               "title": "Buzzer control service",
               "description": "Whether to show buzzer control buttons.",
               "type": "boolean",
-              "required": false
-            },
-            "childLockControl": {
-              "title": "Child lock control service",
-              "description": "Shows a switch on the device accessory which control the child lock.",
-              "type": "boolean",
+              "default": true,
               "required": false
             },
             "ledControl": {
               "title": "Led control service",
               "description": "Whether to show led control buttons.",
               "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "childLockControl": {
+              "title": "Child lock control service",
+              "description": "Shows a switch on the device accessory which control the child lock.",
+              "type": "boolean",
+              "default": true,
               "required": false
             },
             "swingControl": {
