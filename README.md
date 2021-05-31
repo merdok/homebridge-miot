@@ -142,8 +142,6 @@ Enables additional more detailed debug log. Useful when trying to figure out iss
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
 Whether the led service is enabled. This allows to turn on/off the device LED. **Default: true**
-- `childLockControl` [optional]
-Whether it is possible to control the child lock. Shows a switch on the device accessory to enable/disable the child lock. **Default: true**
 - `actionButtons` [optional]
 Show additional action switches if the device supports any. **Default: false**
   - Set to *true* or *false* to show/hide all actions available on the device

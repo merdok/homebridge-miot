@@ -113,13 +113,6 @@
               "default": true,
               "required": false
             },
-            "childLockControl": {
-              "title": "Child lock control service",
-              "description": "Shows a switch on the device accessory which control the child lock.",
-              "type": "boolean",
-              "default": true,
-              "required": false
-            },
             "swingControl": {
               "title": "Swing control service",
               "description": "Show a switch to quickly enable/disable horizontal and/or vertical swing mode.",
@@ -334,8 +327,7 @@
             "expanded": false,
             "items": [
               "devices[].ledControl",
-              "devices[].buzzerControl",
-              "devices[].childLockControl",
+              "devices[].buzzerControl"
               {
                 "key": "devices[].actionButtons",
                 "description": "Configure action buttons. For details check README.",
