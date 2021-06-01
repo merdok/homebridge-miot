@@ -327,7 +327,7 @@
             "expanded": false,
             "items": [
               "devices[].ledControl",
-              "devices[].buzzerControl"
+              "devices[].buzzerControl",
               {
                 "key": "devices[].actionButtons",
                 "description": "Configure action buttons. For details check README.",
