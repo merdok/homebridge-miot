@@ -32,6 +32,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Curtain
 * Fresh Air System
 * Robot Cleaner
+* Light
 
 More device types will be added!
 
