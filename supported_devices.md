@@ -57,6 +57,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Robot Cleaner
 * dreame.vacuum.p2008 (Dreame F9)
+* dreame.vacuum.p2009 (Dreame D9)
 * dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
 * roborock.vacuum.a15 (Roborock Vacuum S7)
 * roborock.vacuum.a11 (Roborock Vacuum T7)
