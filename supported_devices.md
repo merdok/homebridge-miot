@@ -17,6 +17,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Ceiling Fan
 * yeelink.light.fancl1 (Yeelight Smart Ceiling Fan)
 * yeelink.light.fancl2 (Yeelight Smart Ceiling Fan S2001)
+* yeelink.light.fancl5 (Yeelight Smart Ceiling Fan C900)
 * opple.light.fanlight (Opple Ceiling Fan Light) 🔵[MiCloud]
 
 ### Heater
