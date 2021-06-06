@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.3] - 2021-06-07
+### Added
+- Added support for Light devices
+- Added support for yeelink.light.fancl5 (Yeelight Smart Ceiling Fan C900) ceiling fan
+- Added support for dreame.vacuum.p2009 (Dreame D9) vacuum cleaner
+- Added support for leshi.light.wy0b01 (Scenario WIFI Dual Color Light) light
+
+### Changed
+- Retry MiCloud connection on failed login
+- Improvements the color temperature characteristic
+
+### Fixed
+- Fixed some unhandled errors
+
+
 ## [0.9.2] - 2021-06-01
 ### Fixed
 - Fixed broken config.schema.json
