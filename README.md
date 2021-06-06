@@ -151,7 +151,7 @@ Show additional action switches if the device supports any. **Default: false**
     - *action* - [required] the action name
     - *name* - [optional] the name of the switch
     - *params* - [optional] parameters to be used for the action, not all actions support parameters
-  - To get the action names available for the device simply check the homebridge debug console. The action names will be printed there during initialization
+  - To get the action names available for the device simply check the homebridge log. Available device action names will be printed there during initialization
 #### Fan specific configuration fields
 - `swingControl` [optional]
 Show a switch to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
