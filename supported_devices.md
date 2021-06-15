@@ -63,6 +63,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * roborock.vacuum.a15 (Roborock Vacuum S7)
 * roborock.vacuum.a11 (Roborock Vacuum T7)
 * roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
+* viomi.vacuum.v10 (Mi Robot Vacuum Mop P)
 
 ### Light
 * leshi.light.wy0b01 (Scenario WIFI Dual Color Light)
