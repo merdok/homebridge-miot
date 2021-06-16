@@ -227,6 +227,8 @@ Show mop mode switches which allow to change the device mop mode. **Default: fal
 - `dndControl` [optional]
 Show a switch which allows to quickly enable do not disturb mode. **Default: false**
 #### Outlet specific configuration fields
+- `shutdownTimer` [optional]
+Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `offMemoryControl` [optional]
 Show switches which allow to change the device off memory behaviour. **Default: false**
 

@@ -491,6 +491,7 @@
             "expandable": true,
             "expanded": false,
             "items": [
+              "devices[].shutdownTimer",
               "devices[].offMemoryControl"
             ]
           }
