@@ -47,6 +47,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
+* cuco.plug.cp2 (Gosund Socket)
 * cuco.plug.cp5 (Gosund Smart Power Strip)
 
 ### Curtain
