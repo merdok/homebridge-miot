@@ -146,7 +146,7 @@ class xiaomiMiotDevice {
 
   initAccessory() {
     // generate uuid
-    this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip);
+    this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
 
     // prepare the fan accessory
     this.deviceAccessoryObj = AccessoryFactory.createAccessory(this.name, this.miotDevice, this.UUID, this.config, this.api, this.logger);
