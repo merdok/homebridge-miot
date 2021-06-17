@@ -3,6 +3,7 @@
 Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the `micloud` property in the `config.json`
 
 ### Fan
+* zhimi.fan.za4 (Smartmi Standing Fan 2S) 🔵[MiCloud]
 * zhimi.fan.za5 (Smartmi Standing Fan 3)
 * zhimi.fan.fa1 (Mijia DC Circulating Fan)
 * zhimi.fan.fb1 (Mi Smart Air Circulator Fan)
