@@ -14,6 +14,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * dmaker.fan.p11 (Mi Smart Standing Fan Pro)
 * dmaker.fan.p15 (Mi Smart Standing Fan Pro EU)
 * dmaker.fan.p5 (Mi Smart Fan 1X) 🔵[MiCloud]
+* dmaker.fan.p18 (Mi Smart Fan 2)
 
 ### Ceiling Fan
 * yeelink.light.fancl1 (Yeelight Smart Ceiling Fan)
