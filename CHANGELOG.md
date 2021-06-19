@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.4] - 2021-06-20
+### Added
+- Added support for Air Conditioner devices
+- Added support for Airer devices
+- Added support for viomi.vacuum.v10 (Mi Robot Vacuum Mop P) vacuum cleaner
+- Added support for cuco.plug.cp2 (Gosund Socket) outlet device
+- Added support for zhimi.fan.za4 (Smartmi Standing Fan 2S) fan
+- Added support for dmaker.fan.p18 (Mi Smart Fan 2) fan
+- Added support for lumi.aircondition.acn05 (Aqara Air Conditioning Companion P3) air conditioner
+- Added support for hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer) airer
+
+### Changed
+- Added `ledControl` and `shutdownTimer` property to outlet devices
+- The generated accessory uuid will now be more unique to prevent conflicts, this might cause existing accessories to reset
+
+
 ## [0.9.3] - 2021-06-07
 ### Added
 - Added support for Light devices
