@@ -28,6 +28,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Humidifier
 * Dehumidifier
 * Air Purifier
+* Air Conditioner
 * Outlet
 * Curtain
 * Fresh Air System
@@ -231,6 +232,13 @@ Show a switch which allows to quickly enable do not disturb mode. **Default: fal
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `offMemoryControl` [optional]
 Show switches which allow to change the device off memory behaviour. **Default: false**
+#### Fan specific configuration fields
+- `swingControl` [optional]
+Show a switch to quickly enable/disable vertical swing mode. **Default: false**
+- `fanLevelControl` [optional]
+Show fan level switches which allow to change the fan level. **Default: true**
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: true**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

@@ -47,6 +47,9 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * zhimi.airpurifier.mc2 (Xiaomi Air Purifier 2H) 🔵[MiCloud]
 * zhimi.airpurifier.ma2 (Xiaomi Air Purifier 2S) 🔵[MiCloud]
 
+### Air Conditioner
+* lumi.aircondition.acn05 (Aqara Air Conditioning Companion P3)
+
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
 * cuco.plug.cp2 (Gosund Socket)

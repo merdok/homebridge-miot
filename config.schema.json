@@ -494,6 +494,18 @@
               "devices[].shutdownTimer",
               "devices[].offMemoryControl"
             ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Air Conditioner specific settings",
+            "description": "Configure air conditioner specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].swingControl",
+              "devices[].fanLevelControl",
+              "devices[].modeControl"
+            ]
           }
         ]
       }
