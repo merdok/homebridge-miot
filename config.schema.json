@@ -506,6 +506,16 @@
               "devices[].fanLevelControl",
               "devices[].modeControl"
             ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Airer specific settings",
+            "description": "Configure airer specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].motorControl"
+            ]
           }
         ]
       }
