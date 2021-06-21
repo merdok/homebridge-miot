@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.5] - 2021-06-21
+### Changed
+- Add additional MiCloud servers
+- Update README
+
+### Fixed
+- Fixed a typo which might cause a crash
+
+
 ## [0.9.4] - 2021-06-20
 ### Added
 - Added support for Air Conditioner devices
