@@ -472,7 +472,16 @@
             "items": [
               "devices[].fanLevelControl",
               "devices[].heaterControl",
-              "devices[].modeControl"
+              "devices[].modeControl",
+              {
+                "key": "devices[].pm25Breakpoints",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "maxItems": 4,
+                  "uniqueItems": true
+                }
+              }
             ]
           },
           {
