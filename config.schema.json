@@ -471,7 +471,8 @@
             "expanded": false,
             "items": [
               "devices[].fanLevelControl",
-              "devices[].heaterControl"
+              "devices[].heaterControl",
+              "devices[].modeControl"
             ]
           },
           {

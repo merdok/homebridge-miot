@@ -62,6 +62,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Fresh Air System
 * zhimi.airfresh.ua1 (Mi Fresh Air Ventilator C1-80)
+* dmaker.airfresh.a1 (Xiaomi Mi Air Purifier A1 MJXFJ-150-A1) 🔵[MiCloud]
 
 ### Robot Cleaner
 * dreame.vacuum.p2008 (Dreame F9)
