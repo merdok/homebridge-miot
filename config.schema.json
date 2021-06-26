@@ -528,6 +528,15 @@
             "items": [
               "devices[].motorControl"
             ]
+          },
+          {
+            "type": "fieldset",
+            "title": "Oven specific settings",
+            "description": "Configure oven specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+            ]
           }
         ]
       }

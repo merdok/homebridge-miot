@@ -35,6 +35,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Robot Cleaner
 * Light
 * Airer
+* Oven
 
 More device types will be added!
 
@@ -248,6 +249,8 @@ Show mode switches which allow to change the device mode. **Default: true**
 #### Airer specific configuration fields
 - `motorControl` [optional]
 Show motor control switches which allow to control the airer. **Default: true**
+#### Oven specific configuration fields
+- none
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
