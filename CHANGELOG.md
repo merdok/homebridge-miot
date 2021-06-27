@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.6] - 2021-06-28
+### Added
+- Added support for Oven devices
+- Added support for chuangmi.plug.212a01 (Mi Smart Power Plug 2) outlet
+- Added support for dmaker.airfresh.a1 (Xiaomi Mi Air Purifier A1) fresh air system
+- Added support for chunmi.microwave.n20l01 (Mi Smart Microwave Oven) oven
+
+### Changed
+- Improvements to the air quality service
+- Marked viomi.vacuum.v10 as a MiCloud device
+- Change airer accessory to lightbulb instead of window covering
+
+
 ## [0.9.5] - 2021-06-21
 ### Changed
 - Add additional MiCloud servers
