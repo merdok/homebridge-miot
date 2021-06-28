@@ -227,6 +227,8 @@ Show a switch which allows to quickly enable the heater. **Default: true**
 Show mode switches which allow to change the device mode. **Default: false**
 - `pm25Breakpoints` [optional]
 Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers. **Default: [7, 15, 30, 55]**
+- `co2AbnormalThreshold` [optional]
+Define a custom carbon dioxide sensor abnormal threshold. **Default: 1000**
 #### Robot Cleaner specific configuration fields
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**

@@ -237,6 +237,12 @@
               },
               "required": false
             },
+            "co2AbnormalThreshold": {
+              "title": "Carbon Dioxide abnormal threshold",
+              "description": "Define a custom carbon dioxide sensor abnormal threshold.",
+              "type": "integer",
+              "required": false
+            },
             "dndControl": {
               "title": "Do not disturb control service",
               "description": "Show a switch which allows to quickly enable do not disturb mode.",
@@ -481,7 +487,8 @@
                   "maxItems": 4,
                   "uniqueItems": true
                 }
-              }
+              },
+              "devices[].co2AbnormalThreshold"
             ]
           },
           {
