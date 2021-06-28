@@ -80,4 +80,4 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer)
 
 ### Oven
-* chunmi.microwave.n20l01 (Mi Smart Microwave Oven)
+* chunmi.microwave.n20l01 (Mi Smart Microwave Oven) 🔵[MiCloud]
