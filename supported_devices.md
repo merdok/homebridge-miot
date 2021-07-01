@@ -49,6 +49,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Conditioner
 * lumi.aircondition.acn05 (Aqara Air Conditioning Companion P3)
+* lumi.acpartner.mcn02 (Xiaomi Mi Air Conditioner Companion 2) 🔵[MiCloud]
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
@@ -78,7 +79,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 * leshi.light.wy0b01 (Scenario WIFI Dual Color Light)
 
 ### Airer
-* hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer)
+* hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer) 🔵[MiCloud]
 
 ### Oven
 * chunmi.microwave.n20l01 (Mi Smart Microwave Oven) 🔵[MiCloud]
