@@ -49,6 +49,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Conditioner
 * lumi.aircondition.acn05 (Aqara Air Conditioning Companion P3)
+* lumi.acpartner.mcn02 (MI Air Conditioner Companion MCN2) 🔵[MiCloud]
 
 ### Outlet
 * cuco.plug.cp1 (Gosund Smart Plug)
