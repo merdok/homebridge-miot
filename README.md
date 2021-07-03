@@ -223,6 +223,8 @@ Show a switch which allows to quickly reverse the motor. **Default: false**
 Show fan level switches which allow to change the fan level. **Default: true**
 - `heaterControl` [optional]
 Show a switch which allows to quickly enable the heater. **Default: true**
+- `heatLevelControl` [optional]
+Show heat level switches which allow to change the heat level. **Default: false**
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
 - `pm25Breakpoints` [optional]
