@@ -155,7 +155,7 @@ class xiaomiMiotDevice {
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.deviceAccessoryObj.getAccessory()]);
       this.logger.info('Accessory successfully initialized!');
     } else {
-      this.logger.error('Something went. Could not initialize accessory!');
+      this.logger.error('Something went wrong. Could not initialize accessory!');
     }
   }
 
