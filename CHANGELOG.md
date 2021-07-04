@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.7] - 2021-07-05
+### Added
+- Added carbon dioxide sensor to fresh air systems
+- New `co2AbnormalThreshold` property to control the abnormal state of the carbon dioxide sensor
+- Show VOC value on air quality sensor if available
+- Added support for dreame.vacuum.p2041 (Xiaomi Mijia 1T Robot Vacuum Cleaner) robot cleaner
+- Added support for lumi.acpartner.mcn02 (Xiaomi Mi Air Conditioner Companion 2) air conditioner
+- Added support for dmaker.airfresh.t2017 (Xiaomi Air Purifier MJXFJ-300-G1) fresh air system
+- Added support for zhimi.airpurifier.v7 (Xiaomi Mi Air Purifier Pro V7) air purifier
+- Added `heatLevelControl` property for supported Fresh Air Systems devices
+
+### Changed
+- The chunmi.microwave.n20l01 is now marked as MiCloud required
+- Adjusted hyd.airer.znlyj1 device spec
+
+### Fixed
+- Fixed some typos in the chunmi.microwave.n20l01 oven
+- Fixed typo in README
+
+
 ## [0.9.6] - 2021-06-28
 ### Added
 - Added support for Oven devices
