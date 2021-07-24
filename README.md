@@ -137,6 +137,7 @@ This is a configuration object for the MiCloud. Some older devices require a MiC
   - *password* - [required] the MiCloud password
   - *country* - [optional] the country where the servers are located for your devices. **Default: "cn"**
   - *forceMiCloud* - [optional] forces to use MiCloud even when the device supports local commands. **Default: false**
+  - *timeout* - [optional] set a custom request timeout in milliseconds. Has to be less or equal to the pollingInterval **Default: 5000**
 - `prefsDir` [optional]
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]
