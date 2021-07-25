@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.8] - 2021-07-26
+### Added
+- Added support for mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1) robot cleaner
+- Added support for dreame.vacuum.p2028 (Dreame Bot Z10 Pro Vacuum) robot cleaner
+- Added support for yeelink.light.color3 (Yeelight LED Color Bulb) light
+
+### Changed
+- Show target temperature on air conditioner devices which does not support temperature reporting
+- Cleaned up actions
+- Improve device factories
+- Improve device definition
+
+### Fixed
+- Fixed an error for air conditioner devices
+
+
 ## [0.9.7] - 2021-07-05
 ### Added
 - Added carbon dioxide sensor to fresh air systems
