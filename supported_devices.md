@@ -89,3 +89,6 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Oven
 * chunmi.microwave.n20l01 (Mi Smart Microwave Oven) 🔵[MiCloud]
 * chunmi.oven.x02 (Mi Smart Steam Oven)
+
+### Coffee Machine
+* scishare.coffee.s1102 (Scishare Capsule Coffee Maker) 🔵[MiCloud]

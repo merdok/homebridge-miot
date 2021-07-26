@@ -36,6 +36,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Light
 * Airer
 * Oven
+* Coffee Machine
 
 More device types will be added!
 
@@ -255,6 +256,8 @@ Show mode switches which allow to change the device mode. **Default: true**
 - `motorControl` [optional]
 Show motor control switches which allow to control the airer. **Default: true**
 #### Oven specific configuration fields
+- none
+#### Coffee Machine specific configuration fields
 - none
 
 ## Troubleshooting

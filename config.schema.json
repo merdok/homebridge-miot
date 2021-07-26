@@ -543,8 +543,15 @@
             "description": "Configure oven specific device settings.",
             "expandable": true,
             "expanded": false,
-            "items": [
-            ]
+            "items": []
+          },
+          {
+            "type": "fieldset",
+            "title": "Coffee Machine specific settings",
+            "description": "Configure coffee machine specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": []
           }
         ]
       }
