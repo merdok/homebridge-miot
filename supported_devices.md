@@ -94,3 +94,6 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Coffee Machine
 * scishare.coffee.s1102 (Scishare Capsule Coffee Maker) 🔵[MiCloud]
+
+### Camera
+* isa.camera.hlc7 (Xiaomi Mi Home Magnetic Mount Outdoor Camera)

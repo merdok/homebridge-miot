@@ -552,6 +552,14 @@
             "expandable": true,
             "expanded": false,
             "items": []
+          },
+          {
+            "type": "fieldset",
+            "title": "Camera specific settings",
+            "description": "Camera machine specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": []
           }
         ]
       }
