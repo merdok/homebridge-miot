@@ -282,6 +282,24 @@
               "description": "Show switches which allow to change the device off memory behaviour.",
               "type": "boolean",
               "required": false
+            },
+            "nightShotControl": {
+              "title": "Night shot control service",
+              "description": "Show night shot switches which allow to change the night shot.",
+              "type": "boolean",
+              "required": false
+            },
+            "recordingModeControl": {
+              "title": "Recording mode control service",
+              "description": "Show recording mode switches which allow to change the recording mode.",
+              "type": "boolean",
+              "required": false
+            },
+            "motionDetectionControl": {
+              "title": "Motion detection control service",
+              "description": "Show a switch which allows to quickly enable/disable the motion detection on your device.",
+              "type": "boolean",
+              "required": false
             }
           }
         }
@@ -559,7 +577,11 @@
             "description": "Camera machine specific device settings.",
             "expandable": true,
             "expanded": false,
-            "items": []
+            "items": [
+              "devices[].nightShotControl",
+              "devices[].recordingModeControl",
+              "devices[].motionDetectionControl"
+            ]
           }
         ]
       }

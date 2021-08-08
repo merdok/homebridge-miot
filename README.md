@@ -261,7 +261,12 @@ Show motor control switches which allow to control the airer. **Default: true**
 #### Coffee Machine specific configuration fields
 - none
 #### Camera specific configuration fields
-- none
+- `nightShotControl` [optional]
+Show night shot switches which allow to change the device night shot property. **Default: false**
+- `recordingModeControl` [optional]
+Show recording mode switches which allow to change the device recording mode. **Default: false**
+- `motionDetectionControl` [optional]
+Show a switch which allows to quickly enable/disable the motion detection on the device. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
