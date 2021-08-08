@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.9] - 2021-08-09
+### Added
+- New coffee machine device type
+- New camera device type with basic support (no stream)
+- Added support for chunmi.oven.x02 (Mi Smart Steam Oven) oven
+- Added support for scishare.coffee.s1102 (Scishare Capsule Coffee Maker) coffee machine
+- Added support for zhimi.airpurifier.xa1 (Mi Air Purifier X) air purifier
+- Added support for dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum) robot cleaner
+- Added support for isa.camera.hlc7 (Xiaomi Mi Home Magnetic Mount Outdoor Camera) camera
+- Added support for the air.fan.ca23ad9 (AIRMATE CA23-AD9 Air Circulation Fan) fan
+- Added support for rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) robot cleaner
+
+### Fixed
+- Fixed an warning for humidifier devices
+
+
 ## [0.9.8] - 2021-07-26
 ### Added
 - Added support for mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1) robot cleaner
