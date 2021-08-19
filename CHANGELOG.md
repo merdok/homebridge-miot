@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.10] - 2021-08-20
+### Added
+- Added support for hanyi.airpurifier.kj550 (MiWhole Air Purifier Mix) air purifier
+- Added support for dreame.vacuum.p2029 (Dreame Bot L10 Pro) robot cleaner
+
+### Changed
+- Some improvements to the oven accessory
+
+### Fixed
+
+
 ## [0.9.9] - 2021-08-09
 ### Added
 - New coffee machine device type
