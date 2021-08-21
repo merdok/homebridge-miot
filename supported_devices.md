@@ -95,6 +95,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum)
 -   rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
 -   dreame.vacuum.p2029 (Dreame Bot L10 Pro)
+-   dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
 
 ### Light
 
