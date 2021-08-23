@@ -88,7 +88,9 @@
             btn.prop('disabled', false).html("Discover All Devices");
           }
           else if (data.success && data.devices) {
-            configuration.devices = data.devices;
+            // add new devices to exists devices list, prevent duplicate by device ip
+            const devices = data.devices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
+            configuration.devices.push(...devices);
             await homebridge.updatePluginConfig([configuration]);
             createForm(configSchema, configuration);
             homebridge.toast.success('Total ' + data.devices.length + ' added. Save and restart Homebridge to apply changes.');

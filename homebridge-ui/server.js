@@ -1,6 +1,7 @@
 const { HomebridgePluginUiServer } = require('@homebridge/plugin-ui-utils');
 const MiCloud = require('../lib/protocol/MiCloud');
 const TwoFactorRequired = require("../lib/errors/TwoFactorRequired");
+const Logger = require("../lib/Logger");
 
 class UiServer extends HomebridgePluginUiServer {
   constructor () {
@@ -14,11 +15,7 @@ class UiServer extends HomebridgePluginUiServer {
   }
 
   async getAllDevices(params) {
-    const logger = {
-      debug(msg) {},
-      deepDebug(msg) {}
-    };
-    const miCloud = new MiCloud(logger);
+    const miCloud = new MiCloud(new Logger());
     const devices = [];
     try {
       await miCloud.login(params.username, params.password);
