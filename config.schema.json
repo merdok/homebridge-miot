@@ -405,7 +405,10 @@
                   "type": "integer"
                 }
               }
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -418,7 +421,10 @@
               "devices[].modeControl",
               "devices[].lightModeControl",
               "devices[].lightShutdownTimer"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(opple|yeelink)\\.light\\.fan([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -430,7 +436,10 @@
               "devices[].shutdownTimer",
               "devices[].heatLevelControl",
               "devices[].modeControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^zhimi\\.heater\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -442,7 +451,10 @@
               "devices[].screenControl",
               "devices[].dryControl",
               "devices[].fanLevelControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|deerma)\\.humidifier\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -453,7 +465,10 @@
             "items": [
               "devices[].modeControl",
               "devices[].fanLevelControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -474,7 +489,10 @@
                   "uniqueItems": true
                 }
               }
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(hanyi|zhimi)\\.airpurifier\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -485,7 +503,10 @@
             "items": [
               "devices[].motorControl",
               "devices[].motorReverseControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(dooya|leshi)\\.curtain\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -508,7 +529,10 @@
                 }
               },
               "devices[].co2AbnormalThreshold"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -520,7 +544,10 @@
               "devices[].modeControl",
               "devices[].mopModeControl",
               "devices[].dndControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(dreame|mijia|roborock|viomi)\\.vacuum\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -531,7 +558,10 @@
             "items": [
               "devices[].shutdownTimer",
               "devices[].offMemoryControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(chuangmi|cuco)\\.plug\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -543,7 +573,10 @@
               "devices[].swingControl",
               "devices[].fanLevelControl",
               "devices[].modeControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -553,7 +586,10 @@
             "expanded": false,
             "items": [
               "devices[].motorControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -561,7 +597,10 @@
             "description": "Configure oven specific device settings.",
             "expandable": true,
             "expanded": false,
-            "items": []
+            "items": [],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^chunmi\\.(microwave|oven)\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -569,7 +608,10 @@
             "description": "Configure coffee machine specific device settings.",
             "expandable": true,
             "expanded": false,
-            "items": []
+            "items": [],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^scishare\\.coffee\\.([^.]+)$/);"
+			}
           },
           {
             "type": "fieldset",
@@ -581,7 +623,10 @@
               "devices[].nightShotControl",
               "devices[].recordingModeControl",
               "devices[].motionDetectionControl"
-            ]
+            ],
+			"condition": {
+			  "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^isa\\.camera\\.([^.]+)$/);"
+			}
           }
         ]
       }
