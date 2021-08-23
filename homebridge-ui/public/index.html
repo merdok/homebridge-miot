@@ -1,0 +1,116 @@
+<script crossorigin="anonymous" src="js/jquery.slim.js"></script>
+<script crossorigin="anonymous" src="js/popper.js"></script>
+<script crossorigin="anonymous" src="js/bootstrap.js"></script>
+
+<div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+                <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
+                    Automatically discover all devices via MiCloud Login
+                </button>
+            </h5>
+        </div>
+
+        <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="collapseOne">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="userNameInput">userId/email/phone</label>
+                            <input class="form-control" id="usernameInput" required type="text">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="passwordInput">password</label>
+                            <input class="form-control" id="passwordInput" required type="password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
+                </div>
+
+                <div class="text-center two-factor-url" style="display: none">
+                    <a class="btn btn-primary btn-login" href="#">2FA required, click here, wait a few second and try again</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  const homebridge = window.homebridge;
+  const $ = jQuery = window.jQuery;
+
+  (async () => {
+    homebridge.showSpinner();
+
+    // get the initial config - this is an array potentially containing multiple config blocks
+    const pluginConfig = await homebridge.getPluginConfig();
+    const configSchema = await homebridge.getPluginConfigSchema();
+
+    if (!pluginConfig.length) {
+      pluginConfig.push({});
+    }
+    const configuration = pluginConfig[0];
+    configuration.devices = configuration.devices || [];
+
+    function createForm(configSchema, configuration) {
+      const configForm = homebridge.createForm(configSchema, configuration);
+      configForm.onChange(async (changes) => {
+        await homebridge.updatePluginConfig([changes]);
+      })
+    }
+
+    $('#getAllDevices').on('click', function (e) {
+      e.preventDefault();
+      var username = $('#usernameInput').val(),
+        password = $('#passwordInput').val();
+      var btn = $(this);
+
+      if (username && password) {
+        $('.two-factor-url').hide();
+        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+
+        homebridge.request('/get-all-devices', {
+          username,
+          password,
+        }).then(async data => {
+          if (typeof data.success === 'undefined' || data.success === false) {
+            homebridge.toast.error('Login error. ' + data.error, 'Error');
+            btn.prop('disabled', false).html("Discover All Devices");
+          }
+          else if (data.success && !data.devices.length) {
+            homebridge.toast.warning('No devices found on your account.');
+            btn.prop('disabled', false).html("Discover All Devices");
+          }
+          else if (data.success && data.devices) {
+            configuration.devices = data.devices;
+            await homebridge.updatePluginConfig([configuration]);
+            createForm(configSchema, configuration);
+            homebridge.toast.success('Total ' + data.devices.length + ' added. Save and restart Homebridge to apply changes.');
+            btn.prop('disabled', false).html("Discover All Devices");
+
+            $(this).closest('.collapse').removeClass('show');
+          }
+          else if (!data.success && data.url) {
+            homebridge.toast.error(data.error);
+            $('.two-factor-url a').attr('href', data.url);
+            $('.two-factor-url').show();
+            btn.prop('disabled', false).html("Discover All Devices");
+          }
+        })
+      }
+      else {
+        homebridge.toast.error('A username and password must be provided.', 'Error');
+      }
+    })
+
+    createForm(configSchema, configuration);
+
+    homebridge.hideSpinner();
+  })();
+</script>
