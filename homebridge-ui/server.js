@@ -16,15 +16,18 @@ class UiServer extends HomebridgePluginUiServer {
 
   async getAllDevices(params) {
     const miCloud = new MiCloud(new Logger());
-    const devices = [];
+    miCloud.setRequestTimeout(10000); // timeout 10 seconds
+    var devices = [];
     try {
       await miCloud.login(params.username, params.password);
       // list all device from all available countries
       for (const country of miCloud.availableCountries) {
         miCloud.setCountry(country);
         // prevent duplicate device
-        const list = (await miCloud.getDevices()).filter(device => !devices.find(d => d.did === device.did));
-        devices.push(...list);
+        const allList = (await miCloud.getDevices()).filter(device => !devices.find(d => d.did === device.did));
+        // filter out device without an local ip and without ssid (most probably bluetooth devices)
+        const validList = allList.filter(device => device.localip && device.localip.length > 0 && device.ssid && device.ssid.length > 0);
+        devices.push(...validList);
       }
 
       return {

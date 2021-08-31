@@ -5,9 +5,9 @@
 <div id="accordion">
   <div class="card">
     <div class="card-header" id="headingOne">
-      <h5 class="mb-0">
-        <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
-          Automatically discover all devices via MiCloud Login
+      <h5 class="mb-0 text-center">
+        <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-deep-orange" data-target="#collapseOne" data-toggle="collapse">
+          Automatically discover all devices via MiCloud
         </button>
       </h5>
     </div>
@@ -67,13 +67,18 @@
 
     $('#getAllDevices').on('click', function(e) {
       e.preventDefault();
-      var username = $('#usernameInput').val(),
-        password = $('#passwordInput').val();
-      var btn = $(this);
+      var btn = $(this),
+        usernameInput = $('#usernameInput'),
+        passwordInput = $('#passwordInput');
+
+      var username = usernameInput.val(),
+        password = passwordInput.val();
 
       if (username && password) {
         $('.two-factor-url').hide();
         btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        usernameInput.prop('disabled', true);
+        passwordInput.prop('disabled', true);
 
         homebridge.request('/get-all-devices', {
           username,
@@ -81,26 +86,24 @@
         }).then(async data => {
           if (typeof data.success === 'undefined' || data.success === false) {
             homebridge.toast.error('Login error. ' + data.error, 'Error');
-            btn.prop('disabled', false).html("Discover All Devices");
           } else if (data.success && !data.devices.length) {
             homebridge.toast.warning('No devices found on your account.');
-            btn.prop('disabled', false).html("Discover All Devices");
           } else if (data.success && data.devices) {
             // add new devices to exists devices list, prevent duplicate by device ip
             const devices = data.devices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
             configuration.devices.push(...devices);
             await homebridge.updatePluginConfig([configuration]);
             createForm(configSchema, configuration);
-            homebridge.toast.success('Total ' + data.devices.length + ' added. Save and restart Homebridge to apply changes.');
-            btn.prop('disabled', false).html("Discover All Devices");
-
+            homebridge.toast.success('Added ' + devices.length + ' new devices. Save and restart Homebridge to apply changes.');
             $(this).closest('.collapse').removeClass('show');
           } else if (!data.success && data.url) {
             homebridge.toast.error(data.error);
             $('.two-factor-url a').attr('href', data.url);
             $('.two-factor-url').show();
-            btn.prop('disabled', false).html("Discover All Devices");
           }
+          btn.prop('disabled', false).html("Discover All Devices");
+          usernameInput.prop('disabled', false);
+          passwordInput.prop('disabled', false);
         })
       } else {
         homebridge.toast.error('A username and password must be provided.', 'Error');
