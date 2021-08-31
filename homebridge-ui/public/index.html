@@ -3,42 +3,42 @@
 <script crossorigin="anonymous" src="js/bootstrap.js"></script>
 
 <div id="accordion">
-    <div class="card">
-        <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-                <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
-                    Automatically discover all devices via MiCloud Login
-                </button>
-            </h5>
-        </div>
-
-        <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="collapseOne">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="userNameInput">userId/email/phone</label>
-                            <input class="form-control" id="usernameInput" required type="text">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="passwordInput">password</label>
-                            <input class="form-control" id="passwordInput" required type="password">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center">
-                    <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
-                </div>
-
-                <div class="text-center two-factor-url" style="display: none">
-                    <a class="btn btn-primary btn-login" href="#">2FA required, click here, wait a few second and try again</a>
-                </div>
-            </div>
-        </div>
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
+          Automatically discover all devices via MiCloud Login
+        </button>
+      </h5>
     </div>
+
+    <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="collapseOne">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="userNameInput">UserId/Email/Phone</label>
+              <input class="form-control" id="usernameInput" required type="text">
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="passwordInput">Password</label>
+              <input class="form-control" id="passwordInput" required type="password">
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
+        </div>
+
+        <div class="text-center two-factor-url" style="display: none">
+          <a class="btn btn-primary btn-login" href="#">2FA required, click here, wait a few seconds and try again!</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -65,7 +65,7 @@
       })
     }
 
-    $('#getAllDevices').on('click', function (e) {
+    $('#getAllDevices').on('click', function(e) {
       e.preventDefault();
       var username = $('#usernameInput').val(),
         password = $('#passwordInput').val();
@@ -82,12 +82,10 @@
           if (typeof data.success === 'undefined' || data.success === false) {
             homebridge.toast.error('Login error. ' + data.error, 'Error');
             btn.prop('disabled', false).html("Discover All Devices");
-          }
-          else if (data.success && !data.devices.length) {
+          } else if (data.success && !data.devices.length) {
             homebridge.toast.warning('No devices found on your account.');
             btn.prop('disabled', false).html("Discover All Devices");
-          }
-          else if (data.success && data.devices) {
+          } else if (data.success && data.devices) {
             // add new devices to exists devices list, prevent duplicate by device ip
             const devices = data.devices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
             configuration.devices.push(...devices);
@@ -97,16 +95,14 @@
             btn.prop('disabled', false).html("Discover All Devices");
 
             $(this).closest('.collapse').removeClass('show');
-          }
-          else if (!data.success && data.url) {
+          } else if (!data.success && data.url) {
             homebridge.toast.error(data.error);
             $('.two-factor-url a').attr('href', data.url);
             $('.two-factor-url').show();
             btn.prop('disabled', false).html("Discover All Devices");
           }
         })
-      }
-      else {
+      } else {
         homebridge.toast.error('A username and password must be provided.', 'Error');
       }
     })

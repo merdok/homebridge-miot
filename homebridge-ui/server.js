@@ -4,7 +4,7 @@ const TwoFactorRequired = require("../lib/errors/TwoFactorRequired");
 const Logger = require("../lib/Logger");
 
 class UiServer extends HomebridgePluginUiServer {
-  constructor () {
+  constructor() {
     // super must be called first
     super();
 
