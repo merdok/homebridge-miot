@@ -58,7 +58,7 @@
               "title": "Background polling interval",
               "description": "How often to check the status of the device in seconds.",
               "type": "number",
-              "default": 5,
+              "default": 7,
               "required": false
             },
             "deepDebugLog": {
@@ -94,9 +94,16 @@
                   ]
                 },
                 "forceMiCloud": {
-                  "title": "Force MiCloud connection.",
+                  "title": "Force MiCloud connection",
                   "description": "Use MiCloud instead of local connection even for devices that do not require it.",
                   "type": "boolean",
+                  "required": false
+                },
+                "timeout": {
+                  "title": "Request timeout",
+                  "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
+                  "type": "number",
+                  "default": 5000,
                   "required": false
                 }
               },
@@ -343,7 +350,8 @@
               "devices[].micloud.username",
               "devices[].micloud.password",
               "devices[].micloud.country",
-              "devices[].micloud.forceMiCloud"
+              "devices[].micloud.forceMiCloud",
+              "devices[].micloud.timeout"
             ]
           },
           {

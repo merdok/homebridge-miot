@@ -2,6 +2,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const MiotController = require('./lib/MiotController.js');
 const AccessoryFactory = require('./lib/factories/AccessoryFactory.js');
+const Constants = require('./lib/constants/Constants.js');
 const Logger = require('./lib/utils/Logger.js');
 const Events = require('./lib/constants/Events.js');
 
@@ -45,8 +46,10 @@ class xiaomiMiotDevice {
     this.token = config.token;
     this.deviceId = config.deviceId;
     this.model = config.model;
-    this.pollingInterval = config.pollingInterval || 5;
-    this.pollingInterval = this.pollingInterval * 1000;
+    this.pollingInterval = config.pollingInterval || Constants.DEFAULT_POLLING_INTERVAL;
+    if (this.pollingInterval < 500) {
+      this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
+    }
     this.prefsDir = config.prefsDir || api.user.storagePath() + '/.xiaomiMiot/';
     this.deepDebugLog = config.deepDebugLog;
     if (this.deepDebugLog === undefined) {

@@ -143,7 +143,7 @@ This is a configuration object for the MiCloud. Some older devices require a MiC
 - `prefsDir` [optional]
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]
-The device state background polling interval in seconds. **Default: 5**
+The device state background polling interval in seconds. **Default: 7**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `buzzerControl` [optional]
