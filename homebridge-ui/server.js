@@ -1,6 +1,6 @@
 const { HomebridgePluginUiServer } = require('@homebridge/plugin-ui-utils');
 const MiCloud = require('../lib/protocol/MiCloud');
-const TwoFactorRequired = require("../lib/errors/TwoFactorRequired");
+const TwoFactorRequired = require("../lib/utils/errors/TwoFactorRequired");
 const Logger = require("../lib/utils/Logger");
 
 class UiServer extends HomebridgePluginUiServer {
