@@ -118,3 +118,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Camera
 
 -   isa.camera.hlc7 (Xiaomi Mi Home Magnetic Mount Outdoor Camera)
+
+### Bath Heater
+
+-   yeelink.bhf_light.v5 (Mi Smart Bathroom Heater Pro)

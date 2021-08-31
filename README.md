@@ -38,6 +38,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Oven
 * Coffee Machine
 * Camera
+* Bath Heater
 
 More device types will be added!
 
@@ -267,6 +268,15 @@ Show night shot switches which allow to change the device night shot property. *
 Show recording mode switches which allow to change the device recording mode. **Default: false**
 - `motionDetectionControl` [optional]
 Show a switch which allows to quickly enable/disable the motion detection on the device. **Default: false**
+#### Bath Heater specific configuration fields
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: false**
+- `lightModeControl` [optional]
+Show light mode switches which allow to change the light mode. **Default: false**
+- `blowControl` [optional]
+Show a switch which allows to control the blow function. **Default: false**
+- `ventilationControl` [optional]
+Show a switch which allows to control the ventilation function. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
