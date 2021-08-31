@@ -38,15 +38,16 @@
   ],
   "author": "merdok",
   "funding": {
-    "type" : "paypal",
-    "url" : "https://paypal.me/merdokdev"
+    "type": "paypal",
+    "url": "https://paypal.me/merdokdev"
   },
   "license": "MIT",
   "dependencies": {
+    "@homebridge/plugin-ui-utils": "^0.0.19",
     "miio": "^0.15.6",
     "mkdirp": "^0.5.1",
-    "randomstring": "^1.2.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "randomstring": "^1.2.1"
   },
   "repository": {
     "type": "git",
