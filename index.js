@@ -2,7 +2,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const MiotController = require('./lib/MiotController.js');
 const AccessoryFactory = require('./lib/AccessoryFactory.js');
-const Logger = require('./lib/Logger.js');
+const Logger = require('./lib/utils/Logger.js');
 const Events = require('./lib/constants/Events.js');
 
 let Service, Characteristic, Homebridge, Accessory;
