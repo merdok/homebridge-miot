@@ -96,6 +96,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
 -   dreame.vacuum.p2029 (Dreame Bot L10 Pro)
 -   dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
+-   dreame.vacuum.p2157 (MOVA L600)
 
 ### Light
 
