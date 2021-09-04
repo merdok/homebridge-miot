@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.11] - 2021-09-20
+### Added
+- Added support for bath heater devices
+- Added support for dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C) robot cleaner
+- Added support for yeelink.bhf_light.v5 (Mi Smart Bathroom Heater Pro) bath heater
+- Added support for dreame.vacuum.p2157 (MOVA L600) robot cleaner
+- Custom UI to automatically extract device tokens from MiCloud! Thanks @nVuln for the contribution!
+
+### Changed
+- Some improvements to the oven accessory
+- Improved the humidifier accessory
+- Increase default polling interval to 7 seconds
+- Organized project structure
+
+### Fixed
+- Fixed deerma.humidifier.jsq4 property mapping
+
+
 ## [0.9.10] - 2021-08-20
 ### Added
 - Added support for hanyi.airpurifier.kj550 (MiWhole Air Purifier Mix) air purifier
@@ -14,8 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Some improvements to the oven accessory
-
-### Fixed
 
 
 ## [0.9.9] - 2021-08-09
