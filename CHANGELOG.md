@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [0.9.11] - 2021-09-20
+## [0.9.11] - 2021-09-05
 ### Added
 - Added support for bath heater devices
 - Added support for dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C) robot cleaner
