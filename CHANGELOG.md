@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.12] - 2021-09-06
+### Added
+- Added support for philips.light.bulb (Xiaomi Philips Smart LED) light
+
+### Fixed
+- Fixed some typos in the changelog and supported devices list
+
+
 ## [0.9.11] - 2021-09-05
 ### Added
 - Added support for bath heater devices
