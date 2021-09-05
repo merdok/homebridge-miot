@@ -101,7 +101,8 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Light
 
 -   leshi.light.wy0b01 (Scenario WIFI Dual Color Light)
--   yeelink.light.color3 (Yeelight LED Color Bulb YLDP02YL)
+-   yeelink.light.color3 (Yeelight LED Color Bulb YLDP02YL) 🔵[MiCloud]
+-   philips.light.bulb (Xiaomi Philips Smart LED) 🔵[MiCloud]
 
 ### Airer
 
