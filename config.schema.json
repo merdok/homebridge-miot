@@ -663,6 +663,17 @@
             ],
             "condition": {
               "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yeelink)\\.bhf_light\\.([^.]+)$/);"
+            },
+            {
+              "type": "fieldset",
+              "title": "Kettle specific settings",
+              "description": "Configure kettle specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yunmi\\.kettle\\.([^.]+)$/);"
+              }
             }
           }
         ]

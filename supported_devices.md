@@ -125,3 +125,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Bath Heater
 
 -   yeelink.bhf_light.v5 (Mi Smart Bathroom Heater Pro)
+
+### Kettle
+
+-   yunmi.kettle.r3 (Yunmi Kettle)
