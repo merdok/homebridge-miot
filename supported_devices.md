@@ -74,6 +74,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   dooya.curtain.m2 (Dooya Curtain)
 -   leshi.curtain.v0001 (Scene Curtain WIFI X)
+-   lumi.curtain.hagl08 (Aqara Curtain Controller A1)
 
 ### Fresh Air System
 
