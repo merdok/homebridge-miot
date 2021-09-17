@@ -129,3 +129,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Kettle
 
 -   yunmi.kettle.r3 (Yunmi Kettle)
+
+### Thermostat
+
+-   cubee.airrtc.th123w (Heatcold UFH Thermostat)

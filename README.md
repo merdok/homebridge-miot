@@ -40,6 +40,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Camera
 * Bath Heater
 * Kettle
+* Thermostat
 
 More device types will be added!
 
@@ -279,6 +280,8 @@ Show a switch which allows to control the blow function. **Default: false**
 - `ventilationControl` [optional]
 Show a switch which allows to control the ventilation function. **Default: false**
 #### Kettle specific configuration fields
+- none
+#### Thermostat specific configuration fields
 - none
 
 ## Troubleshooting
