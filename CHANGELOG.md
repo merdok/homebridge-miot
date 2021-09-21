@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.13] - 2021-09-22
+### Added
+- Added support for kettle devices
+- Added support for thermostat devices
+- Added support for yunmi.kettle.r3 (Yunmi Kettle) kettle
+- Added support for cubee.airrtc.th123w (Heatcold UFH Thermostat) thermostat
+- Added support for lumi.curtain.hagl08 (Aqara Curtain Controller A1) curtain
+- Added support for cuco.plug.co1 (Gosund Smart Wall Plug). Thanks @seanzhang98 for the contribution!
+
+
 ## [0.9.12] - 2021-09-06
 ### Added
 - Added support for philips.light.bulb (Xiaomi Philips Smart LED) light
