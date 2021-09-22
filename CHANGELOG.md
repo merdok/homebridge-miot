@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.14] - 2021-09-23
+### Fixed
+- Fixed config.schema.json
+
+
 ## [0.9.13] - 2021-09-22
 ### Added
 - Added support for kettle devices
