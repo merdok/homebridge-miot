@@ -663,28 +663,28 @@
             ],
             "condition": {
               "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yeelink)\\.bhf_light\\.([^.]+)$/);"
-            },
-            {
-              "type": "fieldset",
-              "title": "Kettle specific settings",
-              "description": "Configure kettle specific device settings.",
-              "expandable": true,
-              "expanded": false,
-              "items": [],
-              "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yunmi\\.kettle\\.([^.]+)$/);"
-              }
-            },
-            {
-              "type": "fieldset",
-              "title": "Thermostat specific settings",
-              "description": "Configure thermostat specific device settings.",
-              "expandable": true,
-              "expanded": false,
-              "items": [],
-              "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^cubee\\.airrtc\\.([^.]+)$/);"
-              }
+            }
+          },
+          {
+            "type": "fieldset",
+            "title": "Kettle specific settings",
+            "description": "Configure kettle specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [],
+            "condition": {
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yunmi\\.kettle\\.([^.]+)$/);"
+            }
+          },
+          {
+            "type": "fieldset",
+            "title": "Thermostat specific settings",
+            "description": "Configure thermostat specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [],
+            "condition": {
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^cubee\\.airrtc\\.([^.]+)$/);"
             }
           }
         ]
