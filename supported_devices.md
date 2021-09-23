@@ -129,7 +129,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Kettle
 
--   yunmi.kettle.r3 (Yunmi Kettle)
+-   yunmi.kettle.r3 (Yunmi Kettle) 🔵[MiCloud]
 
 ### Thermostat
 
