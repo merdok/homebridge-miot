@@ -69,6 +69,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   cuco.plug.cp5 (Gosund Smart Power Strip)
 -   cuco.plug.co1 (Gosund Smart Wall Plug)
 -   chuangmi.plug.212a01 (Mi Smart Power Plug 2)
+-   chuangmi.plug.m3 (Xiaomi Chuangmi Plug M3)
 
 ### Curtain
 
