@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.15] - 2021-10-02
+### Added
+- Added support for chuangmi.plug.m3 (Xiaomi Chuangmi Plug M3) outlet
+
+### Changed
+- The yunmi.kettle.r3 is now marked as MiCloud required
+
+
 ## [0.9.14] - 2021-09-23
 ### Fixed
 - Fixed config.schema.json
