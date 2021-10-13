@@ -144,3 +144,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Thermostat
 
 -   cubee.airrtc.th123w (Heatcold UFH Thermostat)
+
+### Switch
+
+-   yeelink.switch.sw1 (Yeelight Smart Dual Control Module)

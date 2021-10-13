@@ -686,6 +686,19 @@
             "condition": {
               "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^cubee\\.airrtc\\.([^.]+)$/);"
             }
+          },
+          {
+            "type": "fieldset",
+            "title": "Switch specific settings",
+            "description": "Configure switch specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              "devices[].modeControl"
+            ],
+            "condition": {
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yeelink\\.switch\\.([^.]+)$/);"
+            }
           }
         ]
       }
