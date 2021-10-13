@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.16] - 2021-10-14
+### Added
+- Added support for switch devices
+- Added support for yeelink.switch.sw1 (Yeelight Smart Dual Control Module) switch
+- Added support for Added support for zhimi.airfresh.va2 (Smartmi Fresh Air System XFXT01ZM) fresh air system
+- Added support for chuangmi.plug.v1 (Xiaomi Chuangmi Plug V1) outlet
+- Added support for chuangmi.plug.v3 (Xiaomi Chuangmi Plug V3) outlet
+- Added support for chuangmi.plug.m1 (Xiaomi Chuangmi Plug M1) outlet
+- Added support for zhimi.airpurifier.v6 (Xiaomi Mi Air Purifier Pro V6) air purifier
+- Added support for chuangmi.plug.hmi206 (Xiaomi Smart Plug 3680w) outlet
+- Added support for yeelink.light.lamp1 (Xiaomi Mi Desk Lamp) light
+- Added support for cuco.plug.cp2a (Gosund CP2-AM) outlet
+- Added support for careli.fryer.maf02 (Mi Smart Air Fryer) air fryer
+
+### Changed
+- Removed the temperature property from chuangmi.plug.m3 outlet
+- Some under the hood improvements
+
+### Fixed
+- Fixed calculation of fan speed on devices which emulate stepless fan speed
+
+
 ## [0.9.15] - 2021-10-02
 ### Added
 - Added support for chuangmi.plug.m3 (Xiaomi Chuangmi Plug M3) outlet
