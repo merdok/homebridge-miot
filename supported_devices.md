@@ -108,6 +108,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dreame.vacuum.p2029 (Dreame Bot L10 Pro)
 -   dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
 -   dreame.vacuum.p2157 (MOVA L600)
+-   viomi.vacuum.v18 (Viomi Robot Vacuum S9)
 
 ### Light
 
