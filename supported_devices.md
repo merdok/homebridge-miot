@@ -121,7 +121,8 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.light.lamp1 (Xiaomi Mi Desk Lamp) 🔵[MiCloud]
 -   yeelink.light.strip4 (Yeelight Willow LED Lightstrip) 🔵[MiCloud]
 -   yeelink.light.color5 (Xiaomi Mi Smart LED Bulb Essential MJDPL01YL)
--   yeelink.light.color4 (Yeelight Smart LED Bulb 1S)
+-   yeelink.light.color4 (Yeelight Smart LED Bulb 1S) 🔵[MiCloud]
+-   yeelink.light.color2 (Yeelight Smart LED Bulb 2) 🔵[MiCloud]
 
 ### Airer
 
