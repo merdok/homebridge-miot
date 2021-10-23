@@ -47,7 +47,8 @@
     "miio": "^0.15.6",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.6.0",
-    "randomstring": "^1.2.1"
+    "randomstring": "^1.2.1",
+    "color-convert": "^2.0.1"
   },
   "repository": {
     "type": "git",
