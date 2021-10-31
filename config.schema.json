@@ -320,6 +320,13 @@
               "description": "Whether to show a ventilation control button.",
               "type": "boolean",
               "required": false
+            },
+            "showTemperature": {
+              "title": "Show temperature",
+              "description": "Show temperature if the outlet supports temperature reporting.",
+              "type": "boolean",
+              "default": true,
+              "required": false
             }
           }
         }
@@ -578,7 +585,8 @@
             "expanded": false,
             "items": [
               "devices[].shutdownTimer",
-              "devices[].offMemoryControl"
+              "devices[].offMemoryControl",
+              "devices[].showTemperature"
             ],
             "condition": {
               "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(chuangmi|cuco)\\.plug\\.([^.]+)$/);"

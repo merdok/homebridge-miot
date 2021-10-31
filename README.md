@@ -250,6 +250,8 @@ Show a switch which allows to quickly enable do not disturb mode. **Default: fal
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `offMemoryControl` [optional]
 Show switches which allow to change the device off memory behaviour. **Default: false**
+- `showTemperature` [optional]
+Show temperature if the outlet supports temperature reporting. **Default: true**
 #### Air Conditioner specific configuration fields
 - `swingControl` [optional]
 Show a switch to quickly enable/disable vertical swing mode. **Default: false**
