@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.17] - 2021-11-02
+### Added
+- Light devices can now control color if supported
+- Added support for leshow.heater.bs1s (Mi Smart Baseboard Heater 1S). Thanks @saurikCornel for the contribution!
+- Added support for yeelink.light.strip4 (Yeelight Willow LED Lightstrip) light
+- Added support for viomi.vacuum.v18 (Viomi Robot Vacuum S9) robot cleaner
+- Added support lumi.acpartner.v2 (Xiaomi Air Conditioning Companion) air conditioner
+- Added support lumi.acpartner.v3 (Aqara Air Conditioning Companion) air conditioner
+- Added support for zhimi.airpurifier.sb1 (Xiaomi Mi Air Purifier MAX) air purifier
+- Added support for yeelink.light.color5 (Xiaomi Mi Smart LED Bulb Essential MJDPL01YL) light
+- Added support for yeelink.light.color4 (Yeelight Smart LED Bulb 1S) light
+- Added support for yeelink.light.color2 (Yeelight Smart LED Bulb 2) light
+- Added support for cuco.plug.cp1m (Gosund Smart Plug CP1-AM) outlet
+
+### Changed
+- Temperature reporting on outlet devices can now be disabled
+
+### Fixed
+- Fix fan level emulation on some devices
+
+
 ## [0.9.16] - 2021-10-14
 ### Added
 - Added support for switch devices
