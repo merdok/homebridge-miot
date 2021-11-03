@@ -58,7 +58,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.airpurifier.v7 (Xiaomi Mi Air Purifier Pro V7) 🔵[MiCloud]
 -   zhimi.airpurifier.xa1 (Mi Air Purifier X)
 -   hanyi.airpurifier.kj550 (MiWhole Air Purifier Mix)
--   zhimi.airpurifier.sb1 (Xiaomi Mi Air Purifier MAX)
+-   zhimi.airpurifier.sb1 (Xiaomi Mi Air Purifier MAX) 🔵[MiCloud]
 
 ### Air Conditioner
 
