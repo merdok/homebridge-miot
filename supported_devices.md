@@ -35,6 +35,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.heater.nb1 (Smartmi Smart Fan Heater)
 -   zhimi.heater.zb1 (Smartmi Smart Convector Heater 1S)
 -   leshow.heater.bs1s (Mi Smart Baseboard Heater 1S)
+-   leshow.heater.bs3 (Mi Smart Baseboard Heater 3)
 
 ### Humidifier
 
