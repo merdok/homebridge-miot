@@ -119,6 +119,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   roborock.vacuum.a10 (Roborock S6 MaxV)
 -   ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
 -   roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
+-   dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop)
 
 ### Light
 
