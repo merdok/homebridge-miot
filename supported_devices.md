@@ -133,6 +133,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.light.color4 (Yeelight Smart LED Bulb 1S) 🔵[MiCloud]
 -   yeelink.light.color2 (Yeelight Smart LED Bulb 2) 🔵[MiCloud]
 -   yeelink.light.mono4 (Yeelight 1S) 🔵[MiCloud]
+-   philips.light.ceiling (Xiaomi Philips LED Ceiling Light) 🔵[MiCloud]
 
 ### Airer
 
