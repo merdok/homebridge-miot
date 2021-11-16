@@ -169,3 +169,4 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Switch
 
 -   yeelink.switch.sw1 (Yeelight Smart Dual Control Module)
+-   babai.switch.bb101s (WiFi Wall Switch A1)

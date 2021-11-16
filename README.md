@@ -289,6 +289,8 @@ Show a switch which allows to control the ventilation function. **Default: false
 #### Switch specific configuration fields
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: false**
+- `powerOffDelay` [optional]
+Show a switch which allows to enable the power off delay. **Default: false**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

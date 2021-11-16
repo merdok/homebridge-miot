@@ -327,6 +327,12 @@
               "type": "boolean",
               "default": true,
               "required": false
+            },
+            "powerOffDelay": {
+              "title": "Power Off Delay control service",
+              "description": "Show a switch which allows to enable the power off delay.",
+              "type": "boolean",
+              "required": false
             }
           }
         }
@@ -702,10 +708,11 @@
             "expandable": true,
             "expanded": false,
             "items": [
-              "devices[].modeControl"
+              "devices[].modeControl",
+              "devices[].powerOffDelay"
             ],
             "condition": {
-              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yeelink\\.switch\\.([^.]+)$/);"
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yeelink|babai)\\.switch\\.([^.]+)$/);"
             }
           }
         ]
