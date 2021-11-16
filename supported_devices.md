@@ -82,6 +82,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   chuangmi.plug.m1 (Xiaomi Chuangmi Plug M1) 🔵[MiCloud]
 -   chuangmi.plug.hmi206 (Xiaomi Smart Plug 3680w) 🔵[MiCloud]
 -   cuco.plug.cp1m (Gosund Smart Plug CP1-AM)
+-   chuangmi.plug.hmi208 (Xiaomi Mijia Smart Wi-fi Plug) 🔵[MiCloud]
 
 ### Curtain
 
