@@ -687,7 +687,7 @@
             "expanded": false,
             "items": [],
             "condition": {
-              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^yunmi\\.kettle\\.([^.]+)$/);"
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yunmi|viomi)\\.(kettle|waterheater)\\.([^.]+)$/);"
             }
           },
           {
