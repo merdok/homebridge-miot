@@ -42,6 +42,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   zhimi.humidifier.ca4 (Smartmi Evaporative Humidifier 2)
 -   deerma.humidifier.jsq4 (Mijia Pure Smart Humidifier)
+-   zhimi.humidifier.cb1 (Smartmi Air Humidifier 2) 🔵[MiCloud]
 
 ### Dehumidifier
 
