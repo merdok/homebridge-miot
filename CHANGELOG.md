@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.18] - 2021-11-29
+### Added
+- Added support for roborock.vacuum.a29 (Roborock Vacuum G10) robot cleaner
+- Added support for roidmi.vacuum.v6 (Roidmi Eve Plus) robot cleaner
+- Added support for roborock.vacuum.a10 (Roborock S6 MaxV) robot cleaner
+- Added support for ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2) robot cleaner
+- Added support for yeelink.light.mono4 (Yeelight 1S) light
+- Added support for roborock.vacuum.s5e (Roborock S5 MAX) robot cleaner
+- Added support for leshow.heater.bs3 (Mi Smart Baseboard Heater 3) heater
+- Added support for dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop) robot cleaner
+- Added support for chuangmi.plug.hmi208 (Xiaomi Mijia Smart Wi-fi Plug) outlet
+- Added support for philips.light.ceiling (Xiaomi Philips LED Ceiling Light) light
+- Added support for zhimi.fan.v3 (Smartmi Standing Fan V3) fan
+- Added support for babai.switch.bb101s (WiFi Wall Switch A1) switch
+- Added support for viomi.vacuum.v19 (Viomi Robot Vacuum SE) robot cleaner
+- Added support for roborock.vacuum.a08 (Roborock S6 Pure) robot cleaner
+- Added support for viomi.waterheater.e8 (Viomi Water Heater) kettle
+- Added support for yeelink.light.bslamp1 (Xiaomi Mi Bedside Lamp) lamp
+- Added support for zhimi.humidifier.cb1 (Smartmi Air Humidifier 2) humidifier
+- Added support for lumi.acpartner.mcn04 (Mi Smart Air Conditioner Controller Pro)  air conditioner
+
+### Changed
+- The zhimi.airpurifier.sb1 air purifier is now marked as MiCloud required
+- Some code cleanup. Thanks @JohnHom1024 for the contribution!
+
+### Fixed
+
 
 ## [0.9.17] - 2021-11-02
 ### Added
