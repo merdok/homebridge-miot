@@ -31,8 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The zhimi.airpurifier.sb1 air purifier is now marked as MiCloud required
 - Some code cleanup. Thanks @JohnHom1024 for the contribution!
 
-### Fixed
-
 
 ## [0.9.17] - 2021-11-02
 ### Added
