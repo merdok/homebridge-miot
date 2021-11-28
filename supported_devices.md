@@ -69,6 +69,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   lumi.acpartner.mcn02 (Xiaomi Mi Air Conditioner Companion 2) 🔵[MiCloud]
 -   lumi.acpartner.v2 (Xiaomi Air Conditioning Companion) 🔵[MiCloud]
 -   lumi.acpartner.v3 (Aqara Air Conditioning Companion) 🔵[MiCloud]
+-   lumi.acpartner.mcn04 (Mi Smart Air Conditioner Controller Pro)
 
 ### Outlet
 
