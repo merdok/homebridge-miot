@@ -50,6 +50,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Purifier
 
+-   zhimi.airpurifier.m1 (Xiaomi Mi Air Purifier 2 Mini)
 -   zhimi.airpurifier.mb4 (Xiaomi Mi Air Purifier 3C)
 -   zhimi.airpurifier.mb3 (Xiaomi Mi Air Purifier 3H)
 -   zhimi.airpurifier.vb2 (Xiaomi Mi Air Purifier Pro H)
