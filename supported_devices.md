@@ -104,30 +104,31 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Robot Cleaner
 
--   dreame.vacuum.p2008 (Dreame F9)
--   dreame.vacuum.p2009 (Dreame D9)
--   dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
--   dreame.vacuum.p2041 (Xiaomi Mijia 1T Robot Vacuum Cleaner)
--   roborock.vacuum.a15 (Roborock Vacuum S7)
--   roborock.vacuum.a11 (Roborock Vacuum T7)
--   roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
--   viomi.vacuum.v10 (Mi Robot Vacuum Mop P) 🔵[MiCloud]
--   mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1)
--   dreame.vacuum.p2028 (Dreame Bot Z10 Pro Vacuum)
--   dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum)
--   rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
--   dreame.vacuum.p2029 (Dreame Bot L10 Pro)
--   dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
--   dreame.vacuum.p2157 (MOVA L600)
--   viomi.vacuum.v18 (Viomi Robot Vacuum S9)
--   roborock.vacuum.a29 (Roborock Vacuum G10)
--   roidmi.vacuum.v6 (Roidmi Eve Plus)
--   roborock.vacuum.a10 (Roborock S6 MaxV)
--   ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
--   roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
--   dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop)
--   viomi.vacuum.v19 (Viomi Robot Vacuum SE)
--   roborock.vacuum.a08 (Roborock S6 Pure)
+- dreame.vacuum.p2008 (Dreame F9)
+- dreame.vacuum.p2009 (Dreame D9)
+- dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
+- dreame.vacuum.p2041 (Xiaomi Mijia 1T Robot Vacuum Cleaner)
+- roborock.vacuum.a15 (Roborock Vacuum S7)
+- roborock.vacuum.a11 (Roborock Vacuum T7)
+- roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
+- viomi.vacuum.v10 (Mi Robot Vacuum Mop P) 🔵[MiCloud]
+- mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1)
+- dreame.vacuum.p2028 (Dreame Bot Z10 Pro Vacuum)
+- dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum)
+- rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
+- dreame.vacuum.p2029 (Dreame Bot L10 Pro)
+- dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
+- dreame.vacuum.p2157 (MOVA L600)
+- viomi.vacuum.v18 (Viomi Robot Vacuum S9)
+- roborock.vacuum.a29 (Roborock Vacuum G10)
+- roidmi.vacuum.v6 (Roidmi Eve Plus)
+- roborock.vacuum.a10 (Roborock S6 MaxV)
+- ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
+- roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
+- roborock.vacuum.s5 (Roborock S5) 🔵[MiCloud]
+- dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop)
+- viomi.vacuum.v19 (Viomi Robot Vacuum SE)
+- roborock.vacuum.a08 (Roborock S6 Pure)
 
 ### Light
 
