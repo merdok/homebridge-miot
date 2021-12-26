@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.19] - 2021-12-27
+
+This update includes new devices added by some users. I appreciate any contribution and highly encourage anyone to add new devices.
+
+### Added
+- Added support for roborock.vacuum.s5 (Roborock S5) robot cleaner. Thanks @wojciej for the contribution!
+- Added support for yeelink.light.color1 (Yeelight Smart LED Bulb 1) light. Thanks @mrking for the contribution!
+- Added support for cuco.plug.sp5 (Gosund Smart Power Strip) outlet. Thanks @PietroLubini for the contribution!
+- Added support for zhimi.airpurifier.m1 (Xiaomi Mi Air Purifier 2 Mini) air purifier. Thanks @mrking for the contribution!
+
+
 ## [0.9.18] - 2021-11-29
 ### Added
 - Added support for roborock.vacuum.a29 (Roborock Vacuum G10) robot cleaner
