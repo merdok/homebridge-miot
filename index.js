@@ -1,6 +1,7 @@
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const MiotController = require('./lib/MiotController.js');
+const fs = require('fs').promises;
+const MiotDevice = require('./lib/protocol/MiotDevice.js');
+const DeviceFactory = require('./lib/factories/DeviceFactory.js');
+const DevTypes = require('./lib/constants/DevTypes.js');
 const AccessoryFactory = require('./lib/factories/AccessoryFactory.js');
 const Constants = require('./lib/constants/Constants.js');
 const Logger = require('./lib/utils/Logger.js');
@@ -21,8 +22,8 @@ module.exports = function(homebridge) {
 };
 
 
-class xiaomiMiotDevice {
-  constructor(log, config, api) {
+class xiaomiMiotDeviceController {
+  constructor(log, config, globalmicloudconfig, api) {
     this.log = log;
     this.config = config;
     this.api = api;
@@ -35,7 +36,7 @@ class xiaomiMiotDevice {
       if (!config.token) throw new Error(`'token' is required but not defined for ${config.name}!`);
     } catch (error) {
       this.logger.error(error);
-      this.logger.error(`Failed to create platform device, missing mandatory information!`);
+      this.logger.error(`Failed to create platform device, missing mandatory information!`, CLASS_LOG_PREFIX);
       this.logger.error(`Please check your device config!`);
       return;
     }
@@ -46,16 +47,19 @@ class xiaomiMiotDevice {
     this.token = config.token;
     this.deviceId = config.deviceId;
     this.model = config.model;
+    this.miCloudConfig = {};
+    this.miCloudConfig.global = globalmicloudconfig;
+    this.miCloudConfig.device = config.micloud;
     this.pollingInterval = config.pollingInterval || Constants.DEFAULT_POLLING_INTERVAL;
     if (this.pollingInterval < 500) {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
     }
+    this.isCustomAccessory = config.customAccessory || false;
     this.prefsDir = config.prefsDir || api.user.storagePath() + '/.xiaomiMiot/';
     this.deepDebugLog = config.deepDebugLog;
     if (this.deepDebugLog === undefined) {
       this.deepDebugLog = false;
     }
-
 
     this.logger.info(`Got device configuration, initializing device with name: ${this.name}`);
 
@@ -67,137 +71,152 @@ class xiaomiMiotDevice {
       this.prefsDir = this.prefsDir + '/';
     }
 
-    // check if the fan preferences directory exists, if not then create it
-    if (fs.existsSync(this.prefsDir) === false) {
-      mkdirp(this.prefsDir);
-    }
+    //spec dir to store device specs
+    this.specDir = this.prefsDir + 'spec/';
 
     // create device model info file name
     this.deviceInfoFile = this.prefsDir + 'info_' + this.ip.split('.').join('') + '_' + this.token;
 
     // prepare variables
-    this.miotController = undefined;
     this.miotDevice = undefined;
+    this.device = undefined;
     this.cachedDeviceInfo = {};
 
-    //try to load cached device info
-    this.loadDeviceInfo();
-
-    //start the device discovery
-    this.initMiotController();
+    // begin with the setup
+    this._setupController();
   }
 
 
   /*----------========== SETUP ==========----------*/
 
-  initMiotController() {
-    let deviceId = this.deviceId || this.cachedDeviceInfo.deviceId;
-    let model = this.model || this.cachedDeviceInfo.model;
-    // if the user specified a model then use that, else try to get cached model
-    this.miotController = new MiotController(this.ip, this.token, deviceId, model, this.name, this.pollingInterval, this.config, this.logger);
+  async _setupController() {
+    // check if the preferences directory exists, if not then create it
+    await this._createDirIfNeeded(this.prefsDir);
 
-    this.miotController.on(Events.CONTROLLER_DEVICE_READY, (miotDevice) => {
-      this.setupMiotDevice(miotDevice);
-    });
+    // check if the spec directory exists, if not then create it recursively
+    await this._createDirIfNeeded(this.specDir);
 
-    this.miotController.connectToDevice();
+    // first try to load cached device info
+    await this._loadDeviceInfo();
+
+    //init the device and start the device discovery
+    this._initMiotDevice();
   }
 
-  setupMiotDevice(miotDevice) {
-    this.miotDevice = miotDevice;
-    //prepare the accessory and do initial accessory information service update
-    if (!this.deviceAccessoryObj) {
-      this.logger.info('Initializing accessory!');
-      this.initAccessory();
-      this.updateInformationService();
-    }
+  async _initMiotDevice() {
+    // if the user specified a model then use that, else try to get cached model
+    let deviceId = this.deviceId || this.cachedDeviceInfo.deviceId;
+    let model = this.model || this.cachedDeviceInfo.model;
 
-    this.miotDevice.on(Events.DEVICE_CONNECTED, (miotDevice) => {
-      this.logger.debug('Device connected!');
-      // update device information since we have more information about the device now. Only if no cached data available!
-      if (!this.cachedDeviceInfo || Object.keys(this.cachedDeviceInfo).length === 0) {
-        this.updateInformationService();
-      }
+    this.miotDevice = new MiotDevice(this.ip, this.token, deviceId, model, this.name, this.logger);
+    this.miotDevice.setPollingInterval(this.pollingInterval);
+    this.miotDevice.setMiCloudConfig(this.miCloudConfig);
 
+    this.miotDevice.on(Events.MIOT_DEVICE_IDENTIFIED, async (miotDevice) => {
+      // init the actual device
+      this._initDevice(miotDevice);
+    });
+
+    this.miotDevice.on(Events.MIOT_DEVICE_SPEC_FETCHED, (miotDevice) => {
+      // save miot spec
+      this._saveMiotSpec(miotDevice);
+    });
+
+    this.miotDevice.on(Events.MIOT_DEVICE_CONNECTED, (miotDevice) => {
       // save device information
-      this.saveDeviceInfo();
+      this._saveDeviceInfo(miotDevice);
     });
 
-    this.miotDevice.on(Events.DEVICE_DISCONNECTED, (miotDevice) => {
-      this.logger.debug('Device diconnected!');
-      if (this.deviceAccessoryObj) {
-        this.deviceAccessoryObj.updateDeviceStatus();
+    this.miotDevice.connect();
+  }
+
+  async _initDevice(miotDevice) {
+    if (!this.device) {
+      this.logger.info('Initializing device!');
+      this.device = await DeviceFactory.createDevice(miotDevice, this.specDir, this.name, this.isCustomAccessory, this.logger);
+      if (this.device) {
+        await this.device.initDevice();
+        if (this.device.getType() === DevTypes.UNKNOWN) {
+          this.logger.warn(`Device not supported! Using a generic device with limited properties! Consider requesting device support!`);
+        } else if (this.device.getType() === DevTypes.CUSTOM) {
+          this.logger.info(`Successfully created a custom accessory device! It is a ${this.device.getDeviceName()}. Make sure to configure the properties and actions!`);
+        } else {
+          this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
+        }
+        this.prepareAccessoryAndStartPolling();
+      } else {
+        this.logger.warn(`Something went wrong during device creation! Initialization failed, cannot create device!`);
       }
-    });
-
-    this.miotDevice.on(Events.DEVICE_ALL_PROPERTIES_UPDATED, (miotDevice) => {
-      if (this.deviceAccessoryObj) {
-        this.deviceAccessoryObj.updateDeviceStatus();
-      }
-    });
-
-    this.miotDevice.on(Events.DEVICE_PROPERTY_UPDATED, (property) => {
-      if (this.deviceAccessoryObj) {
-        this.deviceAccessoryObj.updateDeviceStatus();
-      }
-    });
-
+    }
   }
 
 
   /*----------========== SETUP SERVICES ==========----------*/
 
-  initAccessory() {
+  prepareAccessoryAndStartPolling() {
     // generate uuid
     this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
 
-    // prepare the fan accessory
-    this.deviceAccessoryObj = AccessoryFactory.createAccessory(this.name, this.miotDevice, this.UUID, this.config, this.api, this.logger);
+    // init the accessory
+    this.device.initDeviceAccessory(this.UUID, this.config, this.api, this.cachedDeviceInfo);
 
-    if (this.deviceAccessoryObj) {
-      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.deviceAccessoryObj.getAccessory()]);
-      this.logger.info('Accessory successfully initialized!');
-    } else {
-      this.logger.error('Something went wrong. Could not initialize accessory!');
-    }
-  }
-
-  updateInformationService() {
-    if (this.deviceAccessoryObj) {
-      let model = 'Unknown';
-      let deviceId = 'Unknown';
-      if (this.miotDevice) {
-        model = this.miotDevice.getModel() || model;
-        deviceId = this.miotDevice.getDeviceId() || deviceId;
-      }
-      this.deviceAccessoryObj.updateInformationService(this.name, 'Xiaomi', model, deviceId, PLUGIN_VERSION);
+    if (this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
+      this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
+      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.device.getAccessories());
+      this.logger.info('Everything looks good! Initiating property polling!');
+      this.miotDevice.startPropertyPolling();
     }
   }
 
 
   /*----------========== HELPERS ==========----------*/
 
-  saveDeviceInfo() {
-    // save model name and deviceId
-    if (this.miotDevice) {
-      this.cachedDeviceInfo.model = this.miotDevice.getModel();
-      this.cachedDeviceInfo.deviceId = this.miotDevice.getDeviceId();
-      fs.writeFile(this.deviceInfoFile, JSON.stringify(this.cachedDeviceInfo), (err) => {
-        if (err) {
-          this.logger.debug('Error occured could not write device model info %s', err);
-        } else {
-          this.logger.debug('Successfully saved device info!');
-        }
+  _saveDeviceInfo(miotDevice) {
+    if (miotDevice) {
+      this.cachedDeviceInfo.model = miotDevice.getModel();
+      this.cachedDeviceInfo.deviceId = miotDevice.getDeviceId();
+      this.cachedDeviceInfo.firmwareRev = miotDevice.getFirmwareRevision();
+      const deviceInfo = JSON.stringify(this.cachedDeviceInfo);
+      fs.writeFile(this.deviceInfoFile, deviceInfo, 'utf8').then(() => {
+        this.logger.debug('Successfully saved device info!');
+      }).catch((err) => {
+        this.logger.debug(`Could not write device info! Error: ${err}`);
       });
     }
   }
 
-  loadDeviceInfo() {
+  async _loadDeviceInfo() {
     try {
-      this.cachedDeviceInfo = JSON.parse(fs.readFileSync(this.deviceInfoFile));
-      this.logger.debug(`Found cached device information: ${this.cachedDeviceInfo.model}`);
+      const deviceInfo = await fs.readFile(this.deviceInfoFile, 'utf8');
+      if (deviceInfo) {
+        this.cachedDeviceInfo = JSON.parse(deviceInfo);
+        this.logger.debug(`Found cached device information: ${this.cachedDeviceInfo.model}`);
+      }
     } catch (err) {
-      this.logger.debug('Device info file does not exist yet!');
+      this.logger.debug('No cached device info found!');
+    }
+  }
+
+  _saveMiotSpec(miotDevice) {
+    if (miotDevice && miotDevice.getMiotSpec()) {
+      let fileName = this.specDir + miotDevice.getModel() + '.spec.json';
+      const miotSpec = JSON.stringify(miotDevice.getMiotSpec(), null, 2);
+      fs.writeFile(fileName, miotSpec, 'utf8').then(() => {
+        this.logger.debug('Successfully saved device miot spec!');
+      }).catch((err) => {
+        this.logger.debug(`Could not save device miot spec! Error: ${err}`);
+      });
+    }
+  }
+
+  async _createDirIfNeeded(dir) {
+    try {
+      await fs.access(dir)
+    } catch (err) {
+      this.logger.debug(`Directory ${dir} is missing! Creating!`);
+      await fs.mkdir(dir, {
+        recursive: true
+      });
     }
   }
 
@@ -233,7 +252,7 @@ class miotPlatform {
    * It should be used to setup event handlers for characteristics and update respective values.
    */
   configureAccessory(accessory) {
-    this.log.debug("Found cached accessory %s", accessory.displayName);
+    this.log.debug(`Found cached accessory ${accessory.displayName}`);
     this.devices.push(accessory);
   }
 
@@ -246,11 +265,11 @@ class miotPlatform {
     if (this.config.devices && Array.isArray(this.config.devices)) {
       for (let device of this.config.devices) {
         if (device) {
-          new xiaomiMiotDevice(this.log, device, this.api);
+          new xiaomiMiotDeviceController(this.log, device, this.config.micloud, this.api);
         }
       }
     } else if (this.config.devices) {
-      this.log.info('The devices property is not of type array. Cannot initialize. Type: %s', typeof this.config.devices);
+      this.log.info(`The devices property is not of type array. Cannot initialize. Type: ${typeof this.config.devices}`);
     }
 
     if (!this.config.devices && !this.config.fans) {
@@ -264,7 +283,7 @@ class miotPlatform {
 
   removeAccessories() {
     // we don't have any special identifiers, we just remove all our accessories
-    this.log.debug("Removing all cached accessories");
+    this.log.debug('Removing all cached accessories');
     this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.devices);
     this.devices = []; // clear out the array
   }

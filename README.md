@@ -6,7 +6,7 @@
 [![homebridge-miot](https://badgen.net/npm/v/homebridge-miot?icon=npm)](https://www.npmjs.com/package/homebridge-miot)
 [![mit-license](https://badgen.net/npm/license/lodash)](https://github.com/merdok/homebridge-miot/blob/master/LICENSE)
 [![follow-me-on-twitter](https://badgen.net/twitter/follow/merdok_dev?icon=twitter)](https://twitter.com/merdok_dev)
-[![join-discord](https://badgen.net/badge/icon/discord?icon=discord&label=homebridge-xiaomi-fan)](https://discord.gg/AFYUZbk)
+[![join-discord](https://badgen.net/badge/icon/discord?icon=discord&label=homebridge-miot)](https://discord.gg/c9AWNESQMg)
 
 </span>
 
@@ -42,6 +42,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Kettle
 * Thermostat
 * Switch
+* Air Monitor
 
 More device types will be added!
 
@@ -85,7 +86,7 @@ Example configuration:
           "buzzerControl": true,
           "ledControl": true,
           "modeControl": true,
-          "shutdownTimer": true,
+          "offDelayControl": true,
           "ioniserControl": true,
           "horizontalAngleButtons": [
             5,
@@ -124,6 +125,8 @@ Keep in mind that your device needs to support the feature which you enable, oth
 Should always be **"miot"**.
 - `devices` [required]
 A list of your devices.
+- `micloud` [optional]
+This is a configuration object for the global MiCloud settings. When specified, this credentials will be used when a device requires a MiCloud connection. It has the same properties as the object on a device (see below).
 #### General configuration fields
 - `name` [required]
 Name of your accessory.
@@ -136,7 +139,7 @@ The deviceId will be automatically retrieved by the plugin but if there is troub
 - `model` [optional]
 The device model if known. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device. **Default: "" (not specified)**
 - `micloud` [optional]
-This is a configuration object for the MiCloud. Some older devices require a MiCloud connection in order to be controlled! **Default: "" (not specified)**
+This is a configuration object for the device MiCloud. When specified overwrites the global setting for the device. Some older devices require a MiCloud connection in order to be controlled! **Default: "" (not specified)**
 - Can also be specified even when the device does not require the MiCloud, in that case additional information for the device will be retrieved.
 - An object should have the following properties:
   - *username* - [required] the MiCloud username
@@ -147,13 +150,17 @@ This is a configuration object for the MiCloud. Some older devices require a MiC
 - `prefsDir` [optional]
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]
-The device state background polling interval in seconds. **Default: 7**
+The device state background polling interval in seconds. **Default: 10**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
 Whether the led service is enabled. This allows to turn on/off the device LED. **Default: true**
+- `childLockControl` [optional]
+Whether the child lock control service is enabled. This allows to turn on/off the device child lock. **Default: true**
+- `modeControl` [optional]
+Show mode switches which allow to change the device mode. **Default: true**
 - `actionButtons` [optional]
 Show additional action switches if the device supports any. **Default: false**
   - Set to *true* or *false* to show/hide all actions available on the device
@@ -163,18 +170,38 @@ Show additional action switches if the device supports any. **Default: false**
     - *name* - [optional] the name of the switch
     - *params* - [optional] parameters to be used for the action, not all actions support parameters
   - To get the action names available for the device simply check the homebridge log. Available device action names will be printed there during initialization
+- `propertyControl_TODO!!!!!!` [optional]
+Show additional action switches if the device supports any. **Default: false**
+  - Set to *true* or *false* to show/hide all actions available on the device
+  - Set an array of action names to only show the desired actions
+  - You can also set an array of objects as the value which enables advanced configuration. An object can have the following properties:
+    - *action* - [required] the action name
+    - *name* - [optional] the name of the switch
+    - *params* - [optional] parameters to be used for the action, not all actions support parameters
+  - To get the action names available for the device simply check the homebridge log. Available device action names will be printed there during initialization
+- `propertyMonitor_TODO!!!!!!` [optional]
+Show additional action switches if the device supports any. **Default: false**
+  - Set to *true* or *false* to show/hide all actions available on the device
+  - Set an array of action names to only show the desired actions
+  - You can also set an array of objects as the value which enables advanced configuration. An object can have the following properties:
+    - *action* - [required] the action name
+    - *name* - [optional] the name of the switch
+    - *params* - [optional] parameters to be used for the action, not all actions support parameters
+      - Set an array of values according to the spec
+      - You can also set an array of objects, which can be useful if actions params are not in the spec. An object can have the following properties:
+        - *piid* - [required] the property id of the same service as the action,
+        - *value* - [required] the value to be set
+  - To get the action names available for the device simply check the homebridge log. Available device action names will be printed there during initialization
 #### Fan specific configuration fields
 - `swingControl` [optional]
 Show a switch to quickly enable/disable horizontal and/or vertical swing mode. **Default: false**
 - `moveControl` [optional]
 Whether the move control service is enabled. This allows to move the fan in 5° to the left, right, up or down. **Default: false**
 - `fanLevelControl` [optional]
-Show fan level switches which allow to change the fan level. **Default: true**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: true**
+Show fan level switches which allow to change the fan level. **Default: false**
 - `ioniserControl` [optional]
 Show a switch which allows to quickly enable/disable the ioniser on your fan. **Default: false**
-- `shutdownTimer` [optional]
+- `offDelayControl` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `horizontalAngleButtons` [optional]
 Whether the angle buttons service is enabled. This allows to create buttons which can change between different horizontal oscillation angles. **Default: "" (disabled)**
@@ -186,19 +213,15 @@ Same as above but for vertical oscillation angles. **Default: "" (disabled)**
 #### Ceiling Fan specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
-- `modeControl` [optional]
-Show mode switches which allow to change the fan mode. **Default: false**
 - `lightModeControl` [optional]
 Show light mode switches which allow to change the light mode. **Default: false**
 - `lightShutdownTimer` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes for the light. **Default: false**
 #### Heater specific configuration fields
-- `shutdownTimer` [optional]
+- `offDelayControl` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `heatLevelControl` [optional]
 Show heat level switches which allow to change the heat level. **Default: false**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
 #### Humidifier specific configuration fields
 - `dryControl` [optional]
 Whether the dry control service is enabled. This allows to quickly turn control the dry state. **Default: true**
@@ -209,15 +232,11 @@ Show fan level switches which allow to change the fan level. **Default: true**
 #### Dehumidifier specific configuration fields
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
 #### Air Purifier specific configuration fields
 - `screenControl` [optional]
 Whether the screen service is enabled. This allows to turn on/off the device screen and control brightness. **Default: true**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: false**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
 - `pm25Breakpoints` [optional]
 Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers. **Default: [7, 15, 30, 55]**
 #### Curtain specific configuration fields
@@ -232,21 +251,14 @@ Show fan level switches which allow to change the fan level. **Default: true**
 Show a switch which allows to quickly enable the heater. **Default: true**
 - `heatLevelControl` [optional]
 Show heat level switches which allow to change the heat level. **Default: false**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
 - `pm25Breakpoints` [optional]
 Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers. **Default: [7, 15, 30, 55]**
 - `co2AbnormalThreshold` [optional]
 Define a custom carbon dioxide sensor abnormal threshold. **Default: 1000**
 #### Robot Cleaner specific configuration fields
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
-- `mopModeControl` [optional]
-Show mop mode switches which allow to change the device mop mode. **Default: false**
-- `dndControl` [optional]
-Show a switch which allows to quickly enable do not disturb mode. **Default: false**
+- none
 #### Outlet specific configuration fields
-- `shutdownTimer` [optional]
+- `offDelayControl` [optional]
 Show a slider (as light bulb) which allows to set a shutdown timer in minutes. **Default: false**
 - `offMemoryControl` [optional]
 Show switches which allow to change the device off memory behaviour. **Default: false**
@@ -257,8 +269,6 @@ Show temperature if the outlet supports temperature reporting. **Default: true**
 Show a switch to quickly enable/disable vertical swing mode. **Default: false**
 - `fanLevelControl` [optional]
 Show fan level switches which allow to change the fan level. **Default: true**
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: true**
 #### Airer specific configuration fields
 - `motorControl` [optional]
 Show motor control switches which allow to control the airer. **Default: true**
@@ -274,23 +284,18 @@ Show recording mode switches which allow to change the device recording mode. **
 - `motionDetectionControl` [optional]
 Show a switch which allows to quickly enable/disable the motion detection on the device. **Default: false**
 #### Bath Heater specific configuration fields
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
-- `lightModeControl` [optional]
-Show light mode switches which allow to change the light mode. **Default: false**
-- `blowControl` [optional]
-Show a switch which allows to control the blow function. **Default: false**
-- `ventilationControl` [optional]
-Show a switch which allows to control the ventilation function. **Default: false**
+- none
 #### Kettle specific configuration fields
 - none
 #### Thermostat specific configuration fields
 - none
 #### Switch specific configuration fields
-- `modeControl` [optional]
-Show mode switches which allow to change the device mode. **Default: false**
-- `powerOffDelay` [optional]
-Show a switch which allows to enable the power off delay. **Default: false**
+- none
+#### Air Monitor specific configuration fields
+- `pm25Breakpoints` [optional]
+Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers. **Default: [7, 15, 30, 55]**
+- `co2AbnormalThreshold` [optional]
+Define a custom carbon dioxide sensor abnormal threshold. **Default: 1000**
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.

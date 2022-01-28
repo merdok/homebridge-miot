@@ -487,7 +487,7 @@
               "devices[].fanLevelControl"
             ],
             "condition": {
-              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|deerma)\\.humidifier\\.([^.]+)$/);"
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/);"
             }
           },
           {
@@ -525,7 +525,7 @@
               }
             ],
             "condition": {
-              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(hanyi|zhimi)\\.airpurifier\\.([^.]+)$/);"
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/);"
             }
           },
           {
@@ -687,7 +687,7 @@
             "expanded": false,
             "items": [],
             "condition": {
-              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yunmi|viomi)\\.(kettle|waterheater)\\.([^.]+)$/);"
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yunmi|viomi)\\.(kettle|health_pot)\\.([^.]+)$/);"
             }
           },
           {
@@ -713,6 +713,28 @@
             ],
             "condition": {
               "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(yeelink|babai)\\.switch\\.([^.]+)$/);"
+            }
+          },
+          {
+            "type": "fieldset",
+            "title": "Air Monitor specific settings",
+            "description": "Configure air monitor specific device settings.",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+              {
+                "key": "devices[].pm25Breakpoints",
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "maxItems": 4,
+                  "uniqueItems": true
+                }
+              },
+              "devices[].co2AbnormalThreshold"
+            ],
+            "condition": {
+              "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(cgllc)\\.(airm|airmonitor)\\.([^.]+)$/);"
             }
           }
         ]

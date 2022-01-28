@@ -43,6 +43,10 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.humidifier.ca4 (Smartmi Evaporative Humidifier 2)
 -   deerma.humidifier.jsq4 (Mijia Pure Smart Humidifier)
 -   zhimi.humidifier.cb1 (Smartmi Air Humidifier 2) 🔵[MiCloud]
+-   leshow.humidifier.jsq1 (Xiaomi Mijia Pure Pro)
+-   deerma.humidifier.jsq (Xiaomi Mi Smart Antibacterial Humidifier)
+-   deerma.humidifier.mjjsq (Xiaomi Mijia Smart Sterilization Humidifier)
+-   zhimi.humidifier.ca1 (Xiaomi Smartmi Evaporative Humidifier 2) 🔵[MiCloud]
 
 ### Dehumidifier
 
@@ -63,6 +67,10 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.airpurifier.xa1 (Mi Air Purifier X)
 -   hanyi.airpurifier.kj550 (MiWhole Air Purifier Mix)
 -   zhimi.airpurifier.sb1 (Xiaomi Mi Air Purifier MAX) 🔵[MiCloud]
+-   zhimi.airp.mb4a (Xiaomi Mi Air Purifier 3C v2)
+-   zhimi.airp.vb4 (Xiaomi Air Purifier Pro 4)
+-   zhimi.airpurifier.m2 (Xiaomi Air Purifier 2) 🔵[MiCloud]
+-   zhimi.airp.vb2a (Xiaomi Air Purifier Pro H v2)
 
 ### Air Conditioner
 
@@ -104,31 +112,33 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Robot Cleaner
 
-- dreame.vacuum.p2008 (Dreame F9)
-- dreame.vacuum.p2009 (Dreame D9)
-- dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
-- dreame.vacuum.p2041 (Xiaomi Mijia 1T Robot Vacuum Cleaner)
-- roborock.vacuum.a15 (Roborock Vacuum S7)
-- roborock.vacuum.a11 (Roborock Vacuum T7)
-- roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
-- viomi.vacuum.v10 (Mi Robot Vacuum Mop P) 🔵[MiCloud]
-- mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1)
-- dreame.vacuum.p2028 (Dreame Bot Z10 Pro Vacuum)
-- dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum)
-- rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
-- dreame.vacuum.p2029 (Dreame Bot L10 Pro)
-- dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
-- dreame.vacuum.p2157 (MOVA L600)
-- viomi.vacuum.v18 (Viomi Robot Vacuum S9)
-- roborock.vacuum.a29 (Roborock Vacuum G10)
-- roidmi.vacuum.v6 (Roidmi Eve Plus)
-- roborock.vacuum.a10 (Roborock S6 MaxV)
-- ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
-- roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
-- roborock.vacuum.s5 (Roborock S5) 🔵[MiCloud]
-- dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop)
-- viomi.vacuum.v19 (Viomi Robot Vacuum SE)
-- roborock.vacuum.a08 (Roborock S6 Pure)
+-   dreame.vacuum.p2008 (Dreame F9)
+-   dreame.vacuum.p2009 (Dreame D9)
+-   dreame.vacuum.mc1808 (Xiaomi Mijia 1C Sweeping Vacuum Cleaner)
+-   dreame.vacuum.p2041 (Xiaomi Mijia 1T Robot Vacuum Cleaner)
+-   roborock.vacuum.a15 (Roborock Vacuum S7)
+-   roborock.vacuum.a11 (Roborock Vacuum T7)
+-   roborock.vacuum.m1s (Xiaomi Mi Robot 1S) 🔵[MiCloud]
+-   viomi.vacuum.v10 (Mi Robot Vacuum Mop P) 🔵[MiCloud]
+-   mijia.vacuum.v2 (Xiaomi Mi Robot Vacuum Mop G1)
+-   dreame.vacuum.p2028 (Dreame Bot Z10 Pro Vacuum)
+-   dreame.vacuum.p2036 (Xiaomi Trouver Finder LDS Vacuum)
+-   rockrobo.vacuum.v1 (Xiaomi Mi Robot Vacuum) 🔵[MiCloud]
+-   dreame.vacuum.p2029 (Dreame Bot L10 Pro)
+-   dreame.vacuum.p2140 (Mijia Robot Vacuum-Mop 2C)
+-   dreame.vacuum.p2157 (MOVA L600)
+-   viomi.vacuum.v18 (Viomi Robot Vacuum S9)
+-   roborock.vacuum.a29 (Roborock Vacuum G10)
+-   roidmi.vacuum.v6 (Roidmi Eve Plus)
+-   roborock.vacuum.a10 (Roborock S6 MaxV)
+-   ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
+-   roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
+-   roborock.vacuum.s5 (Roborock S5) 🔵[MiCloud]
+-   dreame.vacuum.mb1808 (Mi Robot Vacuum-Mop)
+-   viomi.vacuum.v19 (Viomi Robot Vacuum SE)
+-   roborock.vacuum.a08 (Roborock S6 Pure)
+-   dreame.vacuum.p2041o (Xiaomi Vacuum Mop 2 Pro+)
+-   viomi.vacuum.v8 (Xiaomi Robot Vacuum-Mop Pro) 🔵[MiCloud]
 
 ### Light
 
@@ -144,10 +154,15 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.light.mono4 (Yeelight 1S) 🔵[MiCloud]
 -   philips.light.ceiling (Xiaomi Philips LED Ceiling Light) 🔵[MiCloud]
 -   yeelink.light.bslamp1 (Xiaomi Mi Bedside Lamp) 🔵[MiCloud]
+-   yeelink.light.monob (Yeelight GU10 LED Smart Bulb W1)
+-   yeelink.light.mono6 (Yeelight Smart LED Bulb mono6)
+-   yeelink.light.lamp22 (Xiaomi Mi Computer Monitor Light Bar 1S)
+-   yeelink.light.strip6 (Yeelight Lightstrip Plus)
 
 ### Airer
 
 -   hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer) 🔵[MiCloud]
+-   hyd.airer.znlyj4 (MIJIA Smart Clothes Dryer 4)
 
 ### Oven
 
@@ -166,11 +181,13 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Bath Heater
 
 -   yeelink.bhf_light.v5 (Mi Smart Bathroom Heater Pro)
+-   viomi.waterheater.e8 (Viomi Water Heater)
+-   yeelink.bhf_light.v1 (Yeelight Smart Bathroom Heater Pro)
 
 ### Kettle
 
 -   yunmi.kettle.r3 (Yunmi Kettle) 🔵[MiCloud]
--   viomi.waterheater.e8 (Viomi Water Heater)
+-   viomi.health_pot.v1 (Mijia Smart Multipurpose Wi-Fi Kettle) 🔵[MiCloud]
 
 ### Thermostat
 
@@ -180,3 +197,8 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   yeelink.switch.sw1 (Yeelight Smart Dual Control Module)
 -   babai.switch.bb101s (WiFi Wall Switch A1)
+
+### Air Monitor
+
+-   cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
+-   cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
