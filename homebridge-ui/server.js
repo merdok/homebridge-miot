@@ -97,18 +97,20 @@ class UiServer extends HomebridgePluginUiServer {
 
   async getDeviceMetadata(params) {
     try {
-      const result = await MiotSpecFetcher.fetchMiotSpecByModel(params.deviceModel);
+      const result = await MiotSpecFetcher.fetchMiotSpecByModel(params.deviceModel, true);
       const {
         description,
         properties,
-        actions
+        actions,
+        events
       } = result;
       return {
         success: true,
         metadata: {
           description,
           properties,
-          actions
+          actions,
+          events
         }
       }
     } catch (err) {

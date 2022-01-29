@@ -114,27 +114,85 @@
             <button class="btn btn-primary" id="getDeviceMetadata" type="button">Fetch metadata</button>
           </div>
         </form>
-        <div class="metadata-table miot-message" style="display: none">
-          <table class="table table-sm">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Id</th>
-                <th scope="col">Description</th>
-                <th scope="col">Format</th>
-                <th scope="col">Access</th>
-                <th scope="col">Unit</th>
-                <th scope="col">Val Range</th>
-                <th scope="col">Val List</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Device could not be found!</td>
-              </tr>
-            </tbody>
-          </table>
+
+        <div class="metadata-table miot-message mt-3" style="display: none">
+
+          <ul class="nav nav-pills" id="metadataTab">
+            <li class="nav-item">
+              <a class="nav-link tab-properties active disabled" data-toggle="tab" role="tab" aria-controls="properties" href="#properties">Properties</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-actions disabled" data-toggle="tab" role="tab" aria-controls="actions" href="#actions">Actions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-events disabled" data-toggle="tab" role="tab" aria-controls="events" href="#events">Events</a>
+            </li>
+          </ul>
+
+          <div id="metadataTabContent" class="tab-content">
+            <div class="tab-pane fade active show" id="properties">
+
+              <div class="metadata-table-properties">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col" style="width:15%">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">Format</th>
+                      <th scope="col">Access</th>
+                      <th scope="col">Unit</th>
+                      <th scope="col">Value Range</th>
+                      <th scope="col" style="width:20%">Value List</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="actions">
+
+              <div class="metadata-table-actions">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">In (piid)</th>
+                      <th scope="col">Out (piid)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="events">
+
+              <div class="metadata-table-events">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">Arguments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+
         </div>
+
       </div>
     </div>
 
@@ -166,6 +224,7 @@
       })
     }
 
+    // cloud devices helper
     function showDeviceTable(devices) {
       $('.device-table table tbody').empty();
       if (devices) {
@@ -179,57 +238,112 @@
       $('.device-table').show();
     }
 
+    // metadata table helper
     function showMetadataTable(metadata) {
-      $('.metadata-table table tbody').empty();
-      if (metadata) {
+      $('.metadata-table .metadata-table-properties table tbody').empty();
+      $('.metadata-table .metadata-table-actions table tbody').empty();
+      $('.metadata-table .metadata-table-events table tbody').empty();
+      $('.metadata-table a.nav-link.tab-properties').addClass('disabled');
+      $('.metadata-table a.nav-link.tab-actions').addClass('disabled');
+      $('.metadata-table a.nav-link.tab-events').addClass('disabled');
 
-        if (metadata.properties) {
-          $('.metadata-table table tbody').append(`<tr class="bg-info"><th scope="row" colspan=8>Properties</th></tr>`);
-          Object.keys(metadata.properties).forEach(propKey => {
-            const prop = metadata.properties[propKey];
-            if (!propKey.includes('device-information')) { // skip properties from the device information, we do not need that
-              let accessStr = null;
-              if (prop.access) {
-                accessStr = '';
-                prop.access.forEach((value) => {
-                  accessStr = accessStr + `${value}</br>`;
-                })
-              }
-              let valRangeStr = null;
-              if (prop.valueRange && prop.valueRange.length === 3) {
-                valRangeStr = `Min: ${prop.valueRange[0]}</br>Max: ${prop.valueRange[1]}</br>Step: ${prop.valueRange[2]}</br>`;
-              }
-              let valListStr = null;
-              if (prop.valueList) {
-                valListStr = '';
-                prop.valueList.forEach((value, key) => {
-                  valListStr = valListStr + `${value.value} - ${value.description}</br>`;
-                })
-              }
-              let tableEntry =
-                `<tr><th scope="row">${prop.name}</th><td>${prop.siid}.${prop.piid}</td><td>${prop.description}</td><td>${prop.format || ' - '}</td><td>${accessStr || ' - '}</td><td>${prop.unit || ' - '}</td><td>${valRangeStr || ' - '}</td><td>${valListStr || ' - '}</td></tr>`
-              $('.metadata-table table tbody').append(tableEntry);
-            }
-          });
+      if (metadata) {
+        $('.metadata-table').show();
+
+        //  showMetdataDeviceType(metadata);
+        //  showSpecUrl(metadata);
+
+        if (metadata.properties && Object.keys(metadata.properties).length > 0) {
+          renderProperties(metadata.properties);
+          $('.metadata-table a.nav-link.tab-properties').removeClass('disabled');
+          $('.metadata-table a.nav-link.tab-properties').tab('show');
         }
 
-        if (metadata.actions) {
-          $('.metadata-table table tbody').append(`<tr class="bg-info"><th scope="row" colspan=8>Actions</th></tr>`);
-          Object.keys(metadata.actions).forEach(actionKey => {
-            const action = metadata.actions[actionKey];
-            if (!actionKey.includes('device-information')) { // skip properties from the device information, we do not need that
-              let tableEntry = `<tr><th scope="row">${action.name}</th><td>${action.siid}.${action.aiid}</td><td>${action.description}</td><td> - </td><td> - </td><td> - </td><td> - </td><td> - </td></tr>`
-              $('.metadata-table table tbody').append(tableEntry);
-            }
-          });
+        if (metadata.actions && Object.keys(metadata.actions).length > 0) {
+          renderActions(metadata.actions);
+          $('.metadata-table  a.nav-link.tab-actions').removeClass('disabled');
+        }
+
+        if (metadata.events && Object.keys(metadata.events).length > 0) {
+          renderEvents(metadata.events);
+          $('.metadata-table  a.nav-link.tab-events').removeClass('disabled');
         }
 
       } else {
-        $('.metadata-table table tbody').append(`<tr><td>Could not get detch metadata!</td></tr>`);
+        homebridge.toast.error('Could not retrieve device metadata...', 'Error');
       }
-      $('.metadata-table').show();
     }
 
+    function renderProperties(properties) {
+      Object.keys(properties).forEach(propKey => {
+        const prop = properties[propKey];
+        let accessStr = null;
+        if (prop.access) {
+          accessStr = '';
+          prop.access.forEach((value) => {
+            accessStr = accessStr + getAccessStr(value);
+          })
+        }
+        let valRangeStr = null;
+        if (prop.valueRange && prop.valueRange.length === 3) {
+          valRangeStr = `Min: ${prop.valueRange[0]}</br>Max: ${prop.valueRange[1]}</br>Step: ${prop.valueRange[2]}</br>`;
+        }
+        let valListStr = null;
+        if (prop.valueList) {
+          valListStr = '';
+          prop.valueList.forEach((value, key) => {
+            valListStr = valListStr + `${value.value} - ${value.description}</br>`;
+          })
+        }
+        let tableEntry =
+          `<tr><th scope="row">${formatName(prop.name)}</th><td>${formatId(prop.siid,prop.piid)}</td><td>${prop.description}</td><td>${prop.format || ' - '}</td><td>${accessStr || ' - '}</td><td>${prop.unit || ' - '}</td><td>${valRangeStr || ' - '}</td><td>${valListStr || ' - '}</td></tr>`
+        $('.metadata-table .metadata-table-properties table tbody').append(tableEntry);
+
+      });
+    }
+
+    function renderActions(actions) {
+      Object.keys(actions).forEach(actionKey => {
+        const action = actions[actionKey];
+        let tableEntry = `<tr><th scope="row">${formatName(action.name)}</th><td>${formatId(action.siid,action.aiid)}</td><td>${action.description}</td><td>${getArrayValues(action.in)}</td><td>${getArrayValues(action.out)}</td></tr>`
+        $('.metadata-table .metadata-table-actions table tbody').append(tableEntry);
+      });
+    }
+
+    function renderEvents(events) {
+      Object.keys(events).forEach(eventKey => {
+        const miotEvent = events[eventKey];
+        let tableEntry = `<tr><th scope="row">${formatName(miotEvent.name)}</th><td>${formatId(miotEvent.siid,miotEvent.eiid)}</td>><td>${miotEvent.description}</td><td>${getArrayValues(miotEvent.arguments)}</td></tr>`
+        $('.metadata-table .metadata-table-events table tbody').append(tableEntry);
+      });
+    }
+
+    function formatName(name) {
+      return `<h7><span class="badge bg-dark">${name}</span><h7>`
+    }
+
+    function formatId(siid, id) {
+      return `<h6><span class="badge bg-info">${siid}.${id}</span><h6>`
+    }
+
+    function getAccessStr(str) {
+      if (str === 'read') {
+        return '<span class="badge rounded-pill bg-success">read</span>'
+      } else if (str === 'write') {
+        return '<span class="badge rounded-pill bg-primary">write</span>'
+      } else {
+        return '<span class="badge rounded-pill bg-secondary">notify</span>'
+      }
+    }
+
+    function getArrayValues(valArray) {
+      if (valArray && valArray.length > 0) {
+        return valArray;
+      }
+      return ' - ';
+    }
+
+    // get all cloud devices
     $('#getAllDevices').on('click', function(e) {
       e.preventDefault();
       var btn = $(this),
@@ -289,6 +403,7 @@
       }
     });
 
+    // generate device class
     $('#generateDeviceClass').on('click', function(e) {
       e.preventDefault();
       let btn = $(this),
@@ -338,6 +453,7 @@
       }
     });
 
+    // get device metadata
     $('#getDeviceMetadata').on('click', function(e) {
       e.preventDefault();
       let btn = $(this),
