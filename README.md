@@ -230,10 +230,11 @@ Allows to monitor any properties of your device. **Default: "" (not specified)**
 #### Some device types also have some specific configuration fields. Please have a look at the device type page to check whether there are any available under the [docs](https://github.com/merdok/homebridge-miot/tree/main/docs).
 
 #### Property and Action names (or ids)
-There are 3 ways to get the property an action names (or ids) used in ***actionButtons***, ***propertyControl*** and ***propertyMonitor***:
+There are 4 ways to get the property an action names (or ids) used in ***actionButtons***, ***propertyControl*** and ***propertyMonitor***:
 - Use the [Miot Spec Fetcher](https://merdok.github.io/specFetcher/)
 - Use the plugin's settings in homebridge-config-ui-x (Homebridge Ui), where you will find a **"Fetch Device Metadata"** button
 - Check the homebridge log. Available device property and action names will be printed there during initialization
+- You can also use the official miot spec in order to determine the names or ids [Miot Spec - Released](https://miot-spec.org/miot-spec-v2/instances?status=released)
 
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
