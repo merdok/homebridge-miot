@@ -188,6 +188,8 @@ The directory where the device info will be stored. **Default: "~/.homebridge/.x
 The device state polling interval in seconds. **Default: 10**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
+- `customAccessory` [optional]
+  Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
@@ -224,8 +226,6 @@ Allows to monitor any properties of your device. **Default: "" (not specified)**
     - *value* - [optional] when a fixed value is specified instead of a light sensor a presence sensor will be created which triggers when the property has the specified value
     - *linkedProperty* - [optional] linked property used for status checking- Useful when monitor should only be possible when for example the device is on
     - *linkedPropertyValue* - [optional] the value of the linked property
-- `customAccessory` [optional]
-  Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 
 #### Some device types also have some specific configuration fields. Please have a look at the device type page to check whether there are any available under the [docs](https://github.com/merdok/homebridge-miot/tree/main/docs).
 
