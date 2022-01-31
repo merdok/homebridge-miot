@@ -72,7 +72,8 @@ exports.handler = async argv => {
         country
       };
     });
-    log.info(`MiCloud devices:`);
+
+    log.success(`Got devices from MiCloud!`);
     log.table(devices);
   } else {
     log.warn(`No device found!`);

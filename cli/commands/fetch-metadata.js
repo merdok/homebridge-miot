@@ -1,19 +1,18 @@
 const log = require('../log');
 const MiotSpecFetcher = require('../../lib/protocol/MiotSpecFetcher');
 
-exports.command = 'fetch-metadata';
+exports.command = 'fetch-metadata <model>';
 exports.description = 'Fetch the metadata for the specified device model';
-exports.builder = {
-  model: {
-    alias: 'm',
-    type: 'string',
-    description: 'Device model',
-    required: true
-  }
-};
+exports.builder = {};
 
 exports.handler = async argv => {
   const deviceModel = argv.model;
+
+  if (!deviceModel) {
+    log.error(`Please specify a device model!`);
+    return;
+  }
+
   try {
     log.info(`Fetching ${deviceModel} metadata from miot spec...`);
     const result = await MiotSpecFetcher.fetchMiotSpecByModel(deviceModel, true);
@@ -59,7 +58,7 @@ exports.handler = async argv => {
       };
     });
 
-    log.info(`Got device miot spec! It is a ${description}!`);
+    log.success(`Got device miot spec! It is a ${description}!`);
     log.info(`Properties:`);
     log.table(properties);
 

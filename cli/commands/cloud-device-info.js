@@ -54,8 +54,8 @@ exports.handler = async argv => {
 
   let result = await MiCloudHelper.getDevice(deviceId);
   if (result !== undefined) {
-    log.info(`Got device info from MiCloud`);
-    log.info(JSON.stringify(result, null, 2));
+    log.success(`Got device info from MiCloud`);
+    log.plain(JSON.stringify(result, null, 2));
   } else {
     log.error(`The device with id ${deviceId} could not be found on the ${country} server! Please make sure that the specified micloud country is correct and the device id is correct!`);
   }
