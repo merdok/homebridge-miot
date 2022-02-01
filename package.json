@@ -1,6 +1,6 @@
 {
   "name": "homebridge-miot",
-  "version": "0.9.19",
+  "version": "1.0.0",
   "description": "Homebridge plugin for devices supporting the miot protocol",
   "main": "index.js",
   "engines": {
@@ -34,7 +34,13 @@
     "robot",
     "cleaner",
     "roborock",
-    "dreame"
+    "dreame",
+    "air quality",
+    "air monitor",
+    "over",
+    "air fryer",
+    "light",
+    "yeelink"
   ],
   "author": "merdok",
   "funding": {
@@ -48,7 +54,7 @@
     "randomstring": "^1.2.1",
     "color-convert": "^2.0.1",
     "yargs": "^17.3.1",
-    "chalk": "^4.1.2",
+    "chalk": "^4.1.2"
   },
   "repository": {
     "type": "git",

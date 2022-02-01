@@ -6,6 +6,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.0.0] - 2022-02-02
+
+**With this update the plugin is now completely rewritten and includes many new features and improvements. The miot spec is now actively used to determine the device type and fetch the device metadata if needed!**  
+**Due to the many changes I expect that there might be some minor issues. If you find any issue then please let me know!**  
+**Please note that there are some breaking changes in this update!**
+
+### Breaking changes
+- Node 16.x is now required, see below for details
+- Some configuration properties got renamed, like `shutdownTimer` -> `offDelayControl`, please review your config if something is not working!
+- Many device specific configuration properties are removed in favor of `propertyControl` and `propertyMonitor`. This gives a better flexibility and control over your accessories. Please use those instead.
+
+### Added
+- The plugin is now implementing its own miio protocol instead of depending on the external miio library which seems not to be maintained anymore
+- The plugin now actively fetches and uses the miot spec for unknown devices to retrieve the device metadata and categorize the device
+- New `propertyControl` configuration property which allows to expose any property of your device as a interactive service on your accessory
+- New `propertyMonitor` configuration property which allows to expose any property of your device as a sensor(light sensor) on your accessory
+- New `customAccessory` configuration property which allows to create a customized accessory for all supported and even unsupported devices
+- New `childLockControl` configuration property which allows to hide the child lock service
+- New global `micloud` configuration property which allows to specify the MiCloud credentials used by all devices
+- Added cli commands
+- Added new tools to Homebridge Ui to fetch get and view device metadata used for `propertyControl`, `propertyMonitor` and `actionButtons`
+- Added support for air monitor devices
+- Added support for ijai.vacuum.v3 (Mi Robot Vacuum-Mop 2 Pro) robot cleaner
+- Added support for zhimi.airp.vb2a (Xiaomi Air Purifier Pro H v2) air purifier
+- Added support for zhimi.airpurifier.m2 (Xiaomi Air Purifier 2) air purifier
+- Added support for yeelink.light.strip6 (Yeelight Lightstrip Plus) light
+- Added support for zhimi.airp.vb4 (Xiaomi Air Purifier Pro 4) air purifier
+- Added support for viomi.vacuum.v8 (Xiaomi Robot Vacuum-Mop Pro) robot cleaner
+- Added support for cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) air monitor
+- Added support for cgllc.airm.cgdn1 (Qingping Air Monitor Lite) air monitor
+- Added support for viomi.health_pot.v1 (Mijia Smart Multipurpose Wi-Fi Kettle) kettle
+- Added support for yeelink.light.lamp22 (Xiaomi Mi Computer Monitor Light Bar 1S) light
+- Added support for zhimi.humidifier.ca1 (Xiaomi Smartmi Evaporative Humidifier 2) humidifier
+- Added support for hyd.airer.znlyj4 (Xiaomi Mijia Smart Clothes Dryer) airer
+- Added support for yeelink.bhf_light.v1 (Yeelight Smart Bathroom Heater Pro) bath heater
+- Added support for deerma.humidifier.mjjsq (Xiaomi Mijia Smart Sterilization Humidifier) humidifier
+- Added support for deerma.humidifier.jsq (Xiaomi Mi Smart Antibacterial Humidifier) humidifier
+- Added support for yeelink.light.mono6 (Yeelight Smart LED Bulb mono6) light
+- Added support for zhimi.airp.mb4a (Xiaomi Mi Air Purifier 3C v2) air purifier
+- Added support for yeelink.light.monob (Yeelight GU10 LED Smart Bulb W1) light
+- Added support for leshow.humidifier.jsq1 (Xiaomi Mijia Pure Pro) humidifier
+
+### Changed
+- IMPORTANT! As Node.js 12.x will not be supported anymore by homebridge as of April 2022, the minimum required Node.js was bumped to 16.x, please make sure to update: https://github.com/homebridge/homebridge/wiki/How-To-Update-Node.js
+- Changed viomi.waterheater.e8 (Viomi Water Heater) device type to bath heater
+- Renamed `shutdownTimer` configuration property to `offDelayControl`
+- Removed many device specific configuration fields
+- MiCloud now uses an encrypted communication to the servers
+- Device specific factories are now not needed anymore
+- Increase default polling interval to 10 seconds as this seems to be enough
+- Reorganized and cleaned up device classes
+- Many more under the hood changes
+
+### Fixed
+- Fixed MiCloud two factor authentication which prevented a login even when the used successfully verified
+- Properly show humidifier devices which do not support target humidity
+
+
 ## [0.9.19] - 2021-12-27
 
 This update includes new devices added by some users. I appreciate any contribution and highly encourage anyone to add new devices.
@@ -34,7 +93,7 @@ This update includes new devices added by some users. I appreciate any contribut
 - Added support for viomi.vacuum.v19 (Viomi Robot Vacuum SE) robot cleaner
 - Added support for roborock.vacuum.a08 (Roborock S6 Pure) robot cleaner
 - Added support for viomi.waterheater.e8 (Viomi Water Heater) kettle
-- Added support for yeelink.light.bslamp1 (Xiaomi Mi Bedside Lamp) lamp
+- Added support for yeelink.light.bslamp1 (Xiaomi Mi Bedside Lamp) light
 - Added support for zhimi.humidifier.cb1 (Smartmi Air Humidifier 2) humidifier
 - Added support for lumi.acpartner.mcn04 (Mi Smart Air Conditioner Controller Pro)  air conditioner
 
