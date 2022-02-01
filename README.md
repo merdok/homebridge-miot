@@ -146,8 +146,9 @@ Example configuration:
 ```
 
 ### Token
-For the plugin to work the device token is required. The recommended method to get the token for your device is to use the plugin's settings in homebridge-config-ui-x
-(Homebridge Ui), where you will find a **"Discover All Devices via MiCloud"** button, which can automatically get the tokens for all your devices!  
+For the plugin to work the device token is required. The plugin offers you two ways to retrieve the token for your devices:
+- You can use the plugin's settings in homebridge-config-ui-x (Homebridge Ui), where you will find a **"Discover All Devices via MiCloud"** button, which can automatically get the tokens for all your devices!
+- Another way it to use the command line tools, simply type `miot cloud-devices -u <username> -p <password>` in the command line to get the tokens for all your devices!
 
 Other ways:  
 - guide to retrieve token manually: [obtaining mi device token](https://github.com/merdok/homebridge-miot/blob/master/obtain_token.md).  
