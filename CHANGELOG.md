@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.0.1] - 2021-02-03
+### Added
+- Added support for zimi.powerstrip.v2 (Xiaomi Power Strip) outlet
+- Added support for dreame.vacuum.p2150o (Mijia Robot Vacuum-Mop Dirt Disposal) robot cleaner
+
+### Fixed
+- Fix possible crash related to the pm10 density property
+- Fix viomi.vacuum.v18 and viomi.vacuum.v19 stop clean actions
+- Fix possible crash in the Kettle accessory
+- Fix possible crash in BathHeater accessory
+
+
 ## [1.0.0] - 2022-02-02
 
 **With this update the plugin is now completely rewritten and includes many new features and improvements. The miot spec is now actively used to determine the device type and fetch the device metadata if needed!**  
