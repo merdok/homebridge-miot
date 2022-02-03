@@ -190,7 +190,6 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Kettle
 
 -   yunmi.kettle.r3 (Yunmi Kettle) 🔵[MiCloud]
--   viomi.health_pot.v1 (Mijia Smart Multipurpose Wi-Fi Kettle) 🔵[MiCloud]
 
 ### Thermostat
 
