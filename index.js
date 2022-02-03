@@ -2,7 +2,6 @@ const fs = require('fs').promises;
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
-const AccessoryFactory = require('./lib/factories/AccessoryFactory.js');
 const Constants = require('./lib/constants/Constants.js');
 const Logger = require('./lib/utils/Logger.js');
 const Events = require('./lib/constants/Events.js');
@@ -22,7 +21,7 @@ module.exports = function(homebridge) {
 };
 
 
-class xiaomiMiotDeviceController {
+class miotDeviceController {
   constructor(log, config, globalmicloudconfig, api) {
     this.log = log;
     this.config = config;
@@ -77,19 +76,22 @@ class xiaomiMiotDeviceController {
     // create device model info file name
     this.deviceInfoFile = this.prefsDir + 'info_' + this.ip.split('.').join('') + '_' + this.token;
 
+    // generate uuid
+    this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+
     // prepare variables
     this.miotDevice = undefined;
     this.device = undefined;
     this.cachedDeviceInfo = {};
 
-    // begin with the setup
-    this._setupController();
+    //restored cashed accessory
+    this.restoredCachedAccessory = null;
   }
 
 
   /*----------========== SETUP ==========----------*/
 
-  async _setupController() {
+  async setupController() {
     // check if the preferences directory exists, if not then create it
     await this._createDirIfNeeded(this.prefsDir);
 
@@ -154,11 +156,16 @@ class xiaomiMiotDeviceController {
   /*----------========== SETUP SERVICES ==========----------*/
 
   prepareAccessoryAndStartPolling() {
-    // generate uuid
-    this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+
+    // first unregister a cached accessory if present!
+    if (this.restoredCachedAccessory) {
+      this.logger.debug('Found cached accessory for this device! Unregistering it first!');
+      this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
+      this.restoredCachedAccessory = null;
+    }
 
     // init the accessory
-    this.device.initDeviceAccessory(this.UUID, this.config, this.api, this.cachedDeviceInfo);
+    this.device.initDeviceAccessory(this.getAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo);
 
     if (this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
       this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
@@ -166,6 +173,16 @@ class xiaomiMiotDeviceController {
       this.logger.info('Everything looks good! Initiating property polling!');
       this.miotDevice.startPropertyPolling();
     }
+  }
+
+  /*----------========== PUBLIC ==========----------*/
+
+  getAccessoryUuid() {
+    return this.UUID;
+  }
+
+  setRestoredCachedAccessory(accessory) {
+    this.restoredCachedAccessory = accessory;
   }
 
 
@@ -227,7 +244,7 @@ class xiaomiMiotDeviceController {
 class miotPlatform {
   constructor(log, config, api) {
 
-    this.devices = [];
+    this.cachedAccessories = [];
     this.log = log;
     this.api = api;
     this.config = config;
@@ -240,7 +257,6 @@ class miotPlatform {
        * This event can also be used to start discovery of new accessories.
        */
       this.api.on("didFinishLaunching", () => {
-        this.removeAccessories(); // remove all cached devices, we do not want to use cache for now, maybe in future?
         this.initDevices();
       });
     }
@@ -253,7 +269,7 @@ class miotPlatform {
    */
   configureAccessory(accessory) {
     this.log.debug(`Found cached accessory ${accessory.displayName}`);
-    this.devices.push(accessory);
+    this.cachedAccessories.push(accessory);
   }
 
   // ------------ CUSTOM METHODS ------------
@@ -263,9 +279,9 @@ class miotPlatform {
 
     // read from config.devices
     if (this.config.devices && Array.isArray(this.config.devices)) {
-      for (let device of this.config.devices) {
-        if (device) {
-          new xiaomiMiotDeviceController(this.log, device, this.config.micloud, this.api);
+      for (let deviceConfig of this.config.devices) {
+        if (deviceConfig) {
+          this.initDevice(deviceConfig);
         }
       }
     } else if (this.config.devices) {
@@ -279,18 +295,35 @@ class miotPlatform {
       this.log.info('-------------------------------------------');
     }
 
+    // remove all accessories which are still left over
+    this.removeAccessories();
+
+  }
+
+  initDevice(deviceConfig) {
+    const newDevCtrl = new miotDeviceController(this.log, deviceConfig, this.config.micloud, this.api);
+    const restoredAccessory = this.cachedAccessories.find(accessory => accessory.UUID === newDevCtrl.getAccessoryUuid());
+    if (restoredAccessory) {
+      newDevCtrl.setRestoredCachedAccessory(restoredAccessory);
+      this.cachedAccessories = this.cachedAccessories.filter(item => item !== restoredAccessory); // remove the cached accessory from the list since the controller will remove it later.
+    }
+    newDevCtrl.setupController(); // begin the controller setup
   }
 
   removeAccessories() {
-    // we don't have any special identifiers, we just remove all our accessories
-    this.log.debug('Removing all cached accessories');
-    this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.devices);
-    this.devices = []; // clear out the array
+    if (this.cachedAccessories && this.cachedAccessories.length > 0) {
+      // we don't have any special identifiers, we just remove all our accessories
+      this.log.debug('Removing all cached accessories');
+      this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.cachedAccessories);
+      this.cachedAccessories = []; // clear out the array
+    } else {
+      this.log.debug('No accessories to remove!');
+    }
   }
 
   removeAccessory(accessory) {
     this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-    this.devices = this.devices.filter(item => item !== accessory);
+    this.cachedAccessories = this.cachedAccessories.filter(item => item !== accessory);
   }
 
 
