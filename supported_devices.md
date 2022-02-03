@@ -110,6 +110,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dmaker.airfresh.a1 (Xiaomi Mi Air Purifier A1 MJXFJ-150-A1) 🔵[MiCloud]
 -   dmaker.airfresh.t2017 (Xiaomi Air Purifier MJXFJ-300-G1) 🔵[MiCloud]
 -   zhimi.airfresh.va2 (Smartmi Fresh Air System XFXT01ZM) 🔵[MiCloud]
+-   zhimi.airfresh.va4 (Smartmi Fresh Air System XFXTDFR02ZM) 🔵[MiCloud]
 
 ### Robot Cleaner
 
