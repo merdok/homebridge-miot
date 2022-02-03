@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [1.0.1] - 2021-02-03
+## [1.0.2] - 2022-02-04
+### Added
+- Added room cleaning guide for Viomi devices
+- Added support for philips.light.candle2 (Xiaomi Philips Zhirui Candle Light Bulb) light
+- Added support for zhimi.airfresh.va4 (Smartmi Fresh Air System XFXTDFR02ZM) fresh air system
+
+### Changed
+- Remove viomi.health_pot.v1 as it seems to be a read only device in the miot protocol
+
+### Fixed
+- Fix potential accessory reset during homebridge restart
+
+
+## [1.0.1] - 2022-02-03
 ### Added
 - Added support for zimi.powerstrip.v2 (Xiaomi Power Strip) outlet
 - Added support for dreame.vacuum.p2150o (Mijia Robot Vacuum-Mop Dirt Disposal) robot cleaner
