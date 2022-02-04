@@ -44,8 +44,8 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   deerma.humidifier.jsq4 (Mijia Pure Smart Humidifier)
 -   zhimi.humidifier.cb1 (Smartmi Air Humidifier 2) 🔵[MiCloud]
 -   leshow.humidifier.jsq1 (Xiaomi Mijia Pure Pro)
--   deerma.humidifier.jsq (Xiaomi Mi Smart Antibacterial Humidifier)
--   deerma.humidifier.mjjsq (Xiaomi Mijia Smart Sterilization Humidifier)
+-   deerma.humidifier.jsq (Xiaomi Mi Smart Antibacterial Humidifier) 🔵[MiCloud]
+-   deerma.humidifier.mjjsq (Xiaomi Mijia Smart Sterilization Humidifier) 🔵[MiCloud]
 -   zhimi.humidifier.ca1 (Xiaomi Smartmi Evaporative Humidifier 2) 🔵[MiCloud]
 
 ### Dehumidifier
