@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.0.3] - 2022-02-06
+### Changed
+- Mark deerma.humidifier.jsq and deerma.humidifier.mjjsq as mi cloud required
+
+### Fixed
+- Fix retrieving actions by id
+- Fix action parameters parsing
+
+
 ## [1.0.2] - 2022-02-04
 ### Added
 - Added room cleaning guide for Viomi devices
