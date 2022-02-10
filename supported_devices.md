@@ -162,7 +162,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.light.monob (Yeelight GU10 LED Smart Bulb W1)
 -   yeelink.light.mono6 (Yeelight Smart LED Bulb mono6)
 -   yeelink.light.lamp22 (Xiaomi Mi Computer Monitor Light Bar 1S)
--   yeelink.light.strip6 (Yeelight Lightstrip Plus)
+-   yeelink.light.strip6 (Yeelight Lightstrip Plus) 🔵[MiCloud]
 -   philips.light.candle2 (Xiaomi Philips Zhirui Candle Light Bulb) 🔵[MiCloud]
 -   yeelink.light.colorc (Yeelight RGB LED Bulb)
 -   philips.light.downlight (Xiaomi Mijia Philips Zhirui Downlight)
