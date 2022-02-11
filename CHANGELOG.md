@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.0.4] - 2022-02-12
+### Added
+- Added support for yeelink.light.colorc (Yeelight RGB LED Bulb) light
+- Added support for zhimi.airp.mb5 (Xiaomi Mi Air Purifier 4) air purifier @blue2000hk for the contribution!
+- Added support for hyd.airer.znlyj2 (MIJIA Smart Clothes Dryer 2) airer @blue2000hk for the contribution!
+- Added support for philips.light.downlight (Xiaomi Mijia Philips Zhirui Downlight) light
+- Added support for isleep.blanket.hs2205 (Painted sleep water heating pad HS2205) heater
+
+### Changed
+- Marked yeelink.light.strip6 as MiCloud required
+
+### Fixed
+- Fix param value 0 being ignored in actions
+
+
 ## [1.0.3] - 2022-02-06
 ### Changed
 - Mark deerma.humidifier.jsq and deerma.humidifier.mjjsq as mi cloud required
