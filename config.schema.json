@@ -577,7 +577,7 @@
                 "devices[].offDelayControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|leshow)\\.heater\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/);"
               }
             },
             {
