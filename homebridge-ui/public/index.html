@@ -436,6 +436,9 @@
               //  createForm(configSchema, configuration);
               let sucMsg =
                 `It is a ${data.devType} device! Created device class at <b> ${data.filePath} </b> <br> Please move the generated file to lib/modules/${data.devType.toLowerCase()}/devices/ and consider creating a pull request at github!`;
+              if(data.devType === 'Generic'){
+                sucMsg = `Could not identify device! Created device class at <b> ${data.filePath} </b> <br> Manual device class adjustment is required!`;
+              }
               $('.device-class-generated .alert').html(sucMsg);
               $('.device-class-generated').show();
               homebridge.toast.success('Device class generated!');
