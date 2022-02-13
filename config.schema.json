@@ -729,7 +729,7 @@
                 "devices[].co2AbnormalThreshold"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(cgllc)\\.(airm|airmonitor)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/);"
               }
             }
           ]
