@@ -209,5 +209,6 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Monitor
 
--   cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
--   cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
+- cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
+- cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
+- zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) 🔵[MiCloud]
