@@ -201,6 +201,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Thermostat
 
 -   cubee.airrtc.th123w (Heatcold UFH Thermostat)
+-   cubee.airrtc.th123e (Heatcold Heating Thermostat)
 
 ### Switch
 
