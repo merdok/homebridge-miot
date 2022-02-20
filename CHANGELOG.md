@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2022-02-21
+### Added
+- Added support for zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) air monitor. Thanks @wojciej for the contribution!
+- Added support for cubee.airrtc.th123e (Heatcold Heating Thermostat) thermostat
+- Added support for zhimi.airpurifier.mc1 (Xiaomi Air Purifier 2S Global Version) air purifier
+
+### Fixed
+- Fix a possible infinite loop which might have occurred on some unknown devices
+
 
 ## [1.0.4] - 2022-02-12
 ### Added
