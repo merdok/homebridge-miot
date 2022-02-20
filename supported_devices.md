@@ -73,6 +73,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.airp.vb4 (Xiaomi Air Purifier Pro 4)
 -   zhimi.airpurifier.m2 (Xiaomi Air Purifier 2) 🔵[MiCloud]
 -   zhimi.airp.vb2a (Xiaomi Air Purifier Pro H v2)
+-   zhimi.airpurifier.mc1 (Xiaomi Air Purifier 2S Global Version) 🔵[MiCloud]
 
 ### Air Conditioner
 
