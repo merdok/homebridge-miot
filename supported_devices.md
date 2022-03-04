@@ -170,6 +170,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   philips.light.candle2 (Xiaomi Philips Zhirui Candle Light Bulb) 🔵[MiCloud]
 -   yeelink.light.colorc (Yeelight RGB LED Bulb)
 -   philips.light.downlight (Xiaomi Mijia Philips Zhirui Downlight)
+-   yeelink.light.lamp15 (Yeelight Led Screen Light Bar Pro)
 
 ### Airer
 
