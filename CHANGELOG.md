@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.6] - 2022-03-09
+### Added
+- Added support for dreame.vacuum.p2259 (Dreame Bot D9 Max) robot cleaner
+- Added support for dreame.vacuum.p2187 (Dreame D9 Pro) robot cleaner
+- Added support for yeelink.light.lamp15 (Yeelight Led Screen Light Bar Pro) light
+
+### Changed
+- Marked the Roidmi Eve Plus as not MiCloud required
+
+
 ## [1.0.5] - 2022-02-21
 ### Added
 - Added support for zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) air monitor. Thanks @wojciej for the contribution!
