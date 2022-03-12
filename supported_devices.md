@@ -100,6 +100,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   cuco.plug.cp1m (Gosund Smart Plug CP1-AM)
 -   chuangmi.plug.hmi208 (Xiaomi Mijia Smart Wi-fi Plug) 🔵[MiCloud]
 -   zimi.powerstrip.v2 (Xiaomi Power Strip) 🔵[MiCloud]
+-   qmi.powerstrip.v1 (Xiaomi Chingmi WiFi Smart Powerstrip) 🔵[MiCloud]
 
 ### Curtain
 

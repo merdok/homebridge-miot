@@ -680,7 +680,7 @@
                 "devices[].showTemperature"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(chuangmi|cuco|zimi)\\.(plug|powerstrip)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/);"
               }
             },
             {
