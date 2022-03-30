@@ -173,6 +173,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.light.colorc (Yeelight RGB LED Bulb)
 -   philips.light.downlight (Xiaomi Mijia Philips Zhirui Downlight)
 -   yeelink.light.lamp15 (Yeelight Led Screen Light Bar Pro)
+-   cuco.light.sl4a (NiteBird SL4)
 
 ### Airer
 
