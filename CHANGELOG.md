@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2022-04-11
+### Added
+- Added support for qmi.powerstrip.v1 (Xiaomi Chingmi WiFi Smart Powerstrip) outlet
+- Added support for zhimi.airp.mb3a (Xiaomi Mi Air Purifier 3H v2) air purifier
+- Added support for cuco.light.sl4a (NiteBird SL4) light
+
+### Changed
+- Introduce custom services for better and cleaner device control
+
+### Fixed
+- Fixed an issue where some properties where detected as percentage, even if they were not
+- Fixed an issue where outlets were displayed as switches
+
+
 ## [1.0.6] - 2022-03-09
 ### Added
 - Added support for dreame.vacuum.p2259 (Dreame Bot D9 Max) robot cleaner
