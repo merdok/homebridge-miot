@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2022-04-15
+### Added
+- Added suppport for roborock.vacuum.a01 (Roborock E4) robot cleaner
+- Added support for zhimi.airp.rmb1 (Xiaomi Air Purifier 4 Lite) air purifier
+
+### Fixed
+- Fix automatic device identification
+- Properties, action and events with id 0 are now properly parsed
+
+
 ## [1.1.0] - 2022-04-11
 ### Added
 - Added support for qmi.powerstrip.v1 (Xiaomi Chingmi WiFi Smart Powerstrip) outlet
