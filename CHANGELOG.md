@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2022-04-15
+### Fixed
+- Additional parsing fix
+
+
 ## [1.1.1] - 2022-04-15
 ### Added
 - Added suppport for roborock.vacuum.a01 (Roborock E4) robot cleaner
