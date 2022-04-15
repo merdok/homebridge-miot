@@ -171,6 +171,12 @@
               "type": "boolean",
               "required": false
             },
+            "reducedPropertyMonitoring": {
+              "title": "Reduce the amount of properties to monitor",
+              "description": "Only monitor a minimal amount of properties. Might help when device runs often into timeouts but also might cause issues for some devices.",
+              "type": "boolean",
+              "required": false
+            },
             "buzzerControl": {
               "title": "Buzzer control service",
               "description": "Whether to show buzzer control buttons.",
@@ -400,8 +406,7 @@
       }
     }
   },
-  "layout": [
-    {
+  "layout": [{
       "type": "fieldset",
       "title": "Global MiCloud Settings",
       "description": "Configure global MiCloud connection details used for all devices.",
@@ -427,8 +432,7 @@
           "key": "devices[]",
           "type": "fieldset",
           "title": "{{ value.title }}",
-          "items": [
-            {
+          "items": [{
               "type": "fieldset",
               "title": "Advanced Settings",
               "description": "Configure advanced plugin settings.",
@@ -464,6 +468,7 @@
               "expanded": false,
               "items": [
                 "devices[].customAccessory",
+                "devices[].reducedPropertyMonitoring",
                 "devices[].ledControl",
                 "devices[].buzzerControl",
                 "devices[].childLockControl",
@@ -716,8 +721,7 @@
               "description": "Configure air monitor specific device settings.",
               "expandable": true,
               "expanded": false,
-              "items": [
-                {
+              "items": [{
                   "key": "devices[].pm25Breakpoints",
                   "type": "array",
                   "items": {

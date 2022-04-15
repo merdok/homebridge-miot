@@ -191,6 +191,8 @@ The device state polling interval in seconds. **Default: 10**
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `customAccessory` [optional]
   Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
+- `reducedPropertyMonitoring` [optional]
+  Only monitor a minimal amount of properties. Might help when device runs often into timeouts but also might cause issues for some devices. **Default: false**
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]
