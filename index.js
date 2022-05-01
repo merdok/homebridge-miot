@@ -54,7 +54,6 @@ class miotDeviceController {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
     }
     this.isCustomAccessory = config.customAccessory || false;
-    this.isReducedPropertyMonitoring = config.reducedPropertyMonitoring || false;
     this.prefsDir = config.prefsDir || api.user.storagePath() + '/.xiaomiMiot/';
     this.deepDebugLog = config.deepDebugLog;
     if (this.deepDebugLog === undefined) {
@@ -138,7 +137,7 @@ class miotDeviceController {
       this.logger.info('Initializing device!');
       this.device = await DeviceFactory.createDevice(miotDevice, this.specDir, this.name, this.isCustomAccessory, this.logger);
       if (this.device) {
-        await this.device.initDevice(this.isReducedPropertyMonitoring);
+        await this.device.initDevice();
         if (this.device.getType() === DevTypes.UNKNOWN) {
           this.logger.warn(`Device not supported! Using a generic device with limited properties! Consider requesting device support!`);
         } else if (this.device.getType() === DevTypes.CUSTOM) {

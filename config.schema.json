@@ -171,12 +171,6 @@
               "type": "boolean",
               "required": false
             },
-            "reducedPropertyMonitoring": {
-              "title": "Reduce the amount of properties to monitor",
-              "description": "Only monitor a minimal amount of properties. Might help when device runs often into timeouts but also might cause issues for some devices.",
-              "type": "boolean",
-              "required": false
-            },
             "buzzerControl": {
               "title": "Buzzer control service",
               "description": "Whether to show buzzer control buttons.",
@@ -468,7 +462,6 @@
               "expanded": false,
               "items": [
                 "devices[].customAccessory",
-                "devices[].reducedPropertyMonitoring",
                 "devices[].ledControl",
                 "devices[].buzzerControl",
                 "devices[].childLockControl",
