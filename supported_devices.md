@@ -155,6 +155,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dreame.vacuum.p2259 (Dreame Bot D9 Max)
 -   dreame.vacuum.p2187 (Dreame D9 Pro)
 -   roborock.vacuum.a01 (Roborock E4) 🔵[MiCloud]
+-   roborock.vacuum.a27 (Roborock S7 MaxV Ultra)
 
 ### Light
 
