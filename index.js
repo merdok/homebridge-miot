@@ -156,7 +156,6 @@ class miotDeviceController {
   /*----------========== SETUP SERVICES ==========----------*/
 
   prepareAccessoryAndStartPolling() {
-
     // first unregister a cached accessory if present!
     if (this.restoredCachedAccessory) {
       this.logger.debug('Found cached accessory for this device! Unregistering it first!');
