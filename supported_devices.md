@@ -226,3 +226,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 - cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
 - cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
 - zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) 🔵[MiCloud]
+
+### Cooker
+
+- chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]

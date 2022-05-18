@@ -44,6 +44,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Thermostat
 * Switch
 * Air Monitor
+* Cooker
 
 More device types will be added!
 
