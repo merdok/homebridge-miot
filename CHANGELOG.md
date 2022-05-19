@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2022-05-20
+### Added
+- Added cooker device support
+- Added support for chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) cooker
+- Added support for cuco.plug.cp3a (Gosund CP3-AM) outlet
+- Added support for zhimi.airp.mp4 (Miija Air Purifier 4 Pro) air purifier
+- Added support for cuco.plug.cp5pro (Gosund Smart Power Strip Pro) outlet
+- Added support for roborock.vacuum.a27 (Roborock S7 MaxV Ultra) robot cleaner
+
+### Changed
+- Only necessary properties are now being monitored which should reduce the probability of timeouts
+- Properties which are not writable are now skipped in `propertyControl`
+
+### Fixed
+- Fix properties monitoring in custom services
+- Set temperature and humidity sensor to inactive when miot device is not connected
+
+
 ## [1.1.3] - 2022-04-16
 ### Fixed
 - More spec parsing improvements
@@ -18,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.1] - 2022-04-15
 ### Added
-- Added suppport for roborock.vacuum.a01 (Roborock E4) robot cleaner
+- Added support for roborock.vacuum.a01 (Roborock E4) robot cleaner
 - Added support for zhimi.airp.rmb1 (Xiaomi Air Purifier 4 Lite) air purifier
 
 ### Fixed
