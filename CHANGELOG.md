@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2022-05-24
+### Added
+- Added support for zhimi.fan.sa1 (Mi Standing Fan) fan
+- Added support for dreame.vacuum.p2027 (Dreame W10) robot cleaner
+
+
 ## [1.2.0] - 2022-05-20
 ### Added
 - Added cooker device support
