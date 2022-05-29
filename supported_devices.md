@@ -19,6 +19,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   air.fan.ca23ad9 (AIRMATE CA23-AD9 Air Circulation Fan)
 -   zhimi.fan.v3 (Smartmi Standing Fan V3) 🔵[MiCloud]
 -   zhimi.fan.sa1 (Mi Standing Fan) 🔵[MiCloud]
+-   dmaker.fan.p30 (Xiaomi Smart Standing Fan 2)
 
 ### Ceiling Fan
 
