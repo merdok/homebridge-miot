@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2022-05-30
+### Added
+- Added support for dmaker.fan.p30 (Xiaomi Smart Standing Fan 2) fan
+- Added support for dmaker.fan.p33 (Xiaomi Smart Standing Fan 2 Pro) fan
+
+### Fixed
+- Adjusted Airer devices to new spec
+- Fix missing temperature on Mi Fresh Air Ventilator C1-80 (zhimi.airfresh.ua1)
+
+
 ## [1.2.1] - 2022-05-24
 ### Added
 - Added support for zhimi.fan.sa1 (Mi Standing Fan) fan
