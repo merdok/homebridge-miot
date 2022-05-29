@@ -20,6 +20,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.fan.v3 (Smartmi Standing Fan V3) 🔵[MiCloud]
 -   zhimi.fan.sa1 (Mi Standing Fan) 🔵[MiCloud]
 -   dmaker.fan.p30 (Xiaomi Smart Standing Fan 2)
+-   dmaker.fan.p33 (Xiaomi Smart Standing Fan 2 Pro)
 
 ### Ceiling Fan
 
