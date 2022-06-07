@@ -117,8 +117,8 @@ Example configuration:
           ],
           "propertyControl": [
             {
-              "action": "fan:anion",
-              "name": "Toggle anion"
+              "property": "fan:anion",
+              "name": "Control anion"
             },
             {
               "property": "2.7",
