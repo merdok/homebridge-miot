@@ -187,7 +187,7 @@ When specified overwrites the global setting for the device. Useful when you hav
 - `prefsDir` [optional]
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]
-The device state polling interval in seconds. **Default: 10**
+The device state polling interval in seconds. **Default: 15**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `customAccessory` [optional]
