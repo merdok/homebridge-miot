@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2022-06-10
+### Added
+- Added support for dmaker.fan.p220 (Mijia DC Inverter Circulating Floor Fan) fan
+
+### Changed
+- Increased default polling interval from 10s to 15s to reduce load on the devices
+- Optimizations to the miot protocol
+
+### Fixed
+- Fixed properties retrieval from the Roborock s7 maxV Ultra
+- Fix missing temperature on hanyi.airpurifier.kj550
+
+
 ## [1.2.2] - 2022-05-30
 ### Added
 - Added support for dmaker.fan.p30 (Xiaomi Smart Standing Fan 2) fan
