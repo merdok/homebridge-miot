@@ -185,6 +185,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   philips.light.downlight (Xiaomi Mijia Philips Zhirui Downlight)
 -   yeelink.light.lamp15 (Yeelight Led Screen Light Bar Pro)
 -   cuco.light.sl4a (NiteBird SL4)
+-   philips.light.zyceiling (Mi Philips Zhirui Ceilling Light) 🔵[MiCloud]
 
 ### Airer
 
