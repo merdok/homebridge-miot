@@ -238,6 +238,14 @@ There are 4 ways to get the property an action names (or ids) used in ***actionB
 - Check the homebridge log. Available device property and action names will be printed there during initialization
 - You can also use the official miot spec in order to determine the names or ids [Miot Spec - Released](https://miot-spec.org/miot-spec-v2/instances?status=released)
 
+## CLI
+The plugin also offers a command line interface to control your devices directly from the command line.  
+Just type `miot` in the console to get a list of available options. Currently available are:
+- `miot send` -> Send a RAW command over your local network to the device
+- `miot tokens` -> Store and show tokens for specific devices
+- `miot cloud` -> Connect to the MiCloud, execute commands, list devices and get specific device info
+- `miot fetch-metadata` -> Fetch device metadata for the specified model
+
 ## Troubleshooting
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
 

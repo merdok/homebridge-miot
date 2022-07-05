@@ -1,4 +1,5 @@
 const log = require('../log');
+const chalk = require('chalk');
 const MiotSpecFetcher = require('../../lib/protocol/MiotSpecFetcher');
 
 exports.command = 'fetch-metadata <model>';
@@ -14,7 +15,7 @@ exports.handler = async argv => {
   }
 
   try {
-    log.info(`Fetching ${deviceModel} metadata from miot spec...`);
+    log.info(`Fetching ${chalk.yellow.bold(deviceModel)} metadata from miot spec...`);
     const result = await MiotSpecFetcher.fetchMiotSpecByModel(deviceModel, true);
     let {
       description,

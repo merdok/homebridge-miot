@@ -1,47 +1,37 @@
-const log = require('../log');
-const MiCloudHelper = require('../../lib/tools/MiCloudHelper');
+const log = require('../../log');
+const chalk = require('chalk');
+const MiCloudHelper = require('../../../lib/tools/MiCloudHelper');
 
-exports.command = 'cloud-devices';
+exports.command = 'list-devices';
 exports.description = 'List all devices from MiCloud';
 exports.builder = {
-  username: {
-    alias: 'u',
+  country: {
+    required: false,
+    alias: 'c',
     type: 'string',
-    description: 'Username'
-  },
-  password: {
-    alias: 'p',
-    type: 'string',
-    description: 'Password'
-  },
-  file: {
-    alias: 'f',
-    type: 'string',
-    description: 'File with the micloud credentials'
+    description: 'Country code'
   }
 };
 
 exports.handler = async argv => {
   let {
-    username,
-    password,
-    file
+    deviceId,
+    country
   } = argv;
 
-  try {
-    await MiCloudHelper.login(username, password, file);
-  } catch (err) {
-    log.error(err.message);
-    return;
+  if (!MiCloudHelper.isLoggedIn()) {
+    log.error(`Not logged in to MiCloud! Please log in first!`);
+    process.exit(0);
   }
 
   var devices = [];
 
-  log.info(`Getting devices...`);
+  log.info(`Getting device list...`);
 
   // list all device from all available countries
   for (const country of MiCloudHelper.availableCountries) {
     try {
+      log.info(`Getting devices from country ${chalk.magenta.bold(country)}...`);
       MiCloudHelper.setCountry(country);
       // prevent duplicate devices
       const allList = (await MiCloudHelper.getDevices()).filter(device => !devices.find(d => d.did === device.did));
@@ -49,6 +39,7 @@ exports.handler = async argv => {
       const validList = allList.filter(device => device.localip && device.localip.length > 0 && device.ssid && device.ssid.length > 0);
       validList.map(device => device.country = country);
       devices.push(...validList);
+      log.info(`Found ${chalk.bold.underline(validList.length)} devices!`);
     } catch (err) {
       log.error(err.message);
     }
@@ -79,4 +70,5 @@ exports.handler = async argv => {
     log.warn(`No device found!`);
   }
 
+  process.exit(0);
 };
