@@ -32,14 +32,14 @@ class UiServer extends HomebridgePluginUiServer {
       if (err instanceof TwoFactorRequired) {
         return {
           success: false,
-          error: 'Two factor authentication required, please use visit below url and retry login.',
-          url: err.notificationUrl,
+          error: 'Two factor authentication required, please visit the specified url and retry login.',
+          url: err.notificationUrl
         }
       }
 
       return {
         success: false,
-        error: err.message + `! The specified MiCloud login credentials might be incorrect or the account does not exist...`,
+        error: err.message + `! The specified MiCloud login credentials might be incorrect or the account does not exist...`
       };
     }
 
@@ -60,7 +60,6 @@ class UiServer extends HomebridgePluginUiServer {
       }
     }
 
-
     return {
       success: true,
       warning: warningMsg,
@@ -73,7 +72,7 @@ class UiServer extends HomebridgePluginUiServer {
           deviceId: device.did,
           country: device.country
         }
-      }),
+      })
     }
   }
 

@@ -43,7 +43,7 @@
             <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
           </div>
           <div class="text-center two-factor-url miot-message" style="display: none">
-            <a class="btn btn-primary btn-login" href="#">2FA required, click here, wait a few seconds and try again!</a>
+            <a id="twoFactorAuth" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required, click here, wait a few seconds and try again!</a>
           </div>
           <div class="text-center device-table miot-message" style="display: none">
             <table class="table table-sm">
@@ -366,11 +366,7 @@
           username,
           password,
         }).then(async data => {
-          if (typeof data.success === 'undefined' || data.success === false) {
-            homebridge.toast.error('Login error. ' + data.error, 'Error');
-          } else if (data.success && !data.devices.length) {
-            homebridge.toast.warning('No devices found on your account.');
-          } else if (data.success && data.devices) {
+          if (data.success && data.devices && data.devices.length > 0) {
             // create the device table
             showDeviceTable(data.devices);
             // add devices to homebridge
@@ -382,11 +378,16 @@
               createForm(configSchema, configuration);
               homebridge.toast.success('Added ' + filteredDevices.length + ' new devices. Save and restart Homebridge to apply changes.');
             }
-            //$(this).closest('.collapse').removeClass('show');
+          } else if (data.success && (!data.devices || data.devices.length === 0)) {
+            homebridge.toast.warning('No devices found on your account.');
           } else if (!data.success && data.url) {
-            homebridge.toast.error(data.error);
+            homebridge.toast.error(data.error, 'Login Error');
             $('.two-factor-url a').attr('href', data.url);
             $('.two-factor-url').show();
+          } else if ((typeof data.success === 'undefined' || data.success === false) && data.error) {
+            homebridge.toast.error(data.error, 'Login Error');
+          } else {
+            homebridge.toast.error('Could not login due to an unknown error.', 'Unknown Error');
           }
 
           if (data.warning) {
@@ -436,7 +437,7 @@
               //  createForm(configSchema, configuration);
               let sucMsg =
                 `It is a ${data.devType} device! Created device class at <b> ${data.filePath} </b> <br> Please move the generated file to lib/modules/${data.devType.toLowerCase()}/devices/ and consider creating a pull request at github!`;
-              if(data.devType === 'Generic'){
+              if (data.devType === 'Generic') {
                 sucMsg = `Could not identify device! Created device class at <b> ${data.filePath} </b> <br> Manual device class adjustment is required!`;
               }
               $('.device-class-generated .alert').html(sucMsg);
