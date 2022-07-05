@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2022-07-06
+### Added
+- Extended and improved the cli commands
+- Added support for philips.light.zyceiling (Mi Philips Zhirui Ceilling Light) light
+- Added support for dreame.vacuum.r2228 (Dreame S10) robot cleaner
+
+### Fixed
+- Fix missing two factor authentication url in homebridge ui
+
+
 ## [1.2.3] - 2022-06-10
 ### Added
 - Added support for dmaker.fan.p220 (Mijia DC Inverter Circulating Floor Fan) fan
