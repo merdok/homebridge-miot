@@ -162,6 +162,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   roborock.vacuum.a27 (Roborock S7 MaxV Ultra)
 -   dreame.vacuum.p2027 (Dreame W10)
 -   dreame.vacuum.r2228 (Dreame S10)
+-   roidmi.vacuum.v66 (Roidmi Eva)
 
 ### Light
 
