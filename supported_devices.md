@@ -163,6 +163,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dreame.vacuum.p2027 (Dreame W10)
 -   dreame.vacuum.r2228 (Dreame S10)
 -   roidmi.vacuum.v66 (Roidmi Eva)
+-   dreame.vacuum.r2205 (Dreame Bot D10 Plus)
 
 ### Light
 
