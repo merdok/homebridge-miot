@@ -167,6 +167,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   roidmi.vacuum.v66 (Roidmi Eva)
 -   dreame.vacuum.r2205 (Dreame Bot D10 Plus)
 -   viomi.vacuum.v7 (Viomi Vacuum v7) 🔵[MiCloud]
+-   dreame.vacuum.p2148o (Xiaomi MIJIA Ultra-Thin Robot Vacuum STYTJ04ZHM)
 
 ### Light
 
