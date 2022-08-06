@@ -57,6 +57,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Dehumidifier
 
 -   nwt.derh.312en (Widetech Dehumidifier)
+-   dmaker.derh.22l (Xiaomi Smart Dehumidifier 22L)
 
 ### Air Purifier
 
