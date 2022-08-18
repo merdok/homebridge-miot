@@ -219,6 +219,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   yeelink.bhf_light.v5 (Mi Smart Bathroom Heater Pro)
 -   viomi.waterheater.e8 (Viomi Water Heater)
 -   yeelink.bhf_light.v1 (Yeelight Smart Bathroom Heater Pro)
+-   yeelink.bhf_light.v2 (Yeelight Smart Bathroom Heater)
 
 ### Kettle
 
