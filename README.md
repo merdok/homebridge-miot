@@ -242,11 +242,14 @@ There are 4 ways to get the property an action names (or ids) used in ***actionB
 The plugin also offers a command line interface to control your devices directly from the command line.  
 Just type `miot` in the console to get a list of available options. Currently available are:
 - `miot send` -> Send a RAW command over your local network to the device
+- `miot test` -> Test connection to a device
 - `miot tokens` -> Store and show tokens for specific devices
 - `miot cloud` -> Connect to the MiCloud, execute commands, list devices and get specific device info
 - `miot fetch-metadata` -> Fetch device metadata for the specified model
 
 ## Troubleshooting
+
+##### Debug
 If you have any issues with the plugin or device services then you can run homebridge in debug mode, which will provide some additional information. This might be useful for debugging issues.
 
 Homebridge debug mode:
@@ -259,6 +262,14 @@ Deep debug log, add the following to your config.json:
 "deepDebugLog": true
 ```
 This will enable additional extra log which might be helpful to debug all kind of issues.
+
+##### Connection test
+You can test the connection to a device with the following cli command:
+```sh
+miot test <ip> -t <token>
+```
+
+If the connection test will succeed then your ip and token are correct!
 
 ## Special thanks
 [HAP-NodeJS](https://github.com/KhaosT/HAP-NodeJS) & [homebridge](https://github.com/nfarina/homebridge) - for making this possible.
