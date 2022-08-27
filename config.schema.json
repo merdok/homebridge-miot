@@ -171,6 +171,12 @@
               "type": "boolean",
               "required": false
             },
+            "onlyMainService": {
+              "title": "Show only the main accessory service",
+              "description": "Only the main accessory service will be created without any additional services. Useful when wanting to have a clean layout. actionButtons, propertyControl or propertyMonitor can be used to manually add services.",
+              "type": "boolean",
+              "required": false
+            },
             "buzzerControl": {
               "title": "Buzzer control service",
               "description": "Whether to show buzzer control buttons.",
@@ -462,6 +468,7 @@
               "expanded": false,
               "items": [
                 "devices[].customAccessory",
+                "devices[].onlyMainService",
                 "devices[].ledControl",
                 "devices[].buzzerControl",
                 "devices[].childLockControl",
