@@ -204,7 +204,11 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   chunmi.microwave.n20l01 (Mi Smart Microwave Oven) 🔵[MiCloud]
 -   chunmi.oven.x02 (Xiaomi Mijia Smart Steam Oven Toaster 12L)
+
+### Air Fryer
+
 -   careli.fryer.maf02 (Mi Smart Air Fryer)
+-   careli.fryer.maf07 (Mi Smart Air Fryer 3.5L)
 
 ### Coffee Machine
 
@@ -237,10 +241,10 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Monitor
 
-- cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
-- cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
-- zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) 🔵[MiCloud]
+-   cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
+-   cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
+-   zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) 🔵[MiCloud]
 
 ### Cooker
 
-- chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]
+-   chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]

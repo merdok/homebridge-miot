@@ -37,6 +37,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Light
 * Airer
 * Oven
+* Air Fryer
 * Coffee Machine
 * Camera
 * Bath Heater
