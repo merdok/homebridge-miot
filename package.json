@@ -1,5 +1,6 @@
 {
   "name": "homebridge-miot",
+  "displayName": "Homebridge Miot",
   "version": "1.2.4",
   "description": "Homebridge plugin for devices supporting the miot protocol",
   "main": "index.js",
