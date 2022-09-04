@@ -209,6 +209,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 ### Air Fryer
 
+-   careli.fryer.maf01 (Mi Smart Air Fryer MAF01)
 -   careli.fryer.maf02 (Mi Smart Air Fryer)
 -   careli.fryer.maf07 (Mi Smart Air Fryer 3.5L)
 
