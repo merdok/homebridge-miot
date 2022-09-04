@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2022-09-05
+### Added
+- Added new device connection test cli command
+- Added new `onlyMainService` config property, which allows to disable all accessory services but the main
+- Added support for roidmi.vacuum.v66 (Roidmi Eva) robot cleaner
+- Added support for dreame.vacuum.r2205 (Dreame Bot D10 Plus) robot cleaner
+- Added support for dmaker.fan.1e (Mi Smart Standing Fan E) fan
+- Added support for dmaker.derh.22l (Xiaomi Smart Dehumidifier 22L) dehumidifier
+- Added support for viomi.vacuum.v7 (Viomi Vacuum v7) robot cleaner
+- Added support for dreame.vacuum.p2148o (Xiaomi MIJIA Ultra-Thin Robot Vacuum STYTJ04ZHM) robot cleaner
+- Added support for yeelink.bhf_light.v2 (Yeelight Smart Bathroom Heater)
+- Added support for careli.fryer.maf07 (Mi Smart Air Fryer 3.5L) air fryer
+- Added support for philips.light.candle (Xiaomi Philips Zhirui Candle Light Bulb - Scrub Version) light. Thanks @achrovisual for the contribution!
+- Added support for zhimi.airp.cpa4 (Xiaomi Air Purifier 4 Compact) air purifier
+- Added support for Added support for careli.fryer.maf01 (Mi Smart Air Fryer MAF01) air fryer
+
+### Changed
+- Air Fryer devices now have a dedicated module
+
+
 ## [1.2.4] - 2022-07-06
 ### Added
 - Extended and improved the cli commands
