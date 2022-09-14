@@ -110,6 +110,12 @@
               "default": 10,
               "required": false
             },
+            "propertyChunkSize": {
+              "title": "Property sync chunk size",
+              "description": "Size of a property chunk when syncing properties with the device. A lower value might reduce the load on the device. Range 1-14.",
+              "type": "number",
+              "required": false
+            },
             "deepDebugLog": {
               "title": "Enable deep debug log",
               "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
@@ -443,6 +449,7 @@
                 "devices[].model",
                 "devices[].prefsDir",
                 "devices[].pollingInterval",
+                "devices[].propertyChunkSize",
                 "devices[].deepDebugLog"
               ]
             },

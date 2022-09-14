@@ -189,6 +189,8 @@ When specified overwrites the global setting for the device. Useful when you hav
 The directory where the device info will be stored. **Default: "~/.homebridge/.xiaomiMiot"**
 - `pollingInterval` [optional]
 The device state polling interval in seconds. **Default: 15**
+- `propertyChunkSize` [optional]
+  Size of a property chunk when syncing properties with the device. A lower value might reduce the load on the device. Range 1-14 **Default: device class default, if not defined -> 14**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `customAccessory` [optional]
