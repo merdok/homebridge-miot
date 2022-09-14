@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2022-09-15
+### Added
+- Property sync chunk size can now be changed per device
+- Added new `propertyChunkSize` config property, which allows to reduce the number of properties which are requested from the device at once
+
+### Changed
+- Marked yeelink.bhf_light.v2 as MiCloud required
+- Remove temperature property from chuangmi.plug.m3 as that seems to cause issues
+
+### Fixed
+- Minor fixes for certain air purifier devices
+
+
 ## [1.3.0] - 2022-09-05
 ### Added
 - Added new device connection test cli command
