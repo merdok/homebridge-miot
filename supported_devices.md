@@ -84,6 +84,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   zhimi.airp.rmb1 (Xiaomi Air Purifier 4 Lite)
 -   zhimi.airp.mp4 (Miija Air Purifier 4 Pro)
 -   zhimi.airp.cpa4 (Xiaomi Air Purifier 4 Compact)
+-   zhimi.airp.sa4 (Xiaomi Air Purifier 4 Max)
 
 ### Air Conditioner
 
