@@ -171,6 +171,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   viomi.vacuum.v7 (Viomi Vacuum v7) 🔵[MiCloud]
 -   dreame.vacuum.p2148o (Xiaomi MIJIA Ultra-Thin Robot Vacuum STYTJ04ZHM)
 -   roborock.vacuum.s6 (Roborock S6) 🔵[MiCloud]
+-   dreame.vacuum.p2114a (Xiaomi Robot Vacuum X10+)
 
 ### Light
 
