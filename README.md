@@ -125,6 +125,12 @@ Example configuration:
               "property": "2.7",
               "value": 0,
               "name": "Set natural wind mode"
+            },
+            {
+              "property": "custom-service:speed-level",
+              "config": {
+                "type": "fan"
+              }
             }
           ],
           "propertyMonitor": [
@@ -223,6 +229,7 @@ Allows to control any properties of your device. **Default: "" (not specified)**
     - *value* - [optional] a fixed value which will be set to the property. When specified will create a stateless switch
     - *linkedProperty* - [optional] linked property used for status checking. Useful when control should only be possible when for example the device is on
     - *linkedPropertyValue* - [optional] the value of the linked property
+    - *config* - [optional] a configuration object, for details see below
 - `propertyMonitor` [optional]
 Allows to monitor any properties of your device. **Default: "" (not specified)**
   - Creates a light sensor to display numeric values. String values are logged
@@ -242,6 +249,14 @@ There are 4 ways to get the property an action names (or ids) used in ***actionB
 - Use the plugin's settings in homebridge-config-ui-x (Homebridge Ui), where you will find a **"Fetch Device Metadata"** button
 - Check the homebridge log. Available device property and action names will be printed there during initialization
 - You can also use the official miot spec in order to determine the names or ids [Miot Spec - Released](https://miot-spec.org/miot-spec-v2/instances?status=released)
+
+#### Property control config
+Some properties have a configuration which enables to change certain aspects of the resulting service.
+
+###### Value range properties:
+- *type* - the type of the accessory which is created **Default: "lightbulb"**
+  - lightbulb
+  - fan
 
 ## CLI
 The plugin also offers a command line interface to control your devices directly from the command line.  

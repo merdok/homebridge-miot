@@ -269,6 +269,11 @@
                     "title": "linkedPropertyValue",
                     "type": "string",
                     "required": false
+                  },
+                  "config": {
+                    "title": "config",
+                    "type": "object",
+                    "required": false
                   }
                 }
               },
@@ -512,7 +517,8 @@
                     "devices[].propertyControl[].name",
                     "devices[].propertyControl[].value",
                     "devices[].propertyControl[].linkedProperty",
-                    "devices[].propertyControl[].linkedPropertyValue"
+                    "devices[].propertyControl[].linkedPropertyValue",
+                    "devices[].propertyControl[].config"
                   ]
                 },
                 {
