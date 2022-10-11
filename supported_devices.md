@@ -241,6 +241,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   yeelink.switch.sw1 (Yeelight Smart Dual Control Module)
 -   babai.switch.bb101s (WiFi Wall Switch A1)
+-   090615.switch.mesw2 (PTX Mesh intelligent two switch)
 
 ### Air Monitor
 
