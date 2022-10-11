@@ -130,7 +130,7 @@ class miotDeviceController {
       this._saveDeviceInfo(miotDevice);
     });
 
-    this.miotDevice.connect();
+    this.miotDevice.identify();
   }
 
   async _initDevice(miotDevice) {
