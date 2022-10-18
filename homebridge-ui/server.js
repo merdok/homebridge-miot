@@ -2,7 +2,7 @@ const {
   HomebridgePluginUiServer
 } = require('@homebridge/plugin-ui-utils');
 const MiCloud = require('../lib/protocol/MiCloud');
-const TwoFactorRequired = require("../lib/utils/errors/TwoFactorRequired");
+const Errors = require("../lib/utils/Errors.js");
 const MiotSpecClassGenerator = require('../lib/tools/MiotSpecClassGenerator');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher');
 const Logger = require("../lib/utils/Logger");
@@ -29,7 +29,7 @@ class UiServer extends HomebridgePluginUiServer {
     try {
       await miCloud.login(params.username, params.password);
     } catch (err) {
-      if (err instanceof TwoFactorRequired) {
+      if (err instanceof Errors.TwoFactorRequired) {
         return {
           success: false,
           error: 'Two factor authentication required, please visit the specified url and retry login.',
