@@ -87,7 +87,7 @@
             },
             "deviceId": {
               "title": "Device id",
-              "description": "The device id of the device.",
+              "description": "The unique device id of the device. Required for MiCloud devices.",
               "type": "string",
               "required": false
             },
@@ -439,6 +439,7 @@
         "devices[].name",
         "devices[].ip",
         "devices[].token",
+        "devices[].deviceId",
         {
           "key": "devices[]",
           "type": "fieldset",
@@ -450,7 +451,6 @@
               "expandable": true,
               "expanded": false,
               "items": [
-                "devices[].deviceId",
                 "devices[].model",
                 "devices[].prefsDir",
                 "devices[].pollingInterval",

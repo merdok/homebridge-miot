@@ -186,7 +186,7 @@ ip address of your device.
 - `token` [required]
 The token of your device.
 - `deviceId` [optional]
-The deviceId will be automatically retrieved by the plugin but if there is trouble you can manually specify it. **Default: "" (not specified)**
+The deviceId is required for a MiCloud connection to identify the device. If not specified an attempt will be made to retrieve it from a local connection to the device **Default: "" (not specified)**
 - `model` [optional]
 The device model if known. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device. **Default: "" (not specified)**
 - `micloud` [optional]

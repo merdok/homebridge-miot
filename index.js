@@ -78,7 +78,11 @@ class miotDeviceController {
     this.deviceInfoFile = this.prefsDir + 'info_' + this.ip.split('.').join('') + '_' + this.token;
 
     // generate uuid
-    this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+    if (this.deviceId) {
+      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME);
+    } else {
+      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+    }
 
     // prepare variables
     this.miotDevice = undefined;
