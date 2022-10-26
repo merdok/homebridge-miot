@@ -6,6 +6,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2022-10-27
+
+**With this update the connection logic to local and especially cloud device has been rewritten!**  
+**Please note that there are some potential breaking changes in this update!**
+
+### Breaking changes
+- If specified, the deviceId is now used to generate the unique accessory uuid which is used by HomeKit, this might cause some devices to reset and require to be reconfigured within the Home app.
+
+### Added
+- Connection to mesh devices over a supported gateway is now possible
+- The property control now accepts a new `config` parameter, which allows to configure the resulting accessory. Right now only `type` is available which allows to choose between a lightbulb or fan for a value range based property
+- Added support for zhimi.airp.sa4 (Xiaomi Air Purifier 4 Max) air purifier
+- Added support for roborock.vacuum.s6 (Roborock S6) robot cleaner
+- Added support for dreame.vacuum.p2114a (Xiaomi Robot Vacuum X10+) robot cleaner
+- Added support for deerma.humidifier.jsq2g (Mijia Smart Anti-bacterial Humidifier 2) humidifier
+- Added support for zhimi.airpurifier.v3 (Xiaomi Mi Air Purifier) air purifier. Thanks @0x5e for the contribution
+- Added support for 090615.switch.mesw2 (PTX Mesh intelligent two switch) switch. Thanks @0x5e for the contribution
+
+### Changed
+- MiCloud devices now use a pure cloud connection without connection to the device locally anymore if a deviceId is provided upfront
+- Improvements to the miio protocol! Thanks @0x5e for the contribution
+
+### Fixed
+- Fixed missing properties monitoring for some services
+- Convert tvoc value from mg/m3 to µg/m3 which is the unit reported by homekit
+- Fix careli.fryer.maf02 device class
+
+
 ## [1.3.1] - 2022-09-15
 ### Added
 - Property sync chunk size can now be changed per device
@@ -33,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for careli.fryer.maf07 (Mi Smart Air Fryer 3.5L) air fryer
 - Added support for philips.light.candle (Xiaomi Philips Zhirui Candle Light Bulb - Scrub Version) light. Thanks @achrovisual for the contribution!
 - Added support for zhimi.airp.cpa4 (Xiaomi Air Purifier 4 Compact) air purifier
-- Added support for Added support for careli.fryer.maf01 (Mi Smart Air Fryer MAF01) air fryer
+- Added support for careli.fryer.maf01 (Mi Smart Air Fryer MAF01) air fryer
 
 ### Changed
 - Air Fryer devices now have a dedicated module
