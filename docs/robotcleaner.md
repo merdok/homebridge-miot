@@ -44,10 +44,10 @@ As for the **params**:
 - The `{"piid": 1,"value": 18}` entry indicated a room clean
 - The `"{\"selects\":[[3,1,1,2,1]]}"` entry decides which room should cleaned, with what mode and what order, the values can be **selects** can be split as follow:  
   - first parameter `3` indicated the room id - this are usually relatively low and if you do not know the room id you can try to guess by incrementing that number
-  - second parameter `1` indicated the number of cleaning times
-  - third parameter `1` indicated the vacuum power - see the `vacuum:mode` property in the device metadata to see all available power modes
-  - fourth parameter `2` indicated the mopping mode - see the `vacuum-extend:mop-mode` property in the device metadata to see all available mop modes
-  - fifth parameter `1` indicated the index of the cleaning. If you have multiple rooms specified this will define the order in what rooms are cleaned
+  - second parameter `1` indicates the number of cleaning times
+  - third parameter `1` indicates the vacuum power - see the `vacuum:mode` property in the device metadata to see all available power modes
+  - fourth parameter `2` indicates the mopping mode - see the `vacuum-extend:mop-mode` property in the device metadata to see all available mop modes
+  - fifth parameter `1` indicates the index of the cleaning. If you have multiple rooms specified this will define the order in what rooms are cleaned
 
 
 #### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) seperate the room configuration/selection
@@ -80,12 +80,12 @@ Setting the room configuration would look as follow:
 ```
 The **action** can be either _6.2_ or _map:update-map_  
 As for the **params**:  
-- The `"{\"customeClean\":[[3,1,2,1,0]]}"` entry sets the configuration for and the **customeClean** values can be split as follow:  
-  - first parameter `3` indicated the room id - this are usually relatively low and if you do not know the room id you can try to guess by incrementing that number
-  - second parameter `1` indicated the vacuum power - see the `vacuum:mode` property in the device metadata to see all available power modes
-  - third parameter `2` indicated the mopping mode - for the X10+ the values are 2 = Low, 3 = Medium and 4 = High. For this device it's always 1 more than in the `vacuum-extend:mop-mode` property in the device metadata - maybe this is also the case for other devices
-  - fourth parameter `1` indicated the number of cleaning times - 1 or 2
-  - fifth parameter `0` indicated the cleaning mode. 0 = sweeping, 1 = mopping and 2 = sweeping and mopping
+- The `"{\"customeClean\":[[3,1,2,1,0]]}"` entry sets the configuration for the rooms and the **customeClean** values can be split as follow:  
+  - first parameter `3` indicates the room id - this are usually relatively low and if you do not know the room id you can try to guess by incrementing that number
+  - second parameter `1` indicates the vacuum power - see the `vacuum:mode` property in the device metadata to see all available power modes
+  - third parameter `2` indicates the mopping mode - for the X10+ the values are 2 = Low, 3 = Medium and 4 = High. For this device it's always 1 more than in the `vacuum-extend:mop-mode` property in the device metadata - maybe this is also the case for other devices
+  - fourth parameter `1` indicates the number of cleaning times - 1 or 2
+  - fifth parameter `0` indicates the cleaning mode. 0 = sweeping, 1 = mopping and 2 = sweeping and mopping
 
 Starting the actual room cleaning would look as follow: 
 
