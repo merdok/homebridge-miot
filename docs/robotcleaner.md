@@ -49,6 +49,83 @@ As for the **params**:
   - fourth parameter `2` indicated the mopping mode - see the `vacuum-extend:mop-mode` property in the device metadata to see all available mop modes
   - fifth parameter `1` indicated the index of the cleaning. If you have multiple rooms specified this will define the order in what rooms are cleaned
 
+
+#### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) seperate the room configuration/selection
+If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 seperate commands.
+Setting the room configuration would look as follow: 
+
+```js
+"actionButtons": [
+    {
+        "action": "6.2",
+        "name": "Room 3 only sweeping",
+        "params": [
+            {
+                "piid": 4,
+                "value": "{\"customeClean\":[[3,1,2,1,0]]}"
+            }
+        ]
+    },
+    {
+        "action": "6.2",
+        "name": "Room 1 and 2 sweeping and mopping",
+        "params": [
+            {
+                "piid": 4,
+                "value": "{\"customeClean\":[[1,1,2,1,2],[2,1,2,1,2]]}"
+            }
+        ]
+    }
+]
+```
+The **action** can be either _6.2_ or _map:update-map_  
+As for the **params**:  
+- The `"{\"customeClean\":[[3,1,2,1,0]]}"` entry sets the configuration for and the **customeClean** values can be split as follow:  
+  - first parameter `3` indicated the room id - this are usually relatively low and if you do not know the room id you can try to guess by incrementing that number
+  - second parameter `1` indicated the vacuum power - see the `vacuum:mode` property in the device metadata to see all available power modes
+  - third parameter `2` indicated the mopping mode - for the X10+ the values are 2 = Low, 3 = Medium and 4 = High. For this device it's always 1 more than in the `vacuum-extend:mop-mode` property in the device metadata - maybe this is also the case for other devices
+  - fourth parameter `1` indicated the number of cleaning times - 1 or 2
+  - fifth parameter `0` indicated the cleaning mode. 0 = sweeping, 1 = mopping and 2 = sweeping and mopping
+
+Starting the actual room cleaning would look as follow: 
+
+```js
+"actionButtons": [
+    {
+        "action": "4.1",
+        "name": "Clean room 1",
+        "params": [
+            {
+                "piid": 1,
+                "value": 18
+            },
+            {
+                "piid": 10,
+                "value": "{\"selects\":[[1,1,1,1,1]]}"
+            }
+        ]
+    },
+    {
+        "action": "4.1",
+        "name": "Clean rooms 2 and 4",
+        "params": [
+            {
+                "piid": 1,
+                "value": 18
+            },
+            {
+                "piid": 10,
+                "value": "{\"selects\":[[2,1,1,1,1],[4,1,1,1,1]]}"
+            }
+        ]
+    }
+]
+```
+The **action** can be either _4.1_ or _vacuum-extend:start-clean_  
+As for the **params**:  
+- The `{"piid": 1,"value": 18}` entry indicated a room clean
+- The `"{\"selects\":[[2,1,1,1,1],[4,1,1,1,1]]}"` entry decides which room should cleaned. It's just the room ID followed by `1,1,1,1`
+
 #### Getting room ids
 
 For **dreame** based devices it is possible to retrieve the room ids by following the steps:
