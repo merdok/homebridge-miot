@@ -43,6 +43,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   leshow.heater.bs1s (Mi Smart Baseboard Heater 1S)
 -   leshow.heater.bs3 (Mi Smart Baseboard Heater 3)
 -   isleep.blanket.hs2205 (Painted sleep water heating pad HS2205)
+-   isleep.blanket.hs2201 (Painted sleep water heating pad HS2201)
 
 ### Humidifier
 
