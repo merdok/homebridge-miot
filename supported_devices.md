@@ -23,6 +23,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dmaker.fan.p33 (Xiaomi Smart Standing Fan 2 Pro)
 -   dmaker.fan.p220 (Mijia DC Inverter Circulating Floor Fan)
 -   dmaker.fan.1e (Mi Smart Standing Fan E)
+-   dreame.fan.p2018 (Xiaomi Smart Purifying Fan)
 
 ### Ceiling Fan
 
