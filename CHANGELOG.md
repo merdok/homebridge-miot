@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2022-11-02
+### Added
+- Added support for isleep.blanket.hs2201 (Painted sleep water heating pad HS2201)
+- Added support for dreame.fan.p2018 (Xiaomi Smart Purifying Fan) fan
+
+### Changed
+- Do not show a warning log when a cloud device is offline
+
+### Fixed
+- Fix tvoc density range calculation
+- Fix property control when switching to fan
+- Fix missing properties to monitor on blanket heater devices
+
+
 ## [1.4.0] - 2022-10-27
 
 **With this update the connection logic to local and especially cloud device has been rewritten!**  
