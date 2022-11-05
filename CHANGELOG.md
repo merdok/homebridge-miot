@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2022-11-05
+### Fixed
+- Fix missing properties to monitor on some fans devices
+- Fix a potential crash during device identification
+
+
 ## [1.4.1] - 2022-11-02
 ### Added
 - Added support for isleep.blanket.hs2201 (Painted sleep water heating pad HS2201)
