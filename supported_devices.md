@@ -259,3 +259,4 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Cooker
 
 -   chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]
+-   chunmi.pre_cooker.dylg5 (Mi Smart Pressure Cooker 5L)
