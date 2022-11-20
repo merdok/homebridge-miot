@@ -260,3 +260,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]
 -   chunmi.pre_cooker.dylg5 (Mi Smart Pressure Cooker 5L)
+
+### Speaker
+
+-   xiaomi.wifispeaker.lx06 (Mi AI Speaker Pro) 🔵[MiCloud]
