@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4] - 2022-11-29
+### Added
+- Added new Speaker module. Thanks @0x5e for the contribution
+- Added support for xiaomi.wifispeaker.lx06 (Mi AI Speaker Pro) speaker. Thanks @0x5e for the contribution
+- Added support for chunmi.pre_cooker.dylg5 (Mi Smart Pressure Cooker 5L) cooker
+- Added support for dreame.vacuum.r2228o (Dreame L10s Ultra) robot cleaner
+
+
 ## [1.4.3] - 2022-11-06
 ### Fixed
 - Fix MiCloud issues with the recent nodejs releases
