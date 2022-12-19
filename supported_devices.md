@@ -266,3 +266,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 ### Speaker
 
 -   xiaomi.wifispeaker.lx06 (Mi AI Speaker Pro) 🔵[MiCloud]
+
+### Contact Sensor
+
+-   isa.magnet.dw2hl (Xiaomi Door and Windows Sensor 2)
