@@ -1,6 +1,7 @@
 ## Supported devices
 
-Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the `micloud` property in the `config.json`
+Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the `micloud` property in the `config.json`  
+Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Gateway or Hub.
 
 ### Fan
 
@@ -127,6 +128,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 -   dooya.curtain.m2 (Dooya Curtain)
 -   leshi.curtain.v0001 (Scene Curtain WIFI X)
 -   lumi.curtain.hagl08 (Aqara Curtain Controller A1)
+-   lumi.curtain.agl001 (Xiaomi Curtain Driver E1) 🟡[Zigbee]
 
 ### Fresh Air System
 
@@ -252,7 +254,7 @@ Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the
 
 -   yeelink.switch.sw1 (Yeelight Smart Dual Control Module)
 -   babai.switch.bb101s (WiFi Wall Switch A1)
--   090615.switch.mesw2 (PTX Mesh intelligent two switch)
+-   090615.switch.mesw2 (PTX Mesh intelligent two switch) 🔴[BLE Mesh]
 
 ### Air Monitor
 
