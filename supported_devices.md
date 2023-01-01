@@ -129,6 +129,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   leshi.curtain.v0001 (Scene Curtain WIFI X)
 -   lumi.curtain.hagl08 (Aqara Curtain Controller A1)
 -   lumi.curtain.agl001 (Xiaomi Curtain Driver E1) 🟡[Zigbee]
+-   lumi.curtain.hmcn02 (Xiaomi BLE Curtain Driver E1) 🔴[BLE Mesh]
 
 ### Fresh Air System
 
