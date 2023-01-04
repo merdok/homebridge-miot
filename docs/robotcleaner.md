@@ -52,7 +52,7 @@ As for the **params**:
 
 #### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) seperate the room configuration/selection
 If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 seperate commands.
-Setting the room configuration would look as follow: 
+Setting the room configuration would look as follow:
 
 ```js
 "actionButtons": [
@@ -87,7 +87,7 @@ As for the **params**:
   - fourth parameter `1` indicates the number of cleaning times - 1 or 2
   - fifth parameter `0` indicates the cleaning mode. 0 = sweeping, 1 = mopping and 2 = sweeping and mopping
 
-Starting the actual room cleaning would look as follow: 
+Starting the actual room cleaning would look as follow:
 
 ```js
 "actionButtons": [
@@ -128,7 +128,22 @@ As for the **params**:
 
 #### Getting room ids
 
-For **dreame** based devices it is possible to retrieve the room ids by following the steps:
+##### Easy way
+To get the rooms ids you will need to use the miot cli tools to send a request to the vacuum which will then return the room id.
+1. Using the Mi home app create a room cleaning schedule for the room for which you want to retrieve the room id
+2. In the terminal on the device where homebridge is installed run the following command:
+Simply in the terminal on the device where homebridge is installed type the following command:
+
+`miot send <IP> -t <TOKEN> get_properties '[{siid":8,"piid":2}]'`
+
+This will output a list which looks similar to this:
+
+`"1-1-14:36-0000000-0-2-1-2-3"`
+
+3. The last number in that value `3` represents the room id. Simply use that room id in the param of your `actionButtons` entry.
+
+##### Alternative way
+As an alternative way it is possible to retrieve the room ids by following the steps:
 1. Using the Mi home app create a room cleaning schedule for the room for which you want to retrieve the room id
 2. Create a new `propertyMonitor` in the plugin which should look like this:
 
@@ -196,3 +211,55 @@ After that you should get 3 additional switches which will allow you to set the 
 - 0 -clean
 - 1 - sweep
 - 2 - mop
+
+---------------
+#### Roborock
+#### Example room cleaning config and parameters description
+
+For **roborock** based devices the `actionButtons` entry would look as follow:
+
+```js
+"actionButtons": [
+  {
+      "action": "vacuum:start-room-sweep",
+      "name": "Clean kitchen",
+      "params": [
+          "80001023333"
+      ]
+  },
+  {
+    "action": "vacuum:start-room-sweep",
+    "name": "Clean multiply rooms",
+    "params": [
+        "80001023333, 80001023332, 80001023334"
+    ]
+  }
+]
+```
+The **action** can be either _2.3_ (_2.6_ on other devices) or simply _vacuum:start-room-sweep_  
+As for the **params**:  
+- The action accepts one parameter which is a string with a single or multiply room ids (separated by commas) indicating which rooms should be cleaned
+
+#### Getting room ids
+
+To get the rooms ids you will need to use the miot cli tools to send a request to the vacuum which will then return the room ids.
+Simply in the terminal on the device where homebridge is installed run the following command:
+
+`miot send <IP> -t <TOKEN> get_room_mapping '[]'`
+
+This will output a list which looks similar to this:
+
+```js
+[[6,"80001026443",2],
+[7,"80001057044",3],
+[8,"80001057045",4],
+[9,"80001057046",4],
+[10,"80001057047",5]
+```
+
+The longer middle number is the room id. You would need to start a couple of manual cleans to see which room id corresponds to which room.
+Afterwards simply use that room id in the param of your `actionButtons` entry.
+
+#### Setting mode
+
+For the room clean the vacuum will use the last selected mode.
