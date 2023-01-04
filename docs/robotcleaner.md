@@ -263,3 +263,118 @@ Afterwards simply use that room id in the param of your `actionButtons` entry.
 #### Setting mode
 
 For the room clean the vacuum will use the last selected mode.
+
+### Methods for miot cli
+#### Roborock
+Here are some helpful methods for **roborock** device which can be executed using the miot cli tools.  
+Not all of the methods might work on every device.
+
+- **app_start**
+- **app_stop**
+- **app_spot**
+- **app_pause**
+- **app_charge**
+- **app_zoned_clean**
+- **resume_zoned_clean**
+- **app_rc_start**
+- **app_rc_end**
+- **reset_consumable**
+- **find_me**
+- **test_sound_volume**
+- **stop_zoned_clean**
+- **stop_segment_clean**
+- **resume_segment_clean**
+- **get_room_mapping**
+- **get_serial_number**
+- **get_map**
+- **get_map_v1**
+- **get_map_v2**
+- **get_consumable**
+- **get_current_sound**
+- **get_customize_clean_mode**
+- **get_clean_sequence**
+- **get_multi_maps_list**
+- **app_segment_clean** , example params -> `[{"clean_mop":0,"segments":[11],"repeat":1,"clean_order_mode":0}]`
+- **get_timezone**
+- **app_stat**
+- **get_mop_template_params_summary**
+- **get_server_timer**
+- **set_fds_endpoint** , example params -> `["awsde0.fds.api.xiaomi.com"]`
+- **enable_log_upload** , example params -> `[9,3]`
+- **set_mop_mode** , example params -> `[300]`
+- **set_water_box_custom_mode** , example params -> `[201]`
+- **set_clean_motor_mode** , example params -> `[{"fan_power":105,"water_box_mode":201,"mop_mode":300}]`
+- **set_app_timezone** , example params -> `["Europe\/Warsaw",0]`
+- **set_custom_mode** , example params -> `[102]`
+- **set_camera_status**
+- **set_ignore_carpet_zone**
+- **set_clean_sequence**
+- **set_homesec_password**
+- **set_child_lock_status**
+- **set_carpet_clean_mode**
+- **set_ignore_identify_area**
+- **set_dust_collection_switch_status**
+- **set_map_beautification_status**
+- **set_fan_motor_work_timeout**
+- **set_mop_motor_status**
+- **set_collision_avoid_status**
+- **set_flow_led_status**
+- **set_dust_collection_mode**
+- **set_timer**
+- **set_dnd_timer**
+- **set_timezone**
+- **set_carpet_mode**
+- **set_lab_status**
+- **set_server_timer**
+- **set_led_status**
+- **set_customize_clean_mode**
+- **set_airdry_hours**
+- **set_timer_dup**
+- **set_map_name**
+- **set_multi_map_timer_different_map_tip**
+- **set_multi_map_timer_switch_different_map_tip**
+- **set_multi_map_timer_different_map_save_tip**
+- **get_clean_motor_mode**
+- **get_camera_status**
+- **get_timer_summary**
+- **get_timer_detail**
+- **get_testid**
+- **get_turn_server**
+- **get_device_sdp**
+- **get_device_ice**
+- **get_homesec_connect_status**
+- **get_child_lock_status**
+- **get_carpet_clean_mode**
+- **get_random_pkey**
+- **get_dust_collection_switch_status**
+- **get_map_beautification_status**
+- **get_fan_motor_work_timeout**
+- **get_mop_motor_status**
+- **get_sound_progress**
+- **get_sound_volume**
+- **get_collision_avoid_status**
+- **get_flow_led_status**
+- **get_dust_collection_mode**
+- **get_photo**
+- **get_multi_map**
+- **get_prop**
+- **get_status**
+- **get_custom_mode**
+- **get_water_box_custom_mode**
+- **get_clean_summary**
+- **get_clean_record**
+- **get_clean_record_map**
+- **get_clean_record_map_v2**
+- **get_timer**
+- **get_dnd_timer**
+- **get_log_upload_status**
+- **get_carpet_mode**
+- **get_fw_features**
+- **get_fresh_map**
+- **get_persist_map**
+- **get_recover_maps**
+- **get_recover_map**
+- **get_map_status**
+- **get_segment_status**
+- **get_network_info**
+- **get_led_status**
