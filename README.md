@@ -33,7 +33,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Outlet
 * Curtain
 * Fresh Air System
-* Robot Cleaner
+* Robot Cleaner - [Room Cleaning guide](https://github.com/merdok/homebridge-miot/blob/main/docs/robotcleaner.md)
 * Light
 * Airer
 * Oven
