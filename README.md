@@ -48,6 +48,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Cooker
 * Speaker
 * Contact Sensor
+* Gateway
 
 More device types will be added!
 
