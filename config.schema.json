@@ -239,6 +239,34 @@
               },
               "required": false
             },
+            "methodButtons": {
+              "title": "Method buttons",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "method": {
+                    "title": "method",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "params": {
+                    "title": "params",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
             "propertyControl": {
               "title": "Property control",
               "type": "array",
@@ -497,6 +525,26 @@
                     "devices[].actionButtons[].name",
                     {
                       "key": "devices[].actionButtons[].params",
+                      "type": "array",
+                      "buttonText": "Add param",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "key": "devices[].methodButtons",
+                  "description": "Configure method buttons. For details check README.",
+                  "buttonText": "Add method button",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].methodButtons[].method",
+                    "devices[].methodButtons[].name",
+                    {
+                      "key": "devices[].methodButtons[].params",
                       "type": "array",
                       "buttonText": "Add param",
                       "items": {

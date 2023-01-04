@@ -119,6 +119,12 @@ Example configuration:
               "name": "Toggle mode action"
             }
           ],
+          "methodButtons": [
+            {
+              "method": "get_room_mapping",
+              "name": "Get room mapping"
+            }
+          ],
           "propertyControl": [
             {
               "property": "fan:anion",
@@ -222,6 +228,14 @@ Show additional action switches if the device supports any. **Default: false**
     - *action* - [required] the action name or action id
     - *name* - [optional] the name of the switch
     - *params* - [optional] parameters to be used for the action, not all actions support parameters
+- `methodButtons` [optional]
+Execute a raw miio method on the device. Can be useful for advanced robot cleaner configuration **Default: "" (not specified)**
+  - Creates statless switches which when pressed execute the method, the result of the method call is printed in the log
+  - Set an array of method names to only show the desired method buttons
+  - You can also set an array of objects as the value which enables advanced configuration. An object can have the following properties:
+    - *method* - [required] the method name
+    - *name* - [optional] the name of the switch
+    - *params* - [optional] parameters to be used for the method call
 - `propertyControl` [optional]
 Allows to control any properties of your device. **Default: "" (not specified)**
   - Creates ui controls on your device based on the property type
