@@ -209,6 +209,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   yeelink.light.lamp15 (Yeelight Led Screen Light Bar Pro)
 -   cuco.light.sl4a (NiteBird SL4)
 -   philips.light.zyceiling (Mi Philips Zhirui Ceilling Light) 🔵[MiCloud]
+-   yeelink.light.ceilc (Yeelight Arwen)
 
 ### Airer
 
