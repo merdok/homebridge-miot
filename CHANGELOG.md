@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2023-01-09
+### Added
+- New `methodButtons` configuration property which allows to call a raw miio method on the device
+- Much better generic device support, the plugin will now try to find some common properties in the miot spec and expose those automatically for device which have no dedicated class
+- Added new contact sensor module
+- Added gateway module
+- Ambient light control will now show up on light device which support that
+- Added support for isa.magnet.dw2hl (Xiaomi Door and Windows Sensor 2) contact sensor
+- Added support for lumi.gateway.mgl03 (Xiaomi Gateway v3) gateway
+- Added support for leshow.heater.bs1 (Mi Smart Baseboard Heater 1) heater
+- Added support for viomi.heater.v4 (Viomi Kick-Line heater Pro2) heater. Thanks @gazer000 for the contribution
+- Added support for lumi.curtain.agl001 (Xiaomi Curtain Driver E1) curtain
+- Added support for lumi.curtain.hmcn02 (Xiaomi BLE Curtain Driver E1) curtain
+- Added support for yeelink.light.ceilc (Yeelight Arwen) light
+- Added room cleaning guide for roborock (and xiaomi) devices
+
+### Fixed
+- Fix a potential bug which could lead to wrong device identification
+
+
 ## [1.4.4] - 2022-11-29
 ### Added
 - Added new Speaker module. Thanks @0x5e for the contribution
