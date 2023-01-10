@@ -49,6 +49,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Speaker
 * Contact Sensor
 * Gateway
+* Video Doorbell
 
 More device types will be added!
 

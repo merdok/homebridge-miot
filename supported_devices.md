@@ -281,3 +281,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 ### Gateway
 
 -   lumi.gateway.mgl03 (Xiaomi Gateway v3)
+
+### Video Doorbell
+
+-   madv.cateye.mowl3g (Xiaomi Smart Doorbell 3)
