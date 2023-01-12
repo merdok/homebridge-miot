@@ -60,6 +60,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   deerma.humidifier.mjjsq (Xiaomi Mijia Smart Sterilization Humidifier) 🔵[MiCloud]
 -   zhimi.humidifier.ca1 (Xiaomi Smartmi Evaporative Humidifier 2) 🔵[MiCloud]
 -   deerma.humidifier.jsq2g (Mijia Smart Anti-bacterial Humidifier 2)
+-   dmaker.humidifier.p2 (Xiaomi Mijia Pure Smart Humidifier 2)
 
 ### Dehumidifier
 
