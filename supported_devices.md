@@ -198,6 +198,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   yeelink.light.mono4 (Yeelight 1S) 🔵[MiCloud]
 -   philips.light.ceiling (Xiaomi Philips LED Ceiling Light) 🔵[MiCloud]
 -   yeelink.light.bslamp1 (Xiaomi Mi Bedside Lamp) 🔵[MiCloud]
+-   yeelink.light.bslamp2 (Xiaomi Mi Bedside Lamp 2) 🔵[MiCloud]
 -   yeelink.light.monob (Yeelight GU10 LED Smart Bulb W1)
 -   yeelink.light.mono6 (Yeelight Smart LED Bulb mono6)
 -   yeelink.light.lamp22 (Xiaomi Mi Computer Monitor Light Bar 1S)
