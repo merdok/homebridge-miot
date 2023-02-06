@@ -184,6 +184,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   roborock.vacuum.s6 (Roborock S6) 🔵[MiCloud]
 -   dreame.vacuum.p2114a (Xiaomi Robot Vacuum X10+)
 -   dreame.vacuum.r2228o (Dreame L10s Ultra)
+-   dreame.vacuum.r2250 (Dreame D10s Pro)
 
 ### Light
 
