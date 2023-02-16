@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2023-02-17
+### Added
+- Added video doorbell module
+- Added support for madv.cateye.mowl3g (Xiaomi Smart Doorbell 3) video doorbell
+- Added support for hlumi.airer.acn02 (Aqara Smart Clothes Drying Rack Lite) airer
+- Added support for dmaker.humidifier.p2 (Xiaomi Mijia Pure Smart Humidifier 2) humidifier
+- Added support for yeelink.light.bslamp2 (Xiaomi Mi Bedside Lamp 2) light. Thanks @jaaasonSun for the contribution
+- Added support for dreame.vacuum.r2250 (Dreame D10s Pro) robot cleaner
+
+### Changed
+- Update the leshow.humidifier.jsq1 spec
+
+
 ## [1.5.0] - 2023-01-09
 ### Added
 - New `methodButtons` configuration property which allows to call a raw miio method on the device
