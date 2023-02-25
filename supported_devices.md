@@ -32,6 +32,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   yeelink.light.fancl2 (Yeelight Smart Ceiling Fan S2001)
 -   yeelink.light.fancl5 (Yeelight Smart Ceiling Fan C900)
 -   opple.light.fanlight (Opple Ceiling Fan Light) 🔵[MiCloud]
+-   yeelink.light.fancl6 (Yeelight Smart Ceiling Fan C1060)
 
 ### Heater
 
