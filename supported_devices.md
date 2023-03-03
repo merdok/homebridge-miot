@@ -220,7 +220,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   hyd.airer.znlyj1 (MIJIA Smart Clothes Dryer) 🔵[MiCloud]
 -   hyd.airer.znlyj2 (MIJIA Smart Clothes Dryer 2)
 -   hyd.airer.znlyj4 (MIJIA Smart Clothes Dryer 4)
--   hlumi.airer.acn02 (Aqara Smart Clothes Drying Rack Lite) 🔵[MiCloud]
+-   lumi.airer.acn02 (Aqara Smart Clothes Drying Rack Lite) 🔵[MiCloud]
 
 ### Oven
 
