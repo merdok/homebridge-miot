@@ -50,6 +50,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Contact Sensor
 * Gateway
 * Video Doorbell
+* Pet Feeder
 
 More device types will be added!
 

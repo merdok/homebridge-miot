@@ -1,5 +1,7 @@
 ## Supported devices
 
+Devices listed here only indicate that a device has been tested and working! Even if your device is not on the list it might work correctly so you should always try adding it to the plugin!
+
 Devices marked as 🔵[MiCloud] require a MiCloud connection. Please specify the `micloud` property in the `config.json`  
 Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Gateway or Hub.
 
