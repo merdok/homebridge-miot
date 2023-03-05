@@ -39,6 +39,10 @@
             <input type="checkbox" checked class="form-check-input" id="autoAddToHomebridgeCheckbox">
             <label class="form-check-label" for="autoAddToHomebridgeCheckbox">Automatically add to homebridge?</label>
           </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="showAllDevicesCheckbox">
+            <label class="form-check-label" for="showAllDevicesCheckbox">Show all devices?</label>
+          </div>
           <div class="text-center">
             <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
           </div>
@@ -349,11 +353,13 @@
       var btn = $(this),
         usernameInput = $('#usernameInput'),
         passwordInput = $('#passwordInput'),
-        autoAddToHomebridgeCheckbox = $('#autoAddToHomebridgeCheckbox');
+        autoAddToHomebridgeCheckbox = $('#autoAddToHomebridgeCheckbox'),
+        showAllDevicesCheckbox = $('#showAllDevicesCheckbox');
 
       let username = usernameInput.val();
       let password = passwordInput.val();
       let isAutoAddToHomebridge = autoAddToHomebridgeCheckbox.is(":checked");
+      let isShowAll = showAllDevicesCheckbox.is(":checked");
 
       if (username && password) {
         $('.miot-message').hide();
@@ -361,18 +367,22 @@
         usernameInput.prop('disabled', true);
         passwordInput.prop('disabled', true);
         autoAddToHomebridgeCheckbox.prop('disabled', true);
+        showAllDevicesCheckbox.prop('disabled', true);
 
         homebridge.request('/get-all-devices', {
           username,
           password,
+          isShowAll
         }).then(async data => {
           if (data.success && data.devices && data.devices.length > 0) {
             // create the device table
             showDeviceTable(data.devices);
             // add devices to homebridge
             if (isAutoAddToHomebridge) {
+              // only add device which have ip and deviceid does not start with 'blt.', prevent of automatically adding bluetooth device if show all enabled
+              let filteredDevices = data.devices.filter(device => device.ip && device.ip.length > 0 && !device.deviceId.includes("blt."));
               // add new devices to exists devices list, prevent duplicate by device ip
-              const filteredDevices = data.devices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
+              filteredDevices = filteredDevices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
               configuration.devices.push(...filteredDevices);
               await homebridge.updatePluginConfig([configuration]);
               createForm(configSchema, configuration);
@@ -398,6 +408,7 @@
           usernameInput.prop('disabled', false);
           passwordInput.prop('disabled', false);
           autoAddToHomebridgeCheckbox.prop('disabled', false);
+          showAllDevicesCheckbox.prop('disabled', false);
         })
       } else {
         homebridge.toast.error('A username and password must be provided.', 'Error');

@@ -44,6 +44,7 @@ class UiServer extends HomebridgePluginUiServer {
     }
 
     let warningMsg = null;
+    const isShowAll = !!params.isShowAll;
 
     // list all device from all available countries
     for (const country of miCloud.availableCountries) {
@@ -51,8 +52,11 @@ class UiServer extends HomebridgePluginUiServer {
         miCloud.setCountry(country);
         // prevent duplicate devices
         const allList = (await miCloud.getDevices()).filter(device => !devices.find(d => d.did === device.did));
-        // filter out device without an local ip and without ssid (most probably bluetooth devices)
-        const validList = allList.filter(device => device.localip && device.localip.length > 0 && device.ssid && device.ssid.length > 0);
+        let validList = allList;
+        if (!isShowAll) {
+          // filter out device without an local ip and without ssid (most probably bluetooth devices)
+          validList = allList.filter(device => device.localip && device.localip.length > 0 && device.ssid && device.ssid.length > 0);
+        }
         validList.map(device => device.country = country);
         devices.push(...validList);
       } catch (err) {
