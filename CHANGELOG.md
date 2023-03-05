@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2023-03-06
+### Added
+- Added pet feeder module
+- Added support for yeelink.light.fancl6 (Yeelight Smart Ceiling Fan C1060) ceiling fan
+
+### Changed
+- It is now possible to show BLE devices from the MiCloud in the homebridge ui and using the list-devices cli command
+
+
 ## [1.5.1] - 2023-02-17
 ### Added
 - Added video doorbell module
