@@ -105,6 +105,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   lumi.acpartner.v2 (Xiaomi Air Conditioning Companion) 🔵[MiCloud]
 -   lumi.acpartner.v3 (Aqara Air Conditioning Companion) 🔵[MiCloud]
 -   lumi.acpartner.mcn04 (Mi Smart Air Conditioner Controller Pro)
+-   miir.aircondition.ir02 (IR AC Remote Control)
 
 ### Outlet
 
