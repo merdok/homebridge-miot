@@ -233,6 +233,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 
 -   careli.fryer.maf01 (Mi Smart Air Fryer MAF01)
 -   careli.fryer.maf02 (Mi Smart Air Fryer)
+-   careli.fryer.maf05a (Mi Smart Air Fryer Pro 4L)
 -   careli.fryer.maf07 (Mi Smart Air Fryer 3.5L)
 
 ### Coffee Machine
