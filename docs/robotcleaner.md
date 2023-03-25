@@ -134,7 +134,7 @@ To get the rooms ids you will need to use the miot cli tools to send a request t
 2. In the terminal on the device where homebridge is installed run the following command:
 Simply in the terminal on the device where homebridge is installed type the following command:
 
-`miot send <IP> -t <TOKEN> get_properties '[{siid":8,"piid":2}]'`
+`miot send <IP> -t <TOKEN> get_properties '[{"siid":8,"piid":2}]'`
 
 This will output a list which looks similar to this:
 
