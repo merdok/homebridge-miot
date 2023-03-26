@@ -211,6 +211,21 @@
               "default": true,
               "required": false
             },
+            "suppressAutoServiceCreation": {
+              "title": "Suppress auto service creation",
+              "description": "Suppress auto creation of some sensor services.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "uniqueItems": true,
+                "enum": [
+                  "temperature",
+                  "relativeHumidity",
+                  "illumination"
+                ]
+              },
+              "required": false
+            },
             "actionButtons": {
               "title": "Action buttons",
               "type": "array",
@@ -513,6 +528,7 @@
                 "devices[].buzzerControl",
                 "devices[].childLockControl",
                 "devices[].modeControl",
+                "devices[].suppressAutoServiceCreation",
                 {
                   "key": "devices[].actionButtons",
                   "description": "Configure action buttons. For details check README.",

@@ -225,6 +225,11 @@ Whether the led service is enabled. This allows to turn on/off the device LED. *
 Whether the child lock control service is enabled. This allows to turn on/off the device child lock. **Default: true**
 - `modeControl` [optional]
 Show mode switches which allow to change the device mode. **Default: true**
+- `suppressAutoServiceCreation` [optional]
+Suppress auto creation of some sensor services. **Default: "" (not specified)**
+  - Set an array of service names which should be disabled
+  - Available services: *temperature*, *relativeHumidity*, *illumination*
+  - Only takes effect if a device supports the specified service and the service is NOT a main device service
 - `actionButtons` [optional]
 Show additional action switches if the device supports any. **Default: false**
   - Set to *true* or *false* to show/hide all actions available on the device
@@ -234,7 +239,7 @@ Show additional action switches if the device supports any. **Default: false**
     - *name* - [optional] the name of the switch
     - *params* - [optional] parameters to be used for the action, not all actions support parameters
 - `methodButtons` [optional]
-Execute a raw miio method on the device. Can be useful for advanced robot cleaner configuration **Default: "" (not specified)**
+Execute a raw miio method on the device. Can be useful for advanced robot cleaner configuration. **Default: "" (not specified)**
   - Creates statless switches which when pressed execute the method, the result of the method call is printed in the log
   - Set an array of method names to only show the desired method buttons
   - You can also set an array of objects as the value which enables advanced configuration. An object can have the following properties:
