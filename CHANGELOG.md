@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2023-03-31
+### Added
+- Added temperature humidity sensor module
+- Added submersion sensor module
+- Added plant monitor module
+- New `suppressAutoServiceCreation` configuration property which allows to suppress auto created services
+- Added support for chunmi.cooker.eh1.js (Xiaomi Mijia Smart Rice Cooker 1.6 L) cooker. Thanks @romacv for the contribution
+- Added support for careli.fryer.maf05a (Mi Smart Air Fryer Pro 4L) air fryer. Thanks @Skjall for the contribution
+- Illumination property can now be auto detected on devices
+
+### Changed
+- Add default food value for pet feeder devices
+
+### Fixed
+- Fix switch naming
+- Fix total clean time unit on some robot cleaner devices
+
+
 ## [1.5.2] - 2023-03-06
 ### Added
 - Added pet feeder module
