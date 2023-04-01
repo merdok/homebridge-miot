@@ -51,7 +51,7 @@ As for the **params**:
 
 
 #### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) seperate the room configuration/selection
-If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 seperate commands.
+If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 separate commands.
 Setting the room configuration would look as follow:
 
 ```js
