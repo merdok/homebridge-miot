@@ -50,7 +50,7 @@ As for the **params**:
   - fifth parameter `1` indicates the index of the cleaning. If you have multiple rooms specified this will define the order in what rooms are cleaned
 
 
-#### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) seperate the room configuration/selection
+#### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) separate the room configuration/selection
 If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 separate commands.
 Setting the room configuration would look as follow:
 
