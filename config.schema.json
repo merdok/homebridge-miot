@@ -304,12 +304,12 @@
                     "required": false
                   },
                   "linkedProperty": {
-                    "title": "linkedProperty",
+                    "title": "linked property",
                     "type": "string",
                     "required": false
                   },
                   "linkedPropertyValue": {
-                    "title": "linkedPropertyValue",
+                    "title": "linked property value",
                     "type": "string",
                     "required": false
                   },
@@ -343,13 +343,25 @@
                     "type": "string",
                     "required": false
                   },
+                  "valueOperator": {
+                    "title": "value operator",
+                    "type": "string",
+                    "enum": [
+                      "equal",
+                      "less",
+                      "greater",
+                      "lessOrEqual",
+                      "greaterOrEqual"
+                    ],
+                    "required": false
+                  },
                   "linkedProperty": {
-                    "title": "linkedProperty",
+                    "title": "linked property",
                     "type": "string",
                     "required": false
                   },
                   "linkedPropertyValue": {
-                    "title": "linkedPropertyValue",
+                    "title": "linked property value",
                     "type": "string",
                     "required": false
                   }
@@ -596,6 +608,7 @@
                     "devices[].propertyMonitor[].property",
                     "devices[].propertyMonitor[].name",
                     "devices[].propertyMonitor[].value",
+                    "devices[].propertyMonitor[].valueOperator",
                     "devices[].propertyMonitor[].linkedProperty",
                     "devices[].propertyMonitor[].linkedPropertyValue"
                   ]

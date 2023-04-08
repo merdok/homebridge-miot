@@ -158,6 +158,12 @@ Example configuration:
               "property": "vacuum:mode",
               "value": 2,
               "name": "Notify when mode 2 set"
+            },
+            {
+              "property": "battery:battery-level",
+              "value": 15,
+              "valueOperator": "lessOrEqual",
+              "name": "Low Battery"
             }
           ]
         }
@@ -265,6 +271,7 @@ Allows to monitor any properties of your device. **Default: "" (not specified)**
     - *property* - [required] the property name or id
     - *name* - [optional] the name of the control
     - *value* - [optional] when a fixed value is specified instead of a light sensor a presence sensor will be created which triggers when the property has the specified value
+    - *valueOperator* - [optional] defines the operator which should be used when comparing the value to the property value. Only takes effect when a value is set. Possible values *equal*, *less*, *greater*, *lessOrEqual*, *greaterOrEqual*. **Default: "equal"**
     - *linkedProperty* - [optional] linked property used for status checking- Useful when monitor should only be possible when for example the device is on
     - *linkedPropertyValue* - [optional] the value of the linked property
 
