@@ -49,6 +49,27 @@ As for the **params**:
   - fourth parameter `2` indicates the mopping mode - see the `vacuum-extend:mop-mode` property in the device metadata to see all available mop modes
   - fifth parameter `1` indicates the index of the cleaning. If you have multiple rooms specified this will define the order in what rooms are cleaned
 
+#### Dreame.vacuum.mc1808/dreame.vacuum.mb1808
+As one of the first models with room cleaning feature these devices don't support `vacuum-extend` **actions** and use `clean:start-clean` action with additional **params**. The `actionButtons` entry would look as follow:
+
+```js
+"actionButtons": [
+    {
+        "action": "18.1",
+        "name": "Clean first room",
+        "params": [
+            {
+                "piid": 1,
+                "value": 18
+            },
+            {
+                "piid": 21,
+                "value": "{\"selects\":[[1,1,1,1,1]]}"
+            }
+        ]
+    }
+]
+```
 
 #### Some other dreame devices (e.g. Xiaomi Robot Vacuum X10+) separate the room configuration/selection
 If the above `actionButtons` doens't work for your robot, you maybe have a device which needs the actions for the room configuration and the actual room selection in 2 separate commands.
