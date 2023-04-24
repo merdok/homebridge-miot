@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.6.1] - 2023-04-25
+### Added
+- Added value operator to property monitor which allows to the value to be used as a threshold
+- Added support for roborock.vacuum.a62 (Roborock S7 Pro Ultra) robot cleaner. Thanks @pawelaugustyn for the contribution
+- Added dreame1808-specific room cleaning section to the documentation. Thanks @mavoronin for the contribution
+
+
 ## [1.6.0] - 2023-03-31
 ### Added
 - Added temperature humidity sensor module
