@@ -278,6 +278,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   chunmi.cooker.normalcd1 (Mi IH 3L Rice Cooker) 🔵[MiCloud]
 -   chunmi.pre_cooker.dylg5 (Mi Smart Pressure Cooker 5L)
 -   chunmi.cooker.eh1.js (Xiaomi Mijia Smart Rice Cooker 1.6 L) 🔵[MiCloud]
+-   chunmi.cooker.r2.js (Joyami Smart Rice Cooker S1) 🔵[MiCloud]
 
 ### Speaker
 
