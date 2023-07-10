@@ -5,7 +5,7 @@
 [![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
 [![homebridge-miot](https://badgen.net/npm/v/homebridge-miot?icon=npm)](https://www.npmjs.com/package/homebridge-miot)
 [![mit-license](https://badgen.net/npm/license/lodash)](https://github.com/merdok/homebridge-miot/blob/master/LICENSE)
-[![follow-me-on-twitter](https://badgen.net/twitter/follow/merdok_dev?icon=twitter)](https://twitter.com/merdok_dev)
+[![follow-me-on-twitter](https://badgen.net/badge/icon/twitter?icon=twitter&label=merdok_dev)](https://twitter.com/merdok_dev)
 [![join-discord](https://badgen.net/badge/icon/discord?icon=discord&label=homebridge-miot)](https://discord.gg/c9AWNESQMg)
 
 </span>
