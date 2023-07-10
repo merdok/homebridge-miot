@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [1.6.2] - 2023-07-11
+### Added
+- Added support for zhimi.airpurifier.ma4 (Xiaomi Mi Air Purifier 3) air purifier. Thanks @thealpa for the contribution
+- Added support for chunmi.cooker.r2.js (Joyami Smart Rice Cooker S1) cooker. Thanks @sirinveen for the contribution
+
+### Fixed
+- Code cleanup
+
+
 ## [1.6.1] - 2023-04-25
 ### Added
 - Added value operator to property monitor which allows to the value to be used as a threshold
