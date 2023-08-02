@@ -288,6 +288,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 ### Contact Sensor
 
 -   isa.magnet.dw2hl (Xiaomi Door and Windows Sensor 2)
+-   lumi.sensor_magnet.v2 (Xiaomi Mi Door and Window Sensor)
 
 ### Gateway
 
