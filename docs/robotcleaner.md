@@ -234,6 +234,40 @@ After that you should get 3 additional switches which will allow you to set the 
 - 2 - mop
 
 ---------------
+#### ijai (Mi Robot Vacuum-Mop 2 Pro)
+#### Example room cleaning config and parameters description
+
+For **ijai** based devices the `actionButtons` entry would look as follows (MiCloud connection details should be configured):
+
+```js
+"actionButtons": [
+  {
+      "action": "sweep:set-room-clean",
+      "name": "Clean kitchen",
+      "params": [
+        "8",
+           0,
+           1
+      ]
+  },
+  {
+      "action": "sweep:set-room-clean",
+      "name": "Clean multiply rooms",
+      "params": [
+          "6,7,8,9",
+          0,
+          1
+      ]
+  }
+]
+```
+As for the **params**:
+- The `0` (`0` - global cleaning; `1` - along the edge) and `1` (`0` - stop; `1` - start; `2` - pause) are related to the vacuum operation and from my experience they should be left at that values. 
+- `"8"` is the room id of the room which should cleaned. The ids start from the specific number (which can be obtained by executing commands bellow), so you can easily guess them by incrementing the number and checking to which room the vacuum goes. For multiple rooms simply separate the room ids with a comma like this `"6,7,8,9"`.
+
+1. `miot cloud action '{"aiid":13,"did":"YOUR_DEVICE_ID","in":[YOU_CURRENT_MAP_ID],"siid":10}'`
+2. `YOU_CURRENT_MAP_ID` is `miot cloud action '{"aiid":1,"did":"YOUR_DEVICE_ID","in":[],"siid":10}'`
+---------------
 #### Roborock
 #### Example room cleaning config and parameters description
 
