@@ -301,6 +301,19 @@ Just type `miot` in the console to get a list of available options. Currently av
 - `miot cloud` -> Connect to the MiCloud, execute commands, list devices and get specific device info
 - `miot fetch-metadata` -> Fetch device metadata for the specified model
 
+Examples:
+```sh
+miot send <IP> -t <TOKEN> get_properties '[{"siid":2,"piid":2}]'
+
+miot send <IP> -t <TOKEN> set_properties '[{"siid":2,"piid":2,"value":1}]'
+
+miot cloud list-devices
+
+miot cloud get-props '[{"siid":2,"piid":2,"did":"<DID>"}]'
+
+miot cloud set-props '[{"siid":2,"piid":2,"value":1,"did":"<DID>"}]'
+```
+
 ## Troubleshooting
 
 ##### Debug
