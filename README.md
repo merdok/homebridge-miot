@@ -292,6 +292,33 @@ Some properties have a configuration which enables to change certain aspects of 
   - lightbulb
   - fan
 
+## BLE and ZigBee devices
+
+It is also possible to connect BLE and ZigBee devices to the plugin via a gateway or hub.
+To do that, first the device needs to be connected to the gateway or hub, afterwards you have to manually specify the **token** and **ip** of the gateway/hub, but the **model** and **deviceId** needs to be that of the BLE or ZigBee device.
+All the required information can be retrieved from the MiCloud either via the Ui or the CLI commands.
+
+Example:
+```js
+{
+  "platforms": [
+    {
+      "platform": "miot",
+      "devices": [
+        {
+          "name": "Zigbee Outlet",
+          "ip": "<GATEWAY_IP>",
+          "token": "<GATEWAY_TOKEN>",
+          "model": "lumi.plug.mmeu01",
+          "deviceId": "<OUTLET_DID>",
+        }
+      ]
+    }
+  ]
+}
+```
+
+
 ## CLI
 The plugin also offers a command line interface to control your devices directly from the command line.  
 Just type `miot` in the console to get a list of available options. Currently available are:
