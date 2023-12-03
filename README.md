@@ -200,9 +200,9 @@ This is a global configuration object for the MiCloud connection. When specified
     - *timeout* - [optional] set a custom request timeout in milliseconds. **Default: 5000**
 #### General device configuration fields
 - `name` [required]
-Name of the accessory.
+The name of the accessory.
 - `ip` [required]
-ip address of your device.
+The ip address of your device.
 - `token` [required]
 The token of your device.
 - `deviceId` [optional]
@@ -216,13 +216,15 @@ The directory where the device info will be stored. **Default: "~/.homebridge/.x
 - `pollingInterval` [optional]
 The device state polling interval in seconds. **Default: 15**
 - `propertyChunkSize` [optional]
-  Size of a property chunk when syncing properties with the device. A lower value might reduce the load on the device. Range 1-14 **Default: device class default, if not defined -> 14**
+Size of a property chunk when syncing properties with the device. A lower value might reduce the load on the device. Range 1-14 **Default: device class default, if not defined -> 14**
 - `deepDebugLog` [optional]
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
+- `silentLog` [optional]
+When enabled all log output will only appear in debug mode. **Default: false**
 - `customAccessory` [optional]
-  Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
+Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `onlyMainService` [optional]
-  Only the main accessory service will be created without any additional services. Useful when wanting to have a clean layout. ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** can be used to manually add services. **Default: false**
+Only the main accessory service will be created without any additional services. Useful when wanting to have a clean layout. ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** can be used to manually add services. **Default: false**
 - `buzzerControl` [optional]
 Whether the buzzer service is enabled. This allows to turn on/off the device buzzer/alarm. **Default: true**
 - `ledControl` [optional]

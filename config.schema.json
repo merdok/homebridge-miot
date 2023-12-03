@@ -122,6 +122,11 @@
               "type": "boolean",
               "default": false
             },
+            "silentLog": {
+              "title": "Enable silent log",
+              "description": "When enabled all log output will only appear in debug mode.",
+              "type": "boolean"
+            },
             "micloud": {
               "title": "MiCloud connection",
               "type": "object",
@@ -510,7 +515,8 @@
                 "devices[].prefsDir",
                 "devices[].pollingInterval",
                 "devices[].propertyChunkSize",
-                "devices[].deepDebugLog"
+                "devices[].deepDebugLog",
+                "devices[].silentLog"
               ]
             },
             {

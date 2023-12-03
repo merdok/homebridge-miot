@@ -54,17 +54,25 @@ class miotDeviceController {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
     }
     this.propertyChunkSize = config.propertyChunkSize;
-    this.isCustomAccessory = config.customAccessory || false;
     this.prefsDir = config.prefsDir || api.user.storagePath() + '/.xiaomiMiot/';
+    this.isCustomAccessory = config.customAccessory;
+    if (this.isCustomAccessory === undefined) {
+      this.isCustomAccessory = false;
+    }
     this.deepDebugLog = config.deepDebugLog;
     if (this.deepDebugLog === undefined) {
       this.deepDebugLog = false;
+    }
+    this.silentLog = config.silentLog;
+    if (this.silentLog === undefined) {
+      this.silentLog = false;
     }
 
     this.logger.info(`Got device configuration, initializing device with name: ${this.name}`);
 
     // set deep debug log
     this.logger.setDeepDebugLogEnabled(this.deepDebugLog);
+    this.logger.setSilentLogEnabled(this.silentLog);
 
     // check if prefs directory ends with a /, if not then add it
     if (this.prefsDir.endsWith('/') === false) {
