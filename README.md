@@ -274,7 +274,7 @@ Allows to monitor any properties of your device. **Default: "" (not specified)**
     - *property* - [required] the property name or id
     - *name* - [optional] the name of the control
     - *value* - [optional] when a fixed value is specified instead of a light sensor a presence sensor will be created which triggers when the property has the specified value
-    - *valueOperator* - [optional] defines the operator which should be used when comparing the value to the property value. Only takes effect when a value is set. Possible values *equal*, *less*, *greater*, *lessOrEqual*, *greaterOrEqual*. **Default: "equal"**
+    - *valueOperator* - [optional] defines the operator which should be used when comparing the value to the property value. Only takes effect when a value is set. Possible values *equal*, *less*, *greater*, *lessOrEqual*, *greaterOrEqual*, *contains*. **Default: "equal"**
     - *linkedProperty* - [optional] linked property used for status checking- Useful when monitor should only be possible when for example the device is on
     - *linkedPropertyValue* - [optional] the value of the linked property
 
@@ -336,6 +336,8 @@ Examples:
 miot send <IP> -t <TOKEN> get_properties '[{"siid":2,"piid":2}]'
 
 miot send <IP> -t <TOKEN> set_properties '[{"siid":2,"piid":2,"value":1}]'
+
+miot send <IP> -t <TOKEN> action '{"aiid":13,"in":[],"siid":10}'
 
 miot cloud list-devices
 
