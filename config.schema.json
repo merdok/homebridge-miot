@@ -471,6 +471,13 @@
               "description": "Show temperature if the outlet supports temperature reporting.",
               "type": "boolean",
               "required": false
+            },
+            "foodAmount": {
+              "title": "Food amount",
+              "description": "The amount of food to dispense.",
+              "type": "integer",
+              "minimum": 1,
+              "required": false
             }
           }
         }
@@ -651,7 +658,7 @@
                 }
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/);"
               }
             },
             {
@@ -665,7 +672,7 @@
                 "devices[].offDelayControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(opple|yeelink)\\.light\\.(fan|fanlight)([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(opple|yeelink)\\.light\\.(fan|fanlight)([^.]+)$/);"
               }
             },
             {
@@ -678,7 +685,7 @@
                 "devices[].offDelayControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/);"
               }
             },
             {
@@ -692,7 +699,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/);"
               }
             },
             {
@@ -705,7 +712,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/);"
               }
             },
             {
@@ -729,7 +736,7 @@
                 }
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/);"
               }
             },
             {
@@ -742,7 +749,7 @@
                 "devices[].motorControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(dooya|leshi|lumi)\\.curtain\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dooya|leshi|lumi)\\.curtain\\.([^.]+)$/);"
               }
             },
             {
@@ -767,7 +774,7 @@
                 "devices[].co2AbnormalThreshold"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/);"
               }
             },
             {
@@ -781,7 +788,7 @@
                 "devices[].showTemperature"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/);"
               }
             },
             {
@@ -795,7 +802,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/);"
               }
             },
             {
@@ -808,7 +815,7 @@
                 "devices[].motorControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/);"
               }
             },
             {
@@ -829,7 +836,20 @@
                 "devices[].co2AbnormalThreshold"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices];return !device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Pet Feeder specific settings",
+              "description": "Configure pet feeder specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].foodAmount"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model ||  device.model.match(/^([^.]+).feeder.([^.]+)$/);"
               }
             }
           ]

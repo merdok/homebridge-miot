@@ -1,4 +1,5 @@
 ## Pet Feeder
 
 ### Pet Feeder specific configuration fields
-- none
+- `foodAmount` [optional]
+The amount of food to dispense. **Default: 7**
