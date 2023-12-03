@@ -54,6 +54,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Temperature Humidity Sensor
 * Submersion Sensor
 * Plant Monitor
+* Motion Sensor
 
 More device types will be added!
 
