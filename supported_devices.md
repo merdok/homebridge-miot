@@ -190,6 +190,8 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   dreame.vacuum.r2228o (Dreame L10s Ultra)
 -   dreame.vacuum.r2250 (Dreame D10s Pro)
 -   roborock.vacuum.a62 (Roborock S7 Pro Ultra)
+-   roborock.vacuum.a51 (Roborock S8)
+-   roborock.vacuum.a70 (Roborock S8 Pro Ultra)
 
 ### Light
 
