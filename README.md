@@ -326,6 +326,9 @@ Example:
 The plugin also offers a command line interface to control your devices directly from the command line.  
 Just type `miot` in the console to get a list of available options. Currently available are:
 - `miot send` -> Send a RAW command over your local network to the device
+- `miot get-prop` -> Get the specified property value from the device. Accepts property id in the format siid:piid
+- `miot set-prop` -> Set the value for the specified property. Accepts property id in the format siid:piid
+- `miot action` -> Execute an action on the device. Accepts action id in the format siid:aiid
 - `miot test` -> Test connection to a device
 - `miot tokens` -> Store and show tokens for specific devices
 - `miot cloud` -> Connect to the MiCloud, execute commands, list devices and get specific device info
