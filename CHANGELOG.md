@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.0] - 2023-12-05
+### Added
+- New `silentLog` configuration property which when enabled allows to disable all log output
+- Added motion sensor module. Thanks @eric14142004 for the contribution
+- Action param parsing can now be disabled per device
+- New 'contains' value operator which allows to specify a list of values as a value for propertyMonitor and it will check if any of the specified values match
+- Allow to configure food dispense amount for pet feeders. The `foodAmount` configuration property can be used for that
+- Handle HCHO density on air quality sensors correctly if the device supports it
+- Some new cli commands for simpler property access or action execution on the device
+- Added support for lumi.sensor_magnet.v2 (Xiaomi Mi Door and Window Sensor) contact sensor! Thanks @350d for the contribution
+- Added support for roborock.vacuum.a51 (Roborock S8) robot cleaner
+- Added support for roborock.vacuum.a70 (Roborock S8 Pro Ultra) robot cleaner
+
+### Changed
+- Status overrides for robot cleaners can now also be specified as arrays, allowing to handle multiply statuses with the same name correctly
+- Auto status parsing logic has been enhanced to also take into account multiple status with the same name
+- Some smaller minor updates under the hood
+
 
 ## [1.6.2] - 2023-07-11
 ### Added
