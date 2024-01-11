@@ -192,6 +192,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   roborock.vacuum.a62 (Roborock S7 Pro Ultra)
 -   roborock.vacuum.a51 (Roborock S8)
 -   roborock.vacuum.a70 (Roborock S8 Pro Ultra)
+-   roborock.vacuum.a75 (Roborock Q Revo)
 
 ### Light
 
