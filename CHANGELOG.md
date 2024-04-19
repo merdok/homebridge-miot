@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2024-04-20
+### Added
+- New `deviceEnabled` configuration property which allows to disable devices and stop unnecessary reconnects when a device is longer offline
+- Added support for roborock.vacuum.a75 (Roborock Q Revo) robot cleaner. Thanks @pablolop002 for the contribution
+
+### Changed
+- Updated spec for dmaker.airfresh.a1 fresh air system. Thanks @Willian-Zhang for the contribution
+
+
 ## [1.7.0] - 2023-12-05
 ### Added
 - New `silentLog` configuration property which when enabled allows to disable all log output
