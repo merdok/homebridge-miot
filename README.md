@@ -222,6 +222,8 @@ Size of a property chunk when syncing properties with the device. A lower value 
 Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin. **Default: false**
 - `silentLog` [optional]
 When enabled all log output will only appear in debug mode. **Default: false**
+- `deviceEnabled` [optional]
+Whether the device is enabled. Disabling the device will not initiate polling. Useful when a device is longer offline and it should not automatically reconnect. **Default: true**
 - `customAccessory` [optional]
 Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `onlyMainService` [optional]

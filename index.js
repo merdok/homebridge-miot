@@ -67,6 +67,10 @@ class miotDeviceController {
     if (this.silentLog === undefined) {
       this.silentLog = false;
     }
+    this.deviceEnabled = config.deviceEnabled;
+    if (this.deviceEnabled === undefined) {
+      this.deviceEnabled = true;
+    }
 
     this.logger.info(`Got device configuration, initializing device with name: ${this.name}`);
 
@@ -182,8 +186,13 @@ class miotDeviceController {
     if (this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
       this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.device.getAccessories());
-      this.logger.info('Everything looks good! Initiating property polling!');
-      this.miotDevice.startPropertyPolling();
+
+      if (this.deviceEnabled) {
+        this.logger.info('Everything looks good! Initiating property polling!');
+        this.miotDevice.startPropertyPolling();
+      } else {
+        this.logger.warn('Device disabled, property polling will not be initiated! Please enable the device in the config.');
+      }
     }
   }
 

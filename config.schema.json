@@ -125,7 +125,14 @@
             "silentLog": {
               "title": "Enable silent log",
               "description": "When enabled all log output will only appear in debug mode.",
-              "type": "boolean"
+              "type": "boolean",
+              "default": false
+            },
+            "deviceEnabled": {
+              "title": "Device enabled",
+              "description": "Disabling the device will not initiate polling. Useful when a device is longer offline and it should not automatically reconnect.",
+              "type": "boolean",
+              "default": true
             },
             "micloud": {
               "title": "MiCloud connection",
@@ -523,7 +530,8 @@
                 "devices[].pollingInterval",
                 "devices[].propertyChunkSize",
                 "devices[].deepDebugLog",
-                "devices[].silentLog"
+                "devices[].silentLog",
+                "devices[].deviceEnabled"
               ]
             },
             {
