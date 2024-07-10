@@ -27,6 +27,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   dmaker.fan.p220 (Mijia DC Inverter Circulating Floor Fan)
 -   dmaker.fan.1e (Mi Smart Standing Fan E)
 -   dreame.fan.p2018 (Xiaomi Smart Purifying Fan)
+-   xiaomi.fan.p51 (Mijia Air Circulation Fan) 🔵[MiCloud]
 
 ### Ceiling Fan
 
@@ -106,7 +107,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   lumi.acpartner.v2 (Xiaomi Air Conditioning Companion) 🔵[MiCloud]
 -   lumi.acpartner.v3 (Aqara Air Conditioning Companion) 🔵[MiCloud]
 -   lumi.acpartner.mcn04 (Mi Smart Air Conditioner Controller Pro)
--   xiaomi.airc.r24r00 (Xiaomi Air Conditioner KFR-35GW/V1A1 2024)
+-   xiaomi.airc.r24r00 (Xiaomi Air Conditioner KFR-35GW/V1A1 2024) 🔵[MiCloud]
 
 ### Outlet
 
