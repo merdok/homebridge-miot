@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.2] - 2024-07-26
+### Added
+- Added support for xiaomi.airc.r24r00 (Xiaomi Air Conditioner KFR-35GW/V1A1 2024) air conditioner. Thanks @Willian-Zhang for the contribution
+- Added support for xiaomi.fan.p51 (Mijia Air Circulation Fan) fan. Thanks @Willian-Zhang for the contribution
+
+### Fixed
+- Ensure filter life level does not exceed 100 as some devices might return a value which is greater
+
+
 ## [1.7.1] - 2024-04-20
 ### Added
 - New `deviceEnabled` configuration property which allows to disable devices and stop unnecessary reconnects when a device is longer offline
