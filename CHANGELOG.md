@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.3] - 2024-08-01
+### Fixed
+- Hot fix for filter life level
+
+
 ## [1.7.2] - 2024-07-26
 ### Added
 - Added support for xiaomi.airc.r24r00 (Xiaomi Air Conditioner KFR-35GW/V1A1 2024) air conditioner. Thanks @Willian-Zhang for the contribution
