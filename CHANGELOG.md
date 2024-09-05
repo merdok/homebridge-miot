@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.4] - 2024-09-06
+### Added
+Added support for Homebridge 2.x
+
+
 ## [1.7.3] - 2024-08-01
 ### Fixed
 - Hot fix for filter life level
