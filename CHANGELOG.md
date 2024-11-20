@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.5] - 2024-11-21
+### Added
+Added support for node.js v22
+
+### Fixed
+- Fixed an issue where switch accessories could be created with non-unique names
+
+
 ## [1.7.4] - 2024-09-06
 ### Added
 Added support for Homebridge 2.x
