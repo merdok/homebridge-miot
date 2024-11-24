@@ -351,6 +351,14 @@ miot cloud get-props '[{"siid":2,"piid":2,"did":"<DID>"}]'
 miot cloud set-props '[{"siid":2,"piid":2,"value":1,"did":"<DID>"}]'
 ```
 
+## Mapping Device Functions to HomeKit
+
+The `homebridge-miot` plugin uses various HomeKit elements to enable the control of MIoT devices. Since HomeKit does not natively support all device types, certain functionalities are mapped as follows:
+
+- **Time Control:** For devices like air fryers, the cooking time is represented as a dimmable light switch. The "brightness" level corresponds to the duration in minutes. For example, setting the light to 50% brightness would represent 50 minutes of cooking time.
+
+This mapping allows users to control specific features of their devices through the HomeKit interface, even if the device type is not natively supported.
+
 ## Troubleshooting
 
 ##### Debug
