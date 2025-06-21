@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.6] - 2025-06-21
+### Fixed
+- Fixed issues with the MiCloud connection. Thanks @JosephStalin0305 for the providing the fix!
+
 ## [1.7.5] - 2024-11-21
 ### Added
 Added support for node.js v22
