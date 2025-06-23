@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.7] - 2025-02-24
+### Added
+- Added support for cgllc.airm.cgs2 (Qingping Air Monitor 2) air monitor. Thanks @M4nk1n for the contribution
+- Added support for deerma.humidifier.jsq1 (Mi Smart Antibacterial Humidifier S) humidifier. Thanks @M4nk1n for the contribution
+- Added support for xiaomi.derh.13l.js (Xiaomi Dehumidifier 13L) dehumidifier. Thanks @Willian-Zhang for the contribution
+
 ## [1.7.6] - 2025-06-21
 ### Fixed
 - Fixed issues with the MiCloud connection. Thanks @JosephStalin0305 for the providing the fix!
