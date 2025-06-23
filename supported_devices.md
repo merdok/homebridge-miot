@@ -65,11 +65,13 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   zhimi.humidifier.ca1 (Xiaomi Smartmi Evaporative Humidifier 2) 🔵[MiCloud]
 -   deerma.humidifier.jsq2g (Mijia Smart Anti-bacterial Humidifier 2)
 -   dmaker.humidifier.p2 (Xiaomi Mijia Pure Smart Humidifier 2)
+-   deerma.humidifier.jsq1 (Mi Smart Antibacterial Humidifier S) 🔵[MiCloud]
 
 ### Dehumidifier
 
 -   nwt.derh.312en (Widetech Dehumidifier)
 -   dmaker.derh.22l (Xiaomi Smart Dehumidifier 22L)
+-   xiaomi.derh.13l.js (Xiaomi Dehumidifier 13L)
 
 ### Air Purifier
 
@@ -278,6 +280,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   cgllc.airmonitor.b1 (Xiaomi Air Quality Monitor) 🔵[MiCloud]
 -   cgllc.airm.cgdn1 (Qingping Air Monitor Lite)
 -   zhimi.airmonitor.v1 (Xiaomi PM2.5 Monitor) 🔵[MiCloud]
+-   cgllc.airm.cgs2 (Qingping Air Monitor 2) 🔵[MiCloud]
 
 ### Cooker
 
