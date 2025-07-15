@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.7.7] - 2025-02-24
+## [1.7.8] - 2025-07-16
+### Added
+- Added support for xiaomi.airp.va3 (Xiaomi Air Purifier 5S) air purifier. Thanks @zinzilulo for the contribution
+- Added support for dmaker.fan.p45 (Xiaomi Tower Fan 2) fan
+- Added support for zhimi.fan.za3 (Smartmi Standing Fan 2) fan
+
+
+## [1.7.7] - 2025-06-23
 ### Added
 - Added support for cgllc.airm.cgs2 (Qingping Air Monitor 2) air monitor. Thanks @M4nk1n for the contribution
 - Added support for deerma.humidifier.jsq1 (Mi Smart Antibacterial Humidifier S) humidifier. Thanks @M4nk1n for the contribution
