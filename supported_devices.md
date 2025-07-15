@@ -28,6 +28,8 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   dmaker.fan.1e (Mi Smart Standing Fan E)
 -   dreame.fan.p2018 (Xiaomi Smart Purifying Fan)
 -   xiaomi.fan.p51 (Mijia Air Circulation Fan) 🔵[MiCloud]
+-   dmaker.fan.p45 (Xiaomi Tower Fan 2)
+
 
 ### Ceiling Fan
 
