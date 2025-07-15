@@ -104,6 +104,8 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   zhimi.airp.mp4 (Miija Air Purifier 4 Pro)
 -   zhimi.airp.cpa4 (Xiaomi Air Purifier 4 Compact)
 -   zhimi.airp.sa4 (Xiaomi Air Purifier 4 Max)
+-   xiaomi.airp.va3 (Xiaomi Air Purifier 5S)
+
 
 ### Air Conditioner
 
