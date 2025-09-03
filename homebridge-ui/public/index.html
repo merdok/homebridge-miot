@@ -46,8 +46,12 @@
           <div class="text-center">
             <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
           </div>
-          <div class="text-center two-factor-url miot-message" style="display: none">
-            <a id="twoFactorAuth" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required, click here, wait a few seconds and try again!</a>
+          <div class="text-center mt-sm-3 two-factor-section miot-message" style="display: none">
+            <a id="twoFactorAuthLink" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required! Click here, paste the received code in the input below and retry!</a>
+            <div class="col">
+              <label for="ticketInput">2FA Code</label>
+              <input class="form-control" id="ticketInput" type="text">
+            </div>
           </div>
           <div class="text-center device-table miot-message" style="display: none">
             <table class="table table-sm">
@@ -354,12 +358,16 @@
         usernameInput = $('#usernameInput'),
         passwordInput = $('#passwordInput'),
         autoAddToHomebridgeCheckbox = $('#autoAddToHomebridgeCheckbox'),
-        showAllDevicesCheckbox = $('#showAllDevicesCheckbox');
+        showAllDevicesCheckbox = $('#showAllDevicesCheckbox'),
+        twoFactorAuthLink = $('#twoFactorAuthLink'),
+        ticketInput = $('#ticketInput');
 
       let username = usernameInput.val();
       let password = passwordInput.val();
       let isAutoAddToHomebridge = autoAddToHomebridgeCheckbox.is(":checked");
       let isShowAll = showAllDevicesCheckbox.is(":checked");
+      let verifyUrl = twoFactorAuthLink.attr('href');
+      let twoFaTicket = ticketInput.val();
 
       if (username && password) {
         $('.miot-message').hide();
@@ -372,6 +380,8 @@
         homebridge.request('/get-all-devices', {
           username,
           password,
+          verifyUrl,
+          twoFaTicket,
           isShowAll
         }).then(async data => {
           if (data.success && data.devices && data.devices.length > 0) {
@@ -392,8 +402,8 @@
             homebridge.toast.warning('No devices found on your account.');
           } else if (!data.success && data.url) {
             homebridge.toast.error(data.error, 'Login Error');
-            $('.two-factor-url a').attr('href', data.url);
-            $('.two-factor-url').show();
+            twoFactorAuthLink.attr('href', data.url);
+            $('.two-factor-section').show();
           } else if ((typeof data.success === 'undefined' || data.success === false) && data.error) {
             homebridge.toast.error(data.error, 'Login Error');
           } else {

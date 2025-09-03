@@ -25,26 +25,42 @@ class UiServer extends HomebridgePluginUiServer {
     miCloud.setRequestTimeout(10000); // timeout 10 seconds
     var devices = [];
 
+    const username = params.username;
+    const password = params.password;
+    const verifyUrl = params.verifyUrl;
+    const twoFaTicket = params.twoFaTicket;
+    const isShowAll = !!params.isShowAll;
+
     // try to login
-    try {
-      await miCloud.login(params.username, params.password);
-    } catch (err) {
-      if (err instanceof Errors.TwoFactorRequired) {
+    if(verifyUrl && twoFaTicket){
+      try {
+        await miCloud.loginTwoFa(verifyUrl, twoFaTicket);
+      } catch (err) {
         return {
           success: false,
-          error: 'Two factor authentication required, please visit the specified url and retry login.',
-          url: err.notificationUrl
-        }
+          error: `2FA login failed with error: ` + err.message
+        };
       }
+    }else{
+      try {
+        await miCloud.login(username, password);
+      } catch (err) {
+        if (err instanceof Errors.TwoFactorRequired) {
+          return {
+            success: false,
+            error: 'Two factor authentication required, please visit the specified url and retry login.',
+            url: err.notificationUrl
+          }
+        }
 
-      return {
-        success: false,
-        error: err.message + `! The specified MiCloud login credentials might be incorrect or the account does not exist...`
-      };
+        return {
+          success: false,
+          error: err.message + `! The specified MiCloud login credentials might be incorrect or the account does not exist...`
+        };
+      }
     }
 
     let warningMsg = null;
-    const isShowAll = !!params.isShowAll;
 
     // list all device from all available countries
     for (const country of miCloud.availableCountries) {
