@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2025-09-04
+### Added
+- Implemented 2FA handling in the MiCloud protocol (currently only used for device discovery)
+- Adjusted the plugin configuration ui to allow 2FA code pass
+- Added support for xiaomi.fan.p45 (Xiaomi Smart Tower Fan 2) fan
+- Added support for dmaker.fan.p28 (Mijia Smart Standing Air Circulation Fan) fan
+
+### Changed
+- During deepDebug log in the console now a '[DEBUG]' marker is present to clearly differentiate the logs
+
+### Fixed
+- Fixed an issue in the plugin configuration ui where action button where missing colors
+
+
 ## [1.7.8] - 2025-07-16
 ### Added
 - Added support for xiaomi.airp.va3 (Xiaomi Air Purifier 5S) air purifier. Thanks @zinzilulo for the contribution
