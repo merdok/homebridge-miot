@@ -46,9 +46,9 @@
             "type": "number",
             "required": false
           },
-          "useCashedSession": {
-            "title": "Use cashed MiCloud session",
-            "description": "Use the cashed session to connect to MiCloud. Use the Ui to create/update the session.",
+          "useCachedSession": {
+            "title": "Use cached MiCloud session",
+            "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
             "type": "boolean",
             "required": false
           }
@@ -178,9 +178,9 @@
                   "type": "number",
                   "required": false
                 },
-                "useCashedSession": {
-                  "title": "Use cashed MiCloud session",
-                  "description": "Use the cashed session to connect to MiCloud. Use the Ui to create/update the session.",
+                "useCachedSession": {
+                  "title": "Use cached MiCloud session",
+                  "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
                   "type": "boolean",
                   "required": false
                 }
@@ -515,7 +515,7 @@
         "micloud.country",
         "micloud.forceMiCloud",
         "micloud.timeout",
-        "micloud.useCashedSession"
+        "micloud.useCachedSession"
       ]
     },
     {
@@ -559,7 +559,7 @@
                 "devices[].micloud.country",
                 "devices[].micloud.forceMiCloud",
                 "devices[].micloud.timeout",
-                "devices[].micloud.useCashedSession"
+                "devices[].micloud.useCachedSession"
               ]
             },
             {

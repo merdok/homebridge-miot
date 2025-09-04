@@ -18,7 +18,7 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/generate-device-class', this.generateDeviceClass.bind(this));
     this.onRequest('/get-device-metadata', this.getDeviceMetadata.bind(this));
     this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
-    this.onRequest('/get-cashed-micloud-session', this.getCashedMiCloudSession.bind(this));
+    this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -194,9 +194,9 @@ class UiServer extends HomebridgePluginUiServer {
     }
 
     try {
-      const cashedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+      const cachedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
       const fileContent = JSON.stringify(serviceToken);
-      await fs.writeFile(cashedMiCloudSessionFile, fileContent, 'utf8');
+      await fs.writeFile(cachedMiCloudSessionFile, fileContent, 'utf8');
     } catch (err) {
       return {
         success: false,
@@ -210,22 +210,22 @@ class UiServer extends HomebridgePluginUiServer {
 
   }
 
-  async getCashedMiCloudSession(params) {
-    const cashedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+  async getCachedMiCloudSession(params) {
+    const cachedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
 
     try {
-      const cashedSession = await fs.readFile(cashedMiCloudSessionFile, 'utf8');
-      if (cashedSession) {
-        let cashedSessionParsed = JSON.parse(cashedSession);
+      const cachedSession = await fs.readFile(cachedMiCloudSessionFile, 'utf8');
+      if (cachedSession) {
+        let cachedSessionParsed = JSON.parse(cachedSession);
         return {
           success: true,
-          cashedSession: cashedSessionParsed
+          cachedSession: cachedSessionParsed
         }
       }
     } catch (err) {
       return {
         success: false,
-        error: `Failed to get cashed MiCloud session: ` + err.message
+        error: `Failed to get cached MiCloud session: ` + err.message
       }
     }
 

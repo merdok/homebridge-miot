@@ -83,7 +83,7 @@
 
     <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="miCloudSession">
       <div class="card-body">
-        <label id="cashedMiCloudSessionStatusLbl" class="text-info fw-bold fs-5"></label>
+        <label id="cachedMiCloudSessionStatusLbl" class="text-info fw-bold fs-5"></label>
         <form>
           <div class="form-row">
             <div class="col">
@@ -108,7 +108,7 @@
           </div>
           <div class="text-center micloud-session miot-message" style="display: none">
             <div class="alert alert-success" role="alert">
-              MiCloud session successfully saved! Please restart homebridge and add 'useCashedSession' to your micloud config!
+              MiCloud session successfully saved! Please restart homebridge and add 'useCachedSession' to your micloud config!
             </div>
           </div>
         </form>
@@ -270,16 +270,16 @@
       })
     }
 
-    // check wheter we have a cashed micloud session
-    await updateCashedMiCloudSessionInfo();
+    // check wheter we have a cached micloud session
+    await updateCachedMiCloudSessionInfo();
 
-    // helper to update the current micloud session cashe info
-    async function updateCashedMiCloudSessionInfo() {
-      const cashedSessionResult = await homebridge.request('/get-cashed-micloud-session', {});
-      if (cashedSessionResult.success && cashedSessionResult.cashedSession) {
-        $('#cashedMiCloudSessionStatusLbl').html("Cashed MiCloud session found! Login time : " + cashedSessionResult.cashedSession.loggedInAt);
+    // helper to update the current micloud session cache info
+    async function updateCachedMiCloudSessionInfo() {
+      const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
+      if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
+        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
       } else {
-        $('#cashedMiCloudSessionStatusLbl').html("No cashed MiCloud session found!");
+        $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
     }
 
@@ -503,8 +503,8 @@
           twoFaTicket
         }).then(async data => {
           if (data.success) {
-            await updateCashedMiCloudSessionInfo();
-            homebridge.toast.success('Successfully cashed the MiCloud session! You may now use it for device control.');
+            await updateCachedMiCloudSessionInfo();
+            homebridge.toast.success('Successfully cached the MiCloud session! You may now use it for device control.');
             $('.micloud-session.miot-message').show();
           } else if (!data.success && data.url) {
             homebridge.toast.error(data.error, 'Login Error');
