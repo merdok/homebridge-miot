@@ -184,8 +184,8 @@ class UiServer extends HomebridgePluginUiServer {
     const serviceToken = miCloud.getServiceToken();
 
     // check if the output directory exists, if not then create it recursively
+    const storagePath = this.homebridgeStoragePath + '/.miot_micloud/';
     try {
-      const storagePath = this.homebridgeStoragePath + '/.miot_micloud/';
       await fs.access(storagePath)
     } catch (err) {
       await fs.mkdir(storagePath, {

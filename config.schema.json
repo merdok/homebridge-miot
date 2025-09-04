@@ -45,6 +45,12 @@
             "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
             "type": "number",
             "required": false
+          },
+          "useCashedSession": {
+            "title": "Use cashed MiCloud session",
+            "description": "Use the cashed session to connect to MiCloud. Use the Ui to create/update the session.",
+            "type": "boolean",
+            "required": false
           }
         },
         "required": false,
@@ -170,6 +176,12 @@
                   "title": "Request timeout",
                   "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
                   "type": "number",
+                  "required": false
+                },
+                "useCashedSession": {
+                  "title": "Use cashed MiCloud session",
+                  "description": "Use the cashed session to connect to MiCloud. Use the Ui to create/update the session.",
+                  "type": "boolean",
                   "required": false
                 }
               },
@@ -502,7 +514,8 @@
         "micloud.password",
         "micloud.country",
         "micloud.forceMiCloud",
-        "micloud.timeout"
+        "micloud.timeout",
+        "micloud.useCashedSession"
       ]
     },
     {
@@ -545,7 +558,8 @@
                 "devices[].micloud.password",
                 "devices[].micloud.country",
                 "devices[].micloud.forceMiCloud",
-                "devices[].micloud.timeout"
+                "devices[].micloud.timeout",
+                "devices[].micloud.useCashedSession"
               ]
             },
             {
