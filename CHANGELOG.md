@@ -6,9 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.2] - 2025-09-04
+### Added
+- `useCachedSession` can now be set from the ui
+
+### Fixed
+- Fixed error handling during MiCloud session caching
+- Renamed `useCashedSession` to `useCachedSession` for proper spelling
+- Fixed spelling errors
+
+
 ## [1.8.1] - 2025-09-04
 ### Added
-- Added experimental support for cashing a MiCloud session. That will allow to control devices even when 2FA is enabled. Use the homebrige ui to create a session by clicking on "Cache MiCloud session". Set the `useCashedSession` to true in the micloud configuration.
+- Added experimental support for caching a MiCloud session. That will allow to control devices even when 2FA is enabled. Use the homebrige ui to create a session by clicking on "Cache MiCloud session". Set the `useCachedSession` to true in the micloud configuration.
 
 
 ## [1.8.0] - 2025-09-04
