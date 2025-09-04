@@ -277,7 +277,7 @@
     async function updateCashedMiCloudSessionInfo() {
       const cashedSessionResult = await homebridge.request('/get-cashed-micloud-session', {});
       if (cashedSessionResult.success && cashedSessionResult.cashedSession) {
-        $('#cashedMiCloudSessionStatusLbl').html("Cashed MiCloud session found! Exported at : " + cashedSessionResult.cashedSession.exportedAt);
+        $('#cashedMiCloudSessionStatusLbl').html("Cashed MiCloud session found! Login time : " + cashedSessionResult.cashedSession.loggedInAt);
       } else {
         $('#cashedMiCloudSessionStatusLbl').html("No cashed MiCloud session found!");
       }

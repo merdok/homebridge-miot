@@ -246,7 +246,7 @@ class miotDeviceController {
       const cashedSession = await fs.readFile(this.cashedMiCloudSessionFile, 'utf8');
       if (cashedSession) {
         this.miCloudConfig.cashedSession = JSON.parse(cashedSession);
-        this.logger.debug(`Found cached MiCloud session from: ${this.miCloudConfig.cashedSession.exportedAt}`);
+        this.logger.debug(`Found cached MiCloud session from: ${this.miCloudConfig.cashedSession.loggedInAt}`);
       }
     } catch (err) {
       this.logger.debug('No cached MiCloud session found!');
