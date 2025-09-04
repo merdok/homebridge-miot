@@ -10,6 +10,9 @@
         <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-primary" data-target="#collapseOne" data-toggle="collapse">
           Discover all devices via MiCloud
         </button>
+        <button aria-controls="miCloudSession" aria-expanded="true" class="btn btn-primary" data-target="#miCloudSession" data-toggle="collapse">
+          Cache MiCloud session
+        </button>
         <button aria-controls="deviceClassGeneratorSection" aria-expanded="true" class="btn btn-secondary" data-target="#deviceClassGeneratorSection" data-toggle="collapse">
           Generate device class
         </button>
@@ -28,7 +31,7 @@
             <div class="col">
               <label for="userNameInput">Username</label>
               <input class="form-control" id="usernameInput" required type="text">
-              <small id="userNameHelp" class="form-text text-muted">UserId/Email/Phone</small>
+              <small id="userNameHelp" class="form-text text-white-50">UserId/Email/Phone</small>
             </div>
             <div class="col">
               <label for="passwordInput">Password</label>
@@ -43,7 +46,7 @@
             <input type="checkbox" class="form-check-input" id="showAllDevicesCheckbox">
             <label class="form-check-label" for="showAllDevicesCheckbox">Show all devices?</label>
           </div>
-          <div class="text-center">
+          <div class="text-center mt-sm-3">
             <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
           </div>
           <div class="text-center mt-sm-3 two-factor-section miot-message" style="display: none">
@@ -76,6 +79,41 @@
       </div>
     </div>
 
+    <!-- MICLOUD SESSION -->
+
+    <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="miCloudSession">
+      <div class="card-body">
+        <label id="cashedMiCloudSessionStatusLbl" class="text-info fw-bold fs-5"></label>
+        <form>
+          <div class="form-row">
+            <div class="col">
+              <label for="userNameMiCloudSessionInput">Username</label>
+              <input class="form-control" id="usernameMiCloudSessionInput" required type="text">
+              <small id="userNameHelpMiCloudSession" class="form-text text-white-50">UserId/Email/Phone</small>
+            </div>
+            <div class="col">
+              <label for="passwordMiCloudSessionInput">Password</label>
+              <input class="form-control" id="passwordMiCloudSessionInput" required type="password">
+            </div>
+          </div>
+          <div class="text-center mt-sm-3">
+            <button class="btn btn-primary btn-login" id="loginToMiCloud" type="button">Login to MiCloud</button>
+          </div>
+          <div class="text-center mt-sm-3 two-factor-section-micloud-session miot-message" style="display: none">
+            <a id="twoFactorAuthMiCloudSessionLink" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required! Click here, paste the received code in the input below and retry!</a>
+            <div class="col">
+              <label for="ticketInput2">2FA Code</label>
+              <input class="form-control" id="ticketMiCloudSessionInput" type="text">
+            </div>
+          </div>
+          <div class="text-center micloud-session miot-message" style="display: none">
+            <div class="alert alert-success" role="alert">
+              MiCloud session successfully saved! Please restart homebridge and add 'useCashedSession' to your micloud config!
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- DEVICE CLASS GENERATOR -->
 
@@ -230,6 +268,19 @@
       configForm.onChange(async (changes) => {
         await homebridge.updatePluginConfig([changes]);
       })
+    }
+
+    // check wheter we have a cashed micloud session
+    await updateCashedMiCloudSessionInfo();
+
+    // helper to update the current micloud session cashe info
+    async function updateCashedMiCloudSessionInfo() {
+      const cashedSessionResult = await homebridge.request('/get-cashed-micloud-session', {});
+      if (cashedSessionResult.success && cashedSessionResult.cashedSession) {
+        $('#cashedMiCloudSessionStatusLbl').html("Cashed MiCloud session found! Exported at : " + cashedSessionResult.cashedSession.exportedAt);
+      } else {
+        $('#cashedMiCloudSessionStatusLbl').html("No cashed MiCloud session found!");
+      }
     }
 
     // cloud devices helper
@@ -419,6 +470,55 @@
           passwordInput.prop('disabled', false);
           autoAddToHomebridgeCheckbox.prop('disabled', false);
           showAllDevicesCheckbox.prop('disabled', false);
+        })
+      } else {
+        homebridge.toast.error('A username and password must be provided.', 'Error');
+      }
+    });
+
+    // login to MiCloud
+    $('#loginToMiCloud').on('click', function(e) {
+      e.preventDefault();
+      var btn = $(this),
+        usernameInput = $('#usernameMiCloudSessionInput'),
+        passwordInput = $('#passwordMiCloudSessionInput'),
+        twoFactorAuthLink = $('#twoFactorAuthMiCloudSessionLink'),
+        ticketInput = $('#ticketMiCloudSessionInput');
+
+      let username = usernameInput.val();
+      let password = passwordInput.val();
+      let verifyUrl = twoFactorAuthLink.attr('href');
+      let twoFaTicket = ticketInput.val();
+
+      if (username && password) {
+        $('.miot-message').hide();
+        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        usernameInput.prop('disabled', true);
+        passwordInput.prop('disabled', true);
+
+        homebridge.request('/login-to-micloud', {
+          username,
+          password,
+          verifyUrl,
+          twoFaTicket
+        }).then(async data => {
+          if (data.success) {
+            await updateCashedMiCloudSessionInfo();
+            homebridge.toast.success('Successfully cashed the MiCloud session! You may now use it for device control.');
+            $('.micloud-session.miot-message').show();
+          } else if (!data.success && data.url) {
+            homebridge.toast.error(data.error, 'Login Error');
+            twoFactorAuthLink.attr('href', data.url);
+            $('.two-factor-section-micloud-session').show();
+          } else if ((typeof data.success === 'undefined' || data.success === false) && data.error) {
+            homebridge.toast.error(data.error, 'Login Error');
+          } else {
+            homebridge.toast.error('Could not login due to an unknown error.', 'Unknown Error');
+          }
+
+          btn.prop('disabled', false).html("Login to MiCloud");
+          usernameInput.prop('disabled', false);
+          passwordInput.prop('disabled', false);
         })
       } else {
         homebridge.toast.error('A username and password must be provided.', 'Error');

@@ -83,11 +83,14 @@ class miotDeviceController {
       this.prefsDir = this.prefsDir + '/';
     }
 
-    //spec dir to store device specs
+    // spec dir to store device specs
     this.specDir = this.prefsDir + 'spec/';
 
     // create device model info file name
     this.deviceInfoFile = this.prefsDir + 'info_' + this.ip.split('.').join('') + '_' + this.token;
+
+    // create cashed micloud session file name
+    this.cashedMiCloudSessionFile = api.user.storagePath() + Constants.MICLOUD_SESSION_CACHE_LOCATION;
 
     // generate uuid
     if (this.deviceId) {
@@ -101,7 +104,7 @@ class miotDeviceController {
     this.device = undefined;
     this.cachedDeviceInfo = {};
 
-    //restored cashed accessory
+    // restored cashed accessory
     this.restoredCachedAccessory = null;
   }
 
@@ -117,6 +120,9 @@ class miotDeviceController {
 
     // first try to load cached device info
     await this._loadDeviceInfo();
+
+    // afterwards try to load a cashed micloud session
+    await this._loadCashedMiCloudSession();
 
     //init the device and start the device discovery
     this._initMiotDevice();
@@ -232,6 +238,18 @@ class miotDeviceController {
       }
     } catch (err) {
       this.logger.debug('No cached device info found!');
+    }
+  }
+
+  async _loadCashedMiCloudSession() {
+    try {
+      const cashedSession = await fs.readFile(this.cashedMiCloudSessionFile, 'utf8');
+      if (cashedSession) {
+        this.miCloudConfig.cashedSession = JSON.parse(cashedSession);
+        this.logger.debug(`Found cached MiCloud session from: ${this.miCloudConfig.cashedSession.exportedAt}`);
+      }
+    } catch (err) {
+      this.logger.debug('No cached MiCloud session found!');
     }
   }
 

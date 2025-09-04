@@ -3,9 +3,11 @@ const {
 } = require('@homebridge/plugin-ui-utils');
 const MiCloud = require('../lib/protocol/MiCloud');
 const Errors = require("../lib/utils/Errors.js");
+const Constants = require('../lib/constants/Constants.js');
 const MiotSpecClassGenerator = require('../lib/tools/MiotSpecClassGenerator');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher');
 const Logger = require("../lib/utils/Logger");
+const fs = require('fs').promises;
 
 class UiServer extends HomebridgePluginUiServer {
   constructor() {
@@ -15,6 +17,8 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/get-all-devices', this.getAllDevices.bind(this));
     this.onRequest('/generate-device-class', this.generateDeviceClass.bind(this));
     this.onRequest('/get-device-metadata', this.getDeviceMetadata.bind(this));
+    this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
+    this.onRequest('/get-cashed-micloud-session', this.getCashedMiCloudSession.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -32,7 +36,7 @@ class UiServer extends HomebridgePluginUiServer {
     const isShowAll = !!params.isShowAll;
 
     // try to login
-    if(verifyUrl && twoFaTicket){
+    if (verifyUrl && twoFaTicket) {
       try {
         await miCloud.loginTwoFa(verifyUrl, twoFaTicket);
       } catch (err) {
@@ -41,7 +45,7 @@ class UiServer extends HomebridgePluginUiServer {
           error: `2FA login failed with error: ` + err.message
         };
       }
-    }else{
+    } else {
       try {
         await miCloud.login(username, password);
       } catch (err) {
@@ -138,6 +142,93 @@ class UiServer extends HomebridgePluginUiServer {
         error: err.message
       }
     }
+  }
+
+  async loginToMiCloud(params) {
+    const miCloud = new MiCloud(new Logger());
+    miCloud.setRequestTimeout(10000); // timeout 10 seconds
+
+    const username = params.username;
+    const password = params.password;
+    const verifyUrl = params.verifyUrl;
+    const twoFaTicket = params.twoFaTicket;
+
+    if (verifyUrl && twoFaTicket) {
+      try {
+        await miCloud.loginTwoFa(verifyUrl, twoFaTicket);
+      } catch (err) {
+        return {
+          success: false,
+          error: `2FA login failed with error: ` + err.message
+        };
+      }
+    } else {
+      try {
+        await miCloud.login(username, password);
+      } catch (err) {
+        if (err instanceof Errors.TwoFactorRequired) {
+          return {
+            success: false,
+            error: 'Two factor authentication required, please visit the specified url and retry login.',
+            url: err.notificationUrl
+          }
+        }
+
+        return {
+          success: false,
+          error: err.message + `! The specified MiCloud login credentials might be incorrect or the account does not exist...`
+        };
+      }
+    }
+
+    const serviceToken = miCloud.getServiceToken();
+
+    // check if the output directory exists, if not then create it recursively
+    try {
+      const storagePath = this.homebridgeStoragePath + '/.miot_micloud/';
+      await fs.access(storagePath)
+    } catch (err) {
+      await fs.mkdir(storagePath, {
+        recursive: true
+      });
+    }
+
+    try {
+      const cashedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+      const fileContent = JSON.stringify(serviceToken);
+      await fs.writeFile(cashedMiCloudSessionFile, fileContent, 'utf8');
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to save Micloud session! Error: ` + err.message
+      };
+    }
+
+    return {
+      success: true
+    }
+
+  }
+
+  async getCashedMiCloudSession(params) {
+    const cashedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+
+    try {
+      const cashedSession = await fs.readFile(cashedMiCloudSessionFile, 'utf8');
+      if (cashedSession) {
+        let cashedSessionParsed = JSON.parse(cashedSession);
+        return {
+          success: true,
+          cashedSession: cashedSessionParsed
+        }
+      }
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to get cashed MiCloud session: ` + err.message
+      }
+    }
+
   }
 
 }
