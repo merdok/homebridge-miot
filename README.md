@@ -316,8 +316,8 @@ Example:
           "name": "Zigbee Outlet",
           "ip": "<GATEWAY_IP>",
           "token": "<GATEWAY_TOKEN>",
-          "model": "lumi.plug.mmeu01",
-          "deviceId": "<OUTLET_DID>",
+          "model": "<DEVICE_MODEL>",
+          "deviceId": "<DEVICE_DID>"
         }
       ]
     }
