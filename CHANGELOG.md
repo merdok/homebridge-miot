@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.4] - 2025-11-16
+### Added
+- Add Diffuser module
+- Added support for xiaomi.diffuser.xw2iv (Xiaomi Smart Scent Diffuser) diffuser
+
+### Changed
+- Ambient light control will now automatically appear when device supports it
+
+### Fixed
+- Fix a minor bug in event registration
+- Fix a bug where the lightbulb created for a value range property unexpectedly goes to 100% when it should stay at 1%
+
+
 ## [1.8.3] - 2025-11-16
 ### Fixed
 - Fixed 2FA authentication
