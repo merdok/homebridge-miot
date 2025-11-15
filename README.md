@@ -55,6 +55,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 * Submersion Sensor
 * Plant Monitor
 * Motion Sensor
+* Diffuser
 
 More device types will be added!
 

@@ -312,3 +312,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 ### Video Doorbell
 
 -   madv.cateye.mowl3g (Xiaomi Smart Doorbell 3)
+
+### Diffuser
+
+-   xiaomi.diffuser.xw2iv (Xiaomi Smart Scent Diffuser) 🔴[BLE Mesh]
