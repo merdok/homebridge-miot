@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.5] - 2025-12-28
+### Added
+- Added node.js v24 support
+- Added support for the yeelink.light.fancl8 (Yeelight Fan Light L4) ceiling fan
+
+### Fixed
+- Fixed 2FA authentication #728 Thanks @TJT-JTJ
+- Fix ColorTemperature handling #727 Thanks @350d
+
+
 ## [1.8.4] - 2025-11-16
 ### Added
 - Add Diffuser module
@@ -72,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.7.5] - 2024-11-21
 ### Added
-Added support for node.js v22
+- Added support for node.js v22
 
 ### Fixed
 - Fixed an issue where switch accessories could be created with non-unique names
@@ -80,7 +90,7 @@ Added support for node.js v22
 
 ## [1.7.4] - 2024-09-06
 ### Added
-Added support for Homebridge 2.x
+- Added support for Homebridge 2.x
 
 
 ## [1.7.3] - 2024-08-01
