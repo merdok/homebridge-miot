@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.8] - 2026-03-27
+### Added
+- Added support for ijai.vacuum.v18 (Xiaomi Mi Vacuum Robot S20) 
+
+
 ## [1.8.7] - 2026-03-01
 ### Added
 - Added support for yunmi.kettle.v19 (Xiaomi Mi Smart Kettle Pro 2) kettle Thanks @zloirog
