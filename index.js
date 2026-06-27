@@ -114,6 +114,7 @@ class miotDeviceController {
     this.restoredCachedAccessory = null;
     this.restoredCachedMatterAccessory = null;
     this.matterModeWarningShown = false;
+    this.miCloudDisabledForRobotCleaner = false;
   }
 
 
@@ -144,6 +145,9 @@ class miotDeviceController {
     this.miotDevice = new MiotDevice(this.ip, this.token, deviceId, model, this.name, this.logger);
     this.miotDevice.setPollingInterval(this.pollingInterval);
     this.miotDevice.setMiCloudConfig(this.miCloudConfig);
+    if (this._looksLikeRobotCleanerModel(model)) {
+      this._disableMiCloudForRobotCleaner();
+    }
 
     this.miotDevice.on(Events.MIOT_DEVICE_IDENTIFIED, async (miotDevice) => {
       // init the actual device
@@ -178,6 +182,7 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
+        this._disableMiCloudForRobotCleaner();
         await this.prepareAccessoryAndStartPolling();
       } else {
         this.logger.warn(`Something went wrong during device creation! Initialization failed, cannot create device!`);
@@ -371,6 +376,19 @@ class miotDeviceController {
 
   _getMatterRoomCacheFile() {
     return this.prefsDir + 'matter_rooms_' + this.ip.split('.').join('') + '_' + this.token + '.json';
+  }
+
+  _disableMiCloudForRobotCleaner() {
+    const isRobotCleaner = (this.device && this.device.getType() === DevTypes.ROBOT_CLEANER) || this._looksLikeRobotCleanerModel(this.model || this.cachedDeviceInfo.model);
+    if (isRobotCleaner && !this.miCloudDisabledForRobotCleaner) {
+      this.miotDevice.disableMiCloud();
+      this.miCloudDisabledForRobotCleaner = true;
+      this.logger.warn('MiCloud disabled for robot cleaner to avoid MiCloud rate limits. Robot cleaner polling and Matter commands will use local MIOT only.');
+    }
+  }
+
+  _looksLikeRobotCleanerModel(model) {
+    return typeof model === 'string' && model.includes('.vacuum.');
   }
 
   async _createDirIfNeeded(dir) {

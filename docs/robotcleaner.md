@@ -6,7 +6,7 @@
   - `hap` - Always uses the existing HomeKit switch.
   - `matter` - Uses Matter when available; falls back to the HomeKit switch if Homebridge Matter is unavailable or disabled.
   - `both` - Exposes both the HomeKit switch and the Matter robot when Matter is available.
-- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. When enabled, the plugin tries local commands first and MiCloud-backed MIOT paths when the configured device connection uses MiCloud.
+- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. When enabled, the plugin tries local MIOT commands only; Matter room discovery does not use MiCloud.
 - `matterRoomDiscoveryInterval` - How often to refresh room discovery, in hours. Default: `6`.
 - `matterRooms` - Optional room definitions or name overrides for Matter room cleaning. Each entry can contain `id`, `name`, `mapId`, and `areaType`.
 
@@ -28,9 +28,11 @@ Example:
 ]
 ```
 
+Robot cleaners are forced to local MIOT control in this plugin to avoid MiCloud rate limits. Per-device `forceMiCloud`, cached MiCloud sessions, and model-level MiCloud requirements are ignored after the robot model is identified.
+
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
 
-Matter room discovery is best-effort because Xiaomi/Roborock/Dreame/Viomi/IJAI expose rooms differently. If discovery cannot find names, the plugin uses stable labels such as `Room 80001026443`. Use `matterRooms` to rename discovered rooms or to supply room IDs manually.
+Matter room discovery is best-effort because Xiaomi/Roborock/Dreame/Viomi/IJAI expose rooms differently. It is intentionally local-only to avoid MiCloud rate limits. If discovery cannot find names, the plugin uses stable labels such as `Room 80001026443`. Use `matterRooms` to rename discovered rooms or to supply room IDs manually.
 
 ### Room cleaning
 
@@ -266,7 +268,7 @@ After that you should get 3 additional switches which will allow you to set the 
 #### ijai (Mi Robot Vacuum-Mop 2 Pro)
 #### Example room cleaning config and parameters description
 
-For **ijai** based devices the `actionButtons` entry would look as follows (MiCloud connection details should be configured):
+For **ijai** based devices the `actionButtons` entry would look as follows:
 
 ```js
 "actionButtons": [

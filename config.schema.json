@@ -155,7 +155,7 @@
             },
             "matterRoomDiscovery": {
               "title": "Matter room discovery",
-              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster when possible.",
+              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster using local MIOT commands only.",
               "type": "string",
               "enum": [
                 "auto",
