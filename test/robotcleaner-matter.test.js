@@ -12,6 +12,33 @@ const {
   normalizeMatterRooms,
   parseRoomsFromUnknownPayload
 } = require('../lib/modules/robotcleaner/RobotCleanerMatterUtils.js');
+const MiotDevice = require('../lib/protocol/MiotDevice.js');
+const IjaiVacuumV1 = require('../lib/modules/robotcleaner/devices/ijai.vacuum.v1.js');
+const RobotCleanerMatterAccessory = require('../lib/modules/robotcleaner/RobotCleanerMatterAccessory.js');
+
+const silentLogger = {
+  info() {},
+  warn() {},
+  error() {},
+  debug() {},
+  deepDebug() {}
+};
+
+function createIjaiVacuumV1() {
+  const miotDevice = new MiotDevice(
+    '127.0.0.1',
+    '00000000000000000000000000000000',
+    'test-did',
+    'ijai.vacuum.v1',
+    'Mi Robot Vacuum-Mop Pro',
+    silentLogger
+  );
+  const robot = new IjaiVacuumV1(miotDevice, 'Mi Robot Vacuum-Mop Pro', silentLogger);
+  robot.initDeviceServices();
+  robot.initDeviceProperties();
+  robot.initDeviceActions();
+  return robot;
+}
 
 test('battery values are clamped and converted for Matter PowerSource', () => {
   assert.equal(batteryPercentToMatter(50), 100);
@@ -94,4 +121,84 @@ test('room discovery parser handles nested vendor payloads', () => {
     { id: '80001026443', name: 'Kitchen', mapId: undefined, areaId: undefined, areaType: undefined },
     { id: '80001026444', name: 'Bedroom', mapId: undefined, areaId: undefined, areaType: undefined }
   ]);
+});
+
+test('ijai v1 reports charging before stale fault values for Matter', () => {
+  const robot = createIjaiVacuumV1();
+  robot.statusProp().updateInternalValue(4);
+  robot.faultProp().updateInternalValue(2103);
+
+  assert.equal(robot.getDeviceName(), 'Mi Robot Vacuum-Mop Pro');
+  assert.equal(robot.getMatterOperationalState(), MATTER_RVC_OPERATIONAL_STATES.CHARGING);
+});
+
+test('ijai v1 go home uses the model-specific go charging action', async () => {
+  const robot = createIjaiVacuumV1();
+  const miotDevice = robot.getMiotDevice();
+  const sentCommands = [];
+
+  miotDevice.localConnected = true;
+  miotDevice.pollProperties = () => {};
+  miotDevice.miioProtocol.send = async (ip, methodName, params) => {
+    sentCommands.push({ ip, methodName, params });
+    return { code: 0 };
+  };
+
+  await robot.sendMatterGoHome();
+
+  assert.deepEqual(sentCommands, [{
+    ip: '127.0.0.1',
+    methodName: 'action',
+    params: {
+      did: 'test-did',
+      siid: 7,
+      aiid: 7,
+      in: [{ piid: 43, value: 1 }]
+    }
+  }]);
+});
+
+test('Matter robot battery ignores the initial unsynced zero', () => {
+  const robot = createIjaiVacuumV1();
+
+  assert.equal(robot.hasKnownMatterBatteryLevel(), false);
+  assert.deepEqual(robot.getMatterBatteryState(), {
+    batPercentRemaining: 200,
+    batChargeLevel: MATTER_BATTERY_CHARGE_LEVELS.OK
+  });
+
+  robot.batteryLevelProp().updateInternalValue(75);
+
+  assert.equal(robot.hasKnownMatterBatteryLevel(), true);
+  assert.deepEqual(robot.getMatterBatteryState(), {
+    batPercentRemaining: 150,
+    batChargeLevel: MATTER_BATTERY_CHARGE_LEVELS.OK
+  });
+});
+
+test('Matter robot power source replaces cached zero battery', () => {
+  const robot = createIjaiVacuumV1();
+  const accessory = new RobotCleanerMatterAccessory(
+    'Mi Robot Vacuum-Mop Pro',
+    robot,
+    'test-uuid',
+    {},
+    null,
+    silentLogger
+  );
+
+  assert.equal(accessory._buildPowerSourceCluster({ batPercentRemaining: 0 }).batPercentRemaining, 200);
+
+  robot.batteryLevelProp().updateInternalValue(75);
+
+  const updatedCluster = accessory._buildPowerSourceCluster({
+    batPercentRemaining: 0,
+    batChargeLevel: MATTER_BATTERY_CHARGE_LEVELS.CRITICAL
+  });
+  assert.equal(updatedCluster.status, 0);
+  assert.equal(updatedCluster.order, 0);
+  assert.equal(updatedCluster.description, 'Battery');
+  assert.equal(updatedCluster.batPercentRemaining, 150);
+  assert.equal(updatedCluster.batChargeLevel, MATTER_BATTERY_CHARGE_LEVELS.OK);
+  assert.equal(updatedCluster.batReplaceability, 1);
 });
