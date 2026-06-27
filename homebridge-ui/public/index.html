@@ -34,6 +34,25 @@
     white-space: normal;
     word-break: break-word;
   }
+
+  .matter-pairing-code {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+
+  .matter-pairing-code img {
+    background: #fff;
+    border-radius: 4px;
+    height: 112px;
+    padding: 0.25rem;
+    width: 112px;
+  }
+
+  .matter-pairing-code code {
+    display: block;
+    white-space: nowrap;
+  }
 </style>
 
 <div id="accordion">
@@ -172,12 +191,13 @@
                 <th scope="col">Model</th>
                 <th scope="col">Matter mode</th>
                 <th scope="col">MiCloud mode</th>
+                <th scope="col">Pairing</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td colspan="5">No robot cleaners found.</td>
+                <td colspan="6">No robot cleaners found.</td>
               </tr>
             </tbody>
           </table>
@@ -406,14 +426,24 @@
     }
 
     async function refreshMatterSetup() {
-      const diagnostics = await homebridge.request('/get-plugin-diagnostics', {
-        limit: 30
-      });
-      renderMatterSetup(diagnostics);
+      const robotDeviceNames = configuration.devices
+        .filter(device => isRobotCleanerConfig(device))
+        .map(device => device.name)
+        .filter(name => !!name);
+      const [diagnostics, pairingCodes] = await Promise.all([
+        homebridge.request('/get-plugin-diagnostics', {
+          limit: 30
+        }),
+        homebridge.request('/get-matter-pairing-codes', {
+          deviceNames: robotDeviceNames
+        })
+      ]);
+      renderMatterSetup(diagnostics, pairingCodes);
     }
 
-    function renderMatterSetup(diagnostics) {
+    function renderMatterSetup(diagnostics, pairingCodeResult) {
       const status = diagnostics && diagnostics.status ? diagnostics.status : {};
+      const pairingCodes = pairingCodeResult && Array.isArray(pairingCodeResult.pairingCodes) ? pairingCodeResult.pairingCodes : [];
       const severityClass = {
         success: 'alert-success',
         warning: 'alert-warning',
@@ -432,9 +462,10 @@
         .filter(item => isRobotCleanerConfig(item.device));
 
       if (robotDevices.length === 0) {
-        tbody.append(`<tr><td colspan="5">No robot cleaners found.</td></tr>`);
+        tbody.append(`<tr><td colspan="6">No robot cleaners found.</td></tr>`);
       } else {
         robotDevices.forEach(({ device, index }) => {
+          const pairingCode = getMatterPairingForDevice(pairingCodes, device);
           const actions = `
             <div class="miot-action-group">
               <button class="btn btn-sm btn-primary matter-config-action" data-device-index="${index}" data-action="matter-local" type="button">Matter local</button>
@@ -448,6 +479,7 @@
               <td>${escapeHtml(device.model || 'Unknown')}</td>
               <td>${escapeHtml(device.matterMode || 'auto')}</td>
               <td>${escapeHtml(getMiCloudModeLabel(device))}</td>
+              <td>${renderMatterPairingCell(pairingCode)}</td>
               <td>${actions}</td>
             </tr>`);
         });
@@ -459,6 +491,31 @@
       } else {
         $('#recentDiagnosticsList').html(entries.map(entry => `<div><code>${escapeHtml(entry)}</code></div>`).join(''));
       }
+    }
+
+    function getMatterPairingForDevice(pairingCodes, device) {
+      const deviceName = String(device.name || '').toLowerCase();
+      return pairingCodes.find(code => String(code.name || '').toLowerCase() === deviceName);
+    }
+
+    function renderMatterPairingCell(pairingCode) {
+      if (!pairingCode) {
+        return '<span class="text-muted">Available after Homebridge registers the Matter accessory.</span>';
+      }
+
+      const qrImage = pairingCode.qrImage ? `<img src="${escapeHtml(pairingCode.qrImage)}" alt="${escapeHtml(pairingCode.name || 'Matter pairing')} QR code">` : '';
+      const manualCode = pairingCode.manualPairingCode ? `<code>${escapeHtml(pairingCode.manualPairingCode)}</code>` : '';
+      const qrCopy = pairingCode.qrCode ? `<button class="btn btn-sm btn-outline-secondary copy-matter-code" data-code="${escapeHtml(pairingCode.qrCode)}" type="button">Copy QR payload</button>` : '';
+      const manualCopy = pairingCode.manualPairingCode ? `<button class="btn btn-sm btn-outline-secondary copy-matter-code" data-code="${escapeHtml(pairingCode.manualPairingCode)}" type="button">Copy manual</button>` : '';
+
+      return `
+        <div class="matter-pairing-code">
+          ${qrImage}
+          <div>
+            ${manualCode}
+            <div class="miot-action-group mt-1">${manualCopy}${qrCopy}</div>
+          </div>
+        </div>`;
     }
 
     async function applyMatterConfigAction(deviceIndex, action) {
@@ -487,9 +544,7 @@
 
       await homebridge.updatePluginConfig([configuration]);
       createForm(configSchema, configuration);
-      renderMatterSetup(await homebridge.request('/get-plugin-diagnostics', {
-        limit: 30
-      }));
+      await refreshMatterSetup();
       homebridge.toast.success('Updated robot cleaner config. Save and restart Homebridge to apply changes.');
     }
 
@@ -635,6 +690,17 @@
         homebridge.toast.error('Failed to update robot cleaner config: ' + err.message, 'Error');
       } finally {
         setButtonLoading(btn, false);
+      }
+    });
+
+    $(document).on('click', '.copy-matter-code', async function(e) {
+      e.preventDefault();
+      const code = $(this).data('code');
+      try {
+        await navigator.clipboard.writeText(code);
+        homebridge.toast.success('Matter pairing code copied.');
+      } catch (err) {
+        homebridge.toast.error('Could not copy pairing code: ' + err.message, 'Error');
       }
     });
 

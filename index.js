@@ -179,6 +179,7 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
+        this._applyRobotCleanerMatterConnectionPolicy();
         this._logRobotCleanerMiCloudPolicy();
         await this.prepareAccessoryAndStartPolling();
       } else {
@@ -394,6 +395,25 @@ class miotDeviceController {
     } else {
       this.logger.info('Robot cleaner will use local MIOT. If local connection fails, use the plugin UI Matter setup to switch this robot to MiCloud/HAP.');
     }
+  }
+
+  _applyRobotCleanerMatterConnectionPolicy() {
+    if (!this._shouldForceLocalRobotCleanerMatter()) {
+      return;
+    }
+
+    const wasUsingMiCloud = this.miotDevice.shouldUseMiCloud();
+    this.miotDevice.forceLocalConnection();
+    if (wasUsingMiCloud) {
+      this.logger.info('Robot cleaner Matter mode selected; using local MIOT instead of MiCloud because Matter robot controls require a local connection.');
+    }
+  }
+
+  _shouldForceLocalRobotCleanerMatter() {
+    const matterMode = this._getMatterMode();
+    return this._isRobotCleanerCandidate() &&
+      this._isMatterReady() &&
+      (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH);
   }
 
   _shouldUseMiCloudForRobotCleaner() {

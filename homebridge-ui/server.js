@@ -7,6 +7,7 @@ const Constants = require('../lib/constants/Constants.js');
 const MiotSpecClassGenerator = require('../lib/tools/MiotSpecClassGenerator');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher');
 const Logger = require("../lib/utils/Logger");
+const QRCode = require('qrcode');
 const fs = require('fs').promises;
 
 class UiServer extends HomebridgePluginUiServer {
@@ -20,6 +21,7 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
     this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
     this.onRequest('/get-plugin-diagnostics', this.getPluginDiagnostics.bind(this));
+    this.onRequest('/get-matter-pairing-codes', this.getMatterPairingCodes.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -264,6 +266,165 @@ class UiServer extends HomebridgePluginUiServer {
       };
     }
 
+  }
+
+  async getMatterPairingCodes(params = {}) {
+    try {
+      const deviceNames = Array.isArray(params.deviceNames) ? params.deviceNames.map(name => String(name || '').trim()).filter(Boolean) : [];
+      const [fileCodes, logCodes] = await Promise.all([
+        this._readMatterCommissioningFiles(),
+        this._readMatterPairingCodesFromLog()
+      ]);
+
+      const pairingCodes = await this._mergeMatterPairingCodes(fileCodes, logCodes, deviceNames);
+      return {
+        success: true,
+        pairingCodes
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to read Matter pairing codes: ` + err.message,
+        pairingCodes: []
+      };
+    }
+  }
+
+  async _readMatterCommissioningFiles() {
+    const matterPath = this.homebridgeStoragePath + '/matter';
+    const results = [];
+    let entries = [];
+
+    try {
+      entries = await fs.readdir(matterPath, { withFileTypes: true });
+    } catch (err) {
+      return results;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+      const filePath = matterPath + '/' + entry.name + '/commissioning.json';
+      try {
+        const [fileContent, fileStat] = await Promise.all([
+          fs.readFile(filePath, 'utf8'),
+          fs.stat(filePath)
+        ]);
+        const commissioning = JSON.parse(fileContent);
+        if (commissioning.qrCode || commissioning.manualPairingCode) {
+          results.push({
+            storageId: entry.name,
+            qrCode: commissioning.qrCode,
+            manualPairingCode: commissioning.manualPairingCode,
+            updatedAt: fileStat.mtime.toISOString(),
+            source: 'commissioning-file'
+          });
+        }
+      } catch (err) {
+        // Ignore unreadable or stale Matter storage entries.
+      }
+    }
+
+    return results;
+  }
+
+  async _readMatterPairingCodesFromLog() {
+    const logFile = this.homebridgeStoragePath + '/homebridge.log';
+    const results = [];
+    let currentCode = null;
+
+    try {
+      const logContent = await fs.readFile(logFile, 'utf8');
+      const lines = logContent
+        .split(/\r?\n/)
+        .slice(-5000)
+        .map(line => this._sanitizeDiagnosticLine(line));
+
+      lines.forEach((line) => {
+        const accessoryMatch = line.match(/Commissioning codes for\s+(.+?):\s*$/i);
+        if (accessoryMatch) {
+          currentCode = {
+            name: accessoryMatch[1].trim(),
+            source: 'log'
+          };
+          return;
+        }
+
+        if (!currentCode) {
+          return;
+        }
+
+        const qrMatch = line.match(/QR Code:\s*(MT:[A-Z0-9.+:/-]+)/i);
+        if (qrMatch) {
+          currentCode.qrCode = qrMatch[1];
+        }
+
+        const manualMatch = line.match(/Manual Code:\s*([0-9-]+)/i);
+        if (manualMatch) {
+          currentCode.manualPairingCode = manualMatch[1];
+          if (currentCode.qrCode || currentCode.manualPairingCode) {
+            results.push(currentCode);
+          }
+          currentCode = null;
+        }
+      });
+    } catch (err) {
+      return results;
+    }
+
+    return results;
+  }
+
+  async _mergeMatterPairingCodes(fileCodes = [], logCodes = [], deviceNames = []) {
+    const codesByKey = new Map();
+
+    fileCodes.forEach((code) => {
+      codesByKey.set(this._matterPairingCodeKey(code), code);
+    });
+
+    logCodes.forEach((logCode) => {
+      const key = this._matterPairingCodeKey(logCode);
+      const existing = codesByKey.get(key) || {};
+      codesByKey.set(key, Object.assign({}, existing, logCode));
+    });
+
+    const normalizedDeviceNames = deviceNames.map(name => name.toLowerCase());
+    const mergedCodes = Array.from(codesByKey.values())
+      .filter(code => code.name || !normalizedDeviceNames.length)
+      .filter(code => !normalizedDeviceNames.length || normalizedDeviceNames.includes(String(code.name || '').toLowerCase()));
+
+    const result = [];
+    for (const code of mergedCodes) {
+      result.push(await this._formatMatterPairingCode(code));
+    }
+
+    return result.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  }
+
+  _matterPairingCodeKey(code = {}) {
+    return code.qrCode || code.manualPairingCode || code.storageId || Math.random().toString(36);
+  }
+
+  async _formatMatterPairingCode(code = {}) {
+    const formatted = {
+      name: code.name || null,
+      qrCode: code.qrCode || null,
+      manualPairingCode: code.manualPairingCode || null,
+      updatedAt: code.updatedAt || null
+    };
+
+    if (formatted.qrCode) {
+      const qrSvg = await QRCode.toString(formatted.qrCode, {
+        type: 'svg',
+        errorCorrectionLevel: 'M',
+        margin: 1,
+        width: 180
+      });
+      formatted.qrImage = 'data:image/svg+xml;base64,' + Buffer.from(qrSvg).toString('base64');
+    }
+
+    return formatted;
   }
 
   _isUsefulDiagnosticLine(line) {
