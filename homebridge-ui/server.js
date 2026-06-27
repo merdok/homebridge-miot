@@ -19,6 +19,7 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/get-device-metadata', this.getDeviceMetadata.bind(this));
     this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
     this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
+    this.onRequest('/get-plugin-diagnostics', this.getPluginDiagnostics.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -229,6 +230,87 @@ class UiServer extends HomebridgePluginUiServer {
       }
     }
 
+  }
+
+  async getPluginDiagnostics(params) {
+    const logFile = this.homebridgeStoragePath + '/homebridge.log';
+    const limit = Math.max(1, Math.min(parseInt(params.limit) || 30, 100));
+
+    try {
+      const logContent = await fs.readFile(logFile, 'utf8');
+      const entries = logContent
+        .split(/\r?\n/)
+        .slice(-2000)
+        .map(line => this._sanitizeDiagnosticLine(line))
+        .filter(line => line.includes('[homebridge-miot]') || line.includes('[Homebridge UI] [homebridge-miot]'))
+        .filter(line => this._isUsefulDiagnosticLine(line))
+        .slice(-limit);
+
+      return {
+        success: true,
+        status: this._summarizeDiagnostics(entries),
+        entries
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to read Homebridge log: ` + err.message,
+        status: {
+          severity: 'unknown',
+          title: 'Diagnostics unavailable',
+          message: 'The UI could not read the Homebridge log file.'
+        },
+        entries: []
+      };
+    }
+
+  }
+
+  _isUsefulDiagnosticLine(line) {
+    return /error|warn|failed|timeout|retrying|matter mode|micloud|not connected|cannot execute/i.test(line);
+  }
+
+  _sanitizeDiagnosticLine(line) {
+    return String(line || '')
+      .replace(/\x1B\[[0-9;]*m/g, '')
+      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[email]')
+      .replace(/("?(?:password|serviceToken|ssecurity|token)"?\s*[:=]\s*"?)[^",\s]+/gi, '$1[redacted]')
+      .trim();
+  }
+
+  _summarizeDiagnostics(entries = []) {
+    const lastConnectionError = [...entries].reverse().find(line => /handshake timeout|Call to device timed out|Could not connect to device/i.test(line));
+    if (lastConnectionError) {
+      return {
+        severity: 'error',
+        title: 'Local MIOT connection is timing out',
+        message: 'A device is not responding to local MIOT requests. If this is a robot cleaner on another subnet or blocked by Wi-Fi isolation, switch it to MiCloud/HAP in the Matter setup section or fix local network reachability.'
+      };
+    }
+
+    const matterFallback = [...entries].reverse().find(line => /Matter mode|Matter auto mode|Matter robot controls require local MIOT/i.test(line));
+    if (matterFallback) {
+      return {
+        severity: 'warning',
+        title: 'Matter fell back to HAP',
+        message: 'Matter robot exposure requires local MIOT. The UI can switch the device between local Matter and MiCloud/HAP modes.'
+      };
+    }
+
+    const lastError = [...entries].reverse().find(line => /error|failed|warn/i.test(line));
+    if (lastError) {
+      return {
+        severity: 'warning',
+        title: 'Recent plugin warning',
+        message: lastError
+      };
+    }
+
+    return {
+      severity: 'success',
+      title: 'No recent plugin errors',
+      message: 'No actionable homebridge-miot errors were found in the recent Homebridge log.'
+    };
   }
 
 }
