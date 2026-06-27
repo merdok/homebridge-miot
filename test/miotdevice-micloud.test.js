@@ -60,6 +60,20 @@ test('local property polling rejects non-array device responses without parsing 
 
   await assert.rejects(
     () => device.requestPropertyChunk(['vacuum:status']),
-    /Invalid property response from device/
+    /Local MIOT property polling is not supported/
   );
+});
+
+test('unsupported local MIOT property polling stops polling instead of reconnecting', async () => {
+  const device = new MiotDevice('127.0.0.1', '00000000000000000000000000000000', '123', 'rockrobo.vacuum.v1', 'Robot vacuum', logger);
+  device.localConnected = true;
+  device.addProperty('vacuum:status', 1, 1, '', 'Status', 'uint8', PropAccess.READ);
+  device.getMiotProperties = async () => 'unknown_method';
+
+  const shouldStartPolling = await device._doInitialPropertiesFetch();
+
+  assert.equal(shouldStartPolling, false);
+  assert.equal(device.propertyPollingUnsupported, true);
+  assert.equal(device.updateDevicePropertiesInterval, undefined);
+  assert.equal(device.currentRunningTimeout, undefined);
 });
