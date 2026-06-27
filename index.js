@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const path = require('path');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
@@ -450,7 +451,7 @@ class miotPlatform {
     this.log = log;
     this.api = api;
     this.config = config;
-    this.cachedMatterAccessories = new Map();
+    this.cachedMatterAccessories = [];
 
     if (this.api) {
       /*
@@ -481,7 +482,7 @@ class miotPlatform {
 
   configureMatterAccessory(accessory) {
     this.log.debug(`Found cached Matter accessory ${accessory.displayName}`);
-    this.cachedMatterAccessories.set(accessory.UUID, accessory);
+    this.cachedMatterAccessories.push(accessory);
   }
 
   // ------------ CUSTOM METHODS ------------
@@ -507,6 +508,8 @@ class miotPlatform {
       this.log.info('-------------------------------------------');
     }
 
+    await this.removeStaleExternalMatterAccessories();
+
     // remove all accessories which are still left over
     this.removeAccessories();
     await this.removeMatterAccessories();
@@ -516,14 +519,15 @@ class miotPlatform {
   initDevice(deviceConfig) {
     const newDevCtrl = new miotDeviceController(this.log, deviceConfig, this.config.micloud, this.api);
     const restoredAccessory = this.cachedAccessories.find(accessory => accessory.UUID === newDevCtrl.getAccessoryUuid());
-    const restoredMatterAccessory = this.cachedMatterAccessories.get(newDevCtrl.getMatterAccessoryUuid());
+    const restoredMatterAccessoryIndex = this.cachedMatterAccessories.findIndex(accessory => accessory.UUID === newDevCtrl.getMatterAccessoryUuid());
+    const restoredMatterAccessory = restoredMatterAccessoryIndex > -1 ? this.cachedMatterAccessories[restoredMatterAccessoryIndex] : null;
     if (restoredAccessory) {
       newDevCtrl.setRestoredCachedAccessory(restoredAccessory);
       this.cachedAccessories = this.cachedAccessories.filter(item => item !== restoredAccessory); // remove the cached accessory from the list since the controller will remove it later.
     }
     if (restoredMatterAccessory) {
       newDevCtrl.setRestoredCachedMatterAccessory(restoredMatterAccessory);
-      this.cachedMatterAccessories.delete(newDevCtrl.getMatterAccessoryUuid());
+      this.cachedMatterAccessories.splice(restoredMatterAccessoryIndex, 1);
     }
     newDevCtrl.setupController().catch((err) => {
       this.log.error(`Failed to setup device ${deviceConfig.name}: ${err.message}`);
@@ -547,14 +551,157 @@ class miotPlatform {
   }
 
   async removeMatterAccessories() {
-    if (this.cachedMatterAccessories && this.cachedMatterAccessories.size > 0 && this.api.matter) {
-      const accessories = Array.from(this.cachedMatterAccessories.values());
-      this.log.debug('Removing all cached Matter accessories');
-      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, accessories);
-      this.cachedMatterAccessories.clear();
-    } else {
+    if (!this.cachedMatterAccessories || this.cachedMatterAccessories.length === 0) {
       this.log.debug('No Matter accessories to remove!');
+      return;
     }
+
+    if (!this.api.matter) {
+      this.log.warn(`Cannot remove ${this.cachedMatterAccessories.length} stale Matter accessor${this.cachedMatterAccessories.length === 1 ? 'y' : 'ies'} because Homebridge Matter is unavailable.`);
+      return;
+    }
+
+    const accessories = this.cachedMatterAccessories;
+    const names = accessories.map(accessory => `${accessory.displayName || 'Unnamed Matter accessory'} (${accessory.UUID})`).join(', ');
+    this.log.info(`Removing ${accessories.length} stale Matter accessor${accessories.length === 1 ? 'y' : 'ies'} no longer present in config: ${names}`);
+    try {
+      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, accessories);
+    } finally {
+      this.cachedMatterAccessories = [];
+    }
+  }
+
+  async removeStaleExternalMatterAccessories() {
+    if (!this.api || !this.api.user || !this.api.user.storagePath) {
+      return;
+    }
+
+    const matterPath = path.join(this.api.user.storagePath(), 'matter');
+    const backupPath = path.join(this.api.user.storagePath(), '.miot_matter_stale');
+    const expectedMatterUuids = this._getExpectedMatterAccessoryUuids();
+    let matterEntries = [];
+
+    try {
+      matterEntries = await fs.readdir(matterPath, { withFileTypes: true });
+    } catch (err) {
+      return;
+    }
+
+    for (const entry of matterEntries) {
+      if (!entry.isDirectory() || !/^[A-F0-9]{12}$/i.test(entry.name)) {
+        continue;
+      }
+
+      const matterBridgePath = path.join(matterPath, entry.name);
+      const accessoriesPath = path.join(matterBridgePath, 'accessories.json');
+      let accessories = [];
+
+      try {
+        accessories = JSON.parse(await fs.readFile(accessoriesPath, 'utf8'));
+      } catch (err) {
+        continue;
+      }
+
+      if (!Array.isArray(accessories)) {
+        continue;
+      }
+
+      const staleAccessories = accessories.filter(accessory => {
+        const uuid = accessory.uuid || accessory.UUID;
+        return accessory.plugin === PLUGIN_NAME && uuid && !expectedMatterUuids.has(uuid);
+      });
+
+      if (staleAccessories.length === 0) {
+        continue;
+      }
+
+      await fs.mkdir(backupPath, { recursive: true });
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const backupEntryPath = path.join(backupPath, `${entry.name}-${timestamp}`);
+      const staleNames = staleAccessories.map(accessory => `${accessory.displayName || 'Unnamed Matter accessory'} (${accessory.uuid || accessory.UUID})`).join(', ');
+
+      if (staleAccessories.length === accessories.length) {
+        await fs.rename(matterBridgePath, backupEntryPath);
+        this.log.info(`Moved stale external Matter storage for ${staleNames} to ${backupEntryPath}`);
+        continue;
+      }
+
+      const remainingAccessories = accessories.filter(accessory => !staleAccessories.includes(accessory));
+      await fs.writeFile(path.join(backupPath, `${entry.name}-${timestamp}-accessories.json`), JSON.stringify(accessories, null, 2), 'utf8');
+      await fs.writeFile(accessoriesPath, JSON.stringify(remainingAccessories, null, 2), 'utf8');
+      this.log.info(`Removed stale Matter cache entries no longer present in config: ${staleNames}`);
+    }
+  }
+
+  _getExpectedMatterAccessoryUuids() {
+    const uuids = new Set();
+    if (!this.config.devices || !Array.isArray(this.config.devices)) {
+      return uuids;
+    }
+
+    for (const deviceConfig of this.config.devices) {
+      if (!this._shouldExpectMatterAccessoryForConfig(deviceConfig)) {
+        continue;
+      }
+
+      const uuid = this._getMatterAccessoryUuidForConfig(deviceConfig);
+      if (uuid) {
+        uuids.add(uuid);
+      }
+    }
+
+    return uuids;
+  }
+
+  _shouldExpectMatterAccessoryForConfig(deviceConfig = {}) {
+    if (!this._looksLikeRobotCleanerConfig(deviceConfig)) {
+      return false;
+    }
+
+    const matterMode = this._getMatterModeForConfig(deviceConfig);
+    if (matterMode === MATTER_MODE_HAP) {
+      return false;
+    }
+
+    if (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH) {
+      return true;
+    }
+
+    return !this._isMiCloudForcedForConfig(deviceConfig);
+  }
+
+  _getMatterModeForConfig(deviceConfig = {}) {
+    const mode = deviceConfig.matterMode || MATTER_MODE_AUTO;
+    if ([MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH].includes(mode)) {
+      return mode;
+    }
+    return MATTER_MODE_AUTO;
+  }
+
+  _isMiCloudForcedForConfig(deviceConfig = {}) {
+    if (deviceConfig.micloud && Object.prototype.hasOwnProperty.call(deviceConfig.micloud, 'forceMiCloud')) {
+      return !!deviceConfig.micloud.forceMiCloud;
+    }
+
+    return !!(this.config.micloud && this.config.micloud.forceMiCloud);
+  }
+
+  _looksLikeRobotCleanerConfig(deviceConfig = {}) {
+    const model = String(deviceConfig.model || '').toLowerCase();
+    const name = String(deviceConfig.name || '').toLowerCase();
+    return model.includes('.vacuum.') || name.includes('vacuum') || name.includes('robot cleaner') || name.includes('robot vacuum');
+  }
+
+  _getMatterAccessoryUuidForConfig(deviceConfig = {}) {
+    if (!deviceConfig.ip || !deviceConfig.token) {
+      return null;
+    }
+
+    if (deviceConfig.deviceId) {
+      return Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + deviceConfig.deviceId + PLATFORM_NAME + ':matter');
+    }
+
+    return Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + PLATFORM_NAME + ':matter');
   }
 
 

@@ -52,7 +52,6 @@
   "dependencies": {
     "@homebridge/plugin-ui-utils": "^0.0.19",
     "node-fetch": "^2.6.7",
-    "qrcode": "^1.5.4",
     "randomstring": "^1.2.1",
     "color-convert": "^2.0.1",
     "yargs": "^17.3.1",
