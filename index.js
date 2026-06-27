@@ -380,10 +380,12 @@ class miotDeviceController {
 
   _disableMiCloudForRobotCleaner() {
     const isRobotCleaner = (this.device && this.device.getType() === DevTypes.ROBOT_CLEANER) || this._looksLikeRobotCleanerModel(this.model || this.cachedDeviceInfo.model);
-    if (isRobotCleaner && !this.miCloudDisabledForRobotCleaner) {
+    if (isRobotCleaner) {
       this.miotDevice.disableMiCloud();
-      this.miCloudDisabledForRobotCleaner = true;
-      this.logger.warn('MiCloud disabled for robot cleaner to avoid MiCloud rate limits. Robot cleaner polling and Matter commands will use local MIOT only.');
+      if (!this.miCloudDisabledForRobotCleaner) {
+        this.miCloudDisabledForRobotCleaner = true;
+        this.logger.warn('MiCloud disabled for robot cleaner to avoid MiCloud rate limits. Robot cleaner polling and Matter commands will use local MIOT only.');
+      }
     }
   }
 
