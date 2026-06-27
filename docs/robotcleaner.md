@@ -1,7 +1,36 @@
 ## Robot Cleaner
 
 ### Robot Cleaner specific configuration fields
-- none
+- `matterMode` - Controls Homebridge Matter exposure for robot cleaners. Default: `auto`.
+  - `auto` - Uses Matter when Homebridge 2.x Matter is enabled for the bridge, otherwise falls back to the existing HomeKit switch.
+  - `hap` - Always uses the existing HomeKit switch.
+  - `matter` - Uses Matter when available; falls back to the HomeKit switch if Homebridge Matter is unavailable or disabled.
+  - `both` - Exposes both the HomeKit switch and the Matter robot when Matter is available.
+- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. When enabled, the plugin tries local commands first and MiCloud-backed MIOT paths when the configured device connection uses MiCloud.
+- `matterRoomDiscoveryInterval` - How often to refresh room discovery, in hours. Default: `6`.
+- `matterRooms` - Optional room definitions or name overrides for Matter room cleaning. Each entry can contain `id`, `name`, `mapId`, and `areaType`.
+
+Example:
+
+```js
+"matterMode": "auto",
+"matterRoomDiscovery": "auto",
+"matterRooms": [
+  {
+    "id": "80001026443",
+    "name": "Kitchen"
+  },
+  {
+    "id": "80001057044",
+    "name": "Living Room",
+    "areaType": 7
+  }
+]
+```
+
+Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
+
+Matter room discovery is best-effort because Xiaomi/Roborock/Dreame/Viomi/IJAI expose rooms differently. If discovery cannot find names, the plugin uses stable labels such as `Room 80001026443`. Use `matterRooms` to rename discovered rooms or to supply room IDs manually.
 
 ### Room cleaning
 

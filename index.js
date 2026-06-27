@@ -11,6 +11,10 @@ let Service, Characteristic, Homebridge, Accessory;
 const PLUGIN_NAME = 'homebridge-miot';
 const PLATFORM_NAME = 'miot';
 const PLUGIN_VERSION = '1.8.7';
+const MATTER_MODE_AUTO = 'auto';
+const MATTER_MODE_HAP = 'hap';
+const MATTER_MODE_MATTER = 'matter';
+const MATTER_MODE_BOTH = 'both';
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
@@ -95,8 +99,10 @@ class miotDeviceController {
     // generate uuid
     if (this.deviceId) {
       this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME);
+      this.MatterUUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME + ':matter');
     } else {
       this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
+      this.MatterUUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME + ':matter');
     }
 
     // prepare variables
@@ -106,6 +112,8 @@ class miotDeviceController {
 
     // restored cached accessory
     this.restoredCachedAccessory = null;
+    this.restoredCachedMatterAccessory = null;
+    this.matterModeWarningShown = false;
   }
 
 
@@ -139,7 +147,9 @@ class miotDeviceController {
 
     this.miotDevice.on(Events.MIOT_DEVICE_IDENTIFIED, async (miotDevice) => {
       // init the actual device
-      this._initDevice(miotDevice);
+      this._initDevice(miotDevice).catch((err) => {
+        this.logger.error(`Failed to initialize device ${this.name}: ${err.message}`);
+      });
     });
 
     this.miotDevice.on(Events.MIOT_DEVICE_SPEC_FETCHED, (miotDevice) => {
@@ -168,7 +178,7 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
-        this.prepareAccessoryAndStartPolling();
+        await this.prepareAccessoryAndStartPolling();
       } else {
         this.logger.warn(`Something went wrong during device creation! Initialization failed, cannot create device!`);
       }
@@ -178,27 +188,59 @@ class miotDeviceController {
 
   /*----------========== SETUP SERVICES ==========----------*/
 
-  prepareAccessoryAndStartPolling() {
-    // first unregister a cached accessory if present!
-    if (this.restoredCachedAccessory) {
+  async prepareAccessoryAndStartPolling() {
+    const exposure = this._getAccessoryExposure();
+    let hasRegisteredAccessory = false;
+
+    // first unregister a cached HAP accessory if present and HAP is enabled for this device.
+    if (this.restoredCachedAccessory && exposure.hap) {
       this.logger.debug('Found cached accessory for this device! Unregistering it first!');
       this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
       this.restoredCachedAccessory = null;
     }
 
-    // init the accessory
-    this.device.initDeviceAccessory(this.getAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo);
+    if (this.restoredCachedAccessory && !exposure.hap) {
+      this.logger.info('Removing stale HAP accessory because this robot is configured for Matter.');
+      this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
+      this.restoredCachedAccessory = null;
+    }
 
-    if (this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
+    if (exposure.hap) {
+      this.device.initDeviceAccessory(this.getAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo);
+    }
+
+    if (exposure.hap && this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
       this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.device.getAccessories());
+      hasRegisteredAccessory = true;
+    }
 
-      if (this.deviceEnabled) {
-        this.logger.info('Everything looks good! Initiating property polling!');
-        this.miotDevice.startPropertyPolling();
-      } else {
-        this.logger.warn('Device disabled, property polling will not be initiated! Please enable the device in the config.');
+    if (exposure.matter) {
+      await this.device.initDeviceMatterAccessory(this.getMatterAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo, this.restoredCachedMatterAccessory, {
+        roomCacheFile: this._getMatterRoomCacheFile()
+      });
+      const matterWrapper = this.device.getMatterAccessoryWrapper();
+      const matterAccessory = matterWrapper ? matterWrapper.getMatterAccessory() : null;
+      if (matterAccessory) {
+        if (this.restoredCachedMatterAccessory) {
+          this.logger.info('Reattached cached Matter robot accessory.');
+        } else {
+          this.logger.info('Registering Matter robot accessory!');
+          await this.api.matter.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [matterAccessory]);
+        }
+        hasRegisteredAccessory = true;
       }
+    } else if (this.restoredCachedMatterAccessory && this.api.matter) {
+      this.logger.info('Removing stale Matter accessory because this robot is configured for HAP or Matter is disabled.');
+      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedMatterAccessory]);
+      this.restoredCachedMatterAccessory = null;
+    }
+
+    if (hasRegisteredAccessory && this.deviceEnabled) {
+      this.logger.info('Everything looks good! Initiating property polling!');
+      this.miotDevice.startPropertyPolling();
+    } else if (hasRegisteredAccessory) {
+      this.logger.warn('Device disabled, property polling will not be initiated! Please enable the device in the config.');
     }
   }
 
@@ -208,8 +250,16 @@ class miotDeviceController {
     return this.UUID;
   }
 
+  getMatterAccessoryUuid() {
+    return this.MatterUUID;
+  }
+
   setRestoredCachedAccessory(accessory) {
     this.restoredCachedAccessory = accessory;
+  }
+
+  setRestoredCachedMatterAccessory(accessory) {
+    this.restoredCachedMatterAccessory = accessory;
   }
 
 
@@ -265,6 +315,64 @@ class miotDeviceController {
     }
   }
 
+  _getAccessoryExposure() {
+    if (!this.device || this.device.getType() !== DevTypes.ROBOT_CLEANER) {
+      return { hap: true, matter: false };
+    }
+
+    const matterReady = this._isMatterReady();
+    const matterMode = this._getMatterMode();
+
+    if (matterMode === MATTER_MODE_HAP) {
+      return { hap: true, matter: false };
+    }
+
+    if (matterMode === MATTER_MODE_BOTH) {
+      if (!matterReady) {
+        this._warnMatterFallback('Matter mode "both" requested, but Matter is not enabled for this bridge. Exposing the robot through HAP only.');
+      }
+      return { hap: true, matter: matterReady };
+    }
+
+    if (matterMode === MATTER_MODE_MATTER) {
+      if (!matterReady) {
+        this._warnMatterFallback('Matter mode "matter" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.');
+      }
+      return { hap: !matterReady, matter: matterReady };
+    }
+
+    return { hap: !matterReady, matter: matterReady };
+  }
+
+  _getMatterMode() {
+    const mode = this.config.matterMode || MATTER_MODE_AUTO;
+    if ([MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH].includes(mode)) {
+      return mode;
+    }
+    this.logger.warn(`Unknown matterMode "${mode}". Falling back to "auto".`);
+    return MATTER_MODE_AUTO;
+  }
+
+  _isMatterReady() {
+    return !!(this.api &&
+      this.api.isMatterAvailable &&
+      this.api.isMatterAvailable() &&
+      this.api.isMatterEnabled &&
+      this.api.isMatterEnabled() &&
+      this.api.matter);
+  }
+
+  _warnMatterFallback(message) {
+    if (!this.matterModeWarningShown) {
+      this.logger.warn(message);
+      this.matterModeWarningShown = true;
+    }
+  }
+
+  _getMatterRoomCacheFile() {
+    return this.prefsDir + 'matter_rooms_' + this.ip.split('.').join('') + '_' + this.token + '.json';
+  }
+
   async _createDirIfNeeded(dir) {
     try {
       await fs.access(dir)
@@ -287,6 +395,7 @@ class miotPlatform {
     this.log = log;
     this.api = api;
     this.config = config;
+    this.cachedMatterAccessories = new Map();
 
     if (this.api) {
       /*
@@ -295,8 +404,12 @@ class miotPlatform {
        * after this event was fired, in order to ensure they weren't added to homebridge already.
        * This event can also be used to start discovery of new accessories.
        */
-      this.api.on("didFinishLaunching", () => {
-        this.initDevices();
+      this.api.on("didFinishLaunching", async () => {
+        try {
+          await this.initDevices();
+        } catch (err) {
+          this.log.error(`Failed to initialize devices: ${err.message}`);
+        }
       });
     }
 
@@ -311,9 +424,14 @@ class miotPlatform {
     this.cachedAccessories.push(accessory);
   }
 
+  configureMatterAccessory(accessory) {
+    this.log.debug(`Found cached Matter accessory ${accessory.displayName}`);
+    this.cachedMatterAccessories.set(accessory.UUID, accessory);
+  }
+
   // ------------ CUSTOM METHODS ------------
 
-  initDevices() {
+  async initDevices() {
     this.log.info('Initializing devices');
 
     // read from config.devices
@@ -336,17 +454,25 @@ class miotPlatform {
 
     // remove all accessories which are still left over
     this.removeAccessories();
+    await this.removeMatterAccessories();
 
   }
 
   initDevice(deviceConfig) {
     const newDevCtrl = new miotDeviceController(this.log, deviceConfig, this.config.micloud, this.api);
     const restoredAccessory = this.cachedAccessories.find(accessory => accessory.UUID === newDevCtrl.getAccessoryUuid());
+    const restoredMatterAccessory = this.cachedMatterAccessories.get(newDevCtrl.getMatterAccessoryUuid());
     if (restoredAccessory) {
       newDevCtrl.setRestoredCachedAccessory(restoredAccessory);
       this.cachedAccessories = this.cachedAccessories.filter(item => item !== restoredAccessory); // remove the cached accessory from the list since the controller will remove it later.
     }
-    newDevCtrl.setupController(); // begin the controller setup
+    if (restoredMatterAccessory) {
+      newDevCtrl.setRestoredCachedMatterAccessory(restoredMatterAccessory);
+      this.cachedMatterAccessories.delete(newDevCtrl.getMatterAccessoryUuid());
+    }
+    newDevCtrl.setupController().catch((err) => {
+      this.log.error(`Failed to setup device ${deviceConfig.name}: ${err.message}`);
+    }); // begin the controller setup
   }
 
   removeAccessories() {
@@ -363,6 +489,17 @@ class miotPlatform {
   removeAccessory(accessory) {
     this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
     this.cachedAccessories = this.cachedAccessories.filter(item => item !== accessory);
+  }
+
+  async removeMatterAccessories() {
+    if (this.cachedMatterAccessories && this.cachedMatterAccessories.size > 0 && this.api.matter) {
+      const accessories = Array.from(this.cachedMatterAccessories.values());
+      this.log.debug('Removing all cached Matter accessories');
+      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, accessories);
+      this.cachedMatterAccessories.clear();
+    } else {
+      this.log.debug('No Matter accessories to remove!');
+    }
   }
 
 

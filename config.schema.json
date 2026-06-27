@@ -140,6 +140,77 @@
               "type": "boolean",
               "default": true
             },
+            "matterMode": {
+              "title": "Matter mode",
+              "description": "Robot Cleaner only. Controls whether robot vacuums are exposed through Homebridge Matter when Homebridge 2.x Matter is enabled.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "hap",
+                "matter",
+                "both"
+              ],
+              "default": "auto",
+              "required": false
+            },
+            "matterRoomDiscovery": {
+              "title": "Matter room discovery",
+              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster when possible.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "disabled"
+              ],
+              "default": "auto",
+              "required": false
+            },
+            "matterRooms": {
+              "title": "Matter rooms",
+              "description": "Robot Cleaner only. Optional room overrides or manual room definitions for Matter ServiceArea.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "title": "Room id",
+                    "description": "Vendor room, segment, or area id used by the robot.",
+                    "type": [
+                      "string",
+                      "number"
+                    ],
+                    "required": true
+                  },
+                  "name": {
+                    "title": "Room name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "mapId": {
+                    "title": "Map id",
+                    "type": [
+                      "string",
+                      "number"
+                    ],
+                    "required": false
+                  },
+                  "areaType": {
+                    "title": "Matter area type",
+                    "description": "Optional Matter AreaNamespaceTag numeric value.",
+                    "type": "integer",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "matterRoomDiscoveryInterval": {
+              "title": "Matter room discovery interval",
+              "description": "Robot Cleaner only. How often to refresh room discovery, in hours.",
+              "type": "number",
+              "default": 6,
+              "minimum": 1,
+              "required": false
+            },
             "micloud": {
               "title": "MiCloud connection",
               "type": "object",
@@ -545,6 +616,32 @@
                 "devices[].deepDebugLog",
                 "devices[].silentLog",
                 "devices[].deviceEnabled"
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "Matter Settings",
+              "description": "Configure Homebridge Matter exposure for Robot Cleaner devices.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].matterMode",
+                "devices[].matterRoomDiscovery",
+                "devices[].matterRoomDiscoveryInterval",
+                {
+                  "key": "devices[].matterRooms",
+                  "description": "Optional room overrides for Matter ServiceArea.",
+                  "buttonText": "Add Matter room",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].matterRooms[].id",
+                    "devices[].matterRooms[].name",
+                    "devices[].matterRooms[].mapId",
+                    "devices[].matterRooms[].areaType"
+                  ]
+                }
               ]
             },
             {
