@@ -10,6 +10,8 @@ const {
   selectMatterCleanModeAction,
   stableAreaId,
   normalizeMatterRooms,
+  matterMapsFromRooms,
+  matterAreasFromRooms,
   parseRoomsFromUnknownPayload
 } = require('../lib/modules/robotcleaner/RobotCleanerMatterUtils.js');
 const MiotDevice = require('../lib/protocol/MiotDevice.js');
@@ -105,6 +107,21 @@ test('room IDs are stable and collisions are made unique', () => {
   assert.equal(stableAreaId(42, usedAreaIds), 42);
   assert.equal(stableAreaId(42, usedAreaIds), 43);
   assert.equal(stableAreaId('80001026443', usedAreaIds) >= 1, true);
+});
+
+test('Matter ServiceArea maps use numeric map IDs when rooms have map IDs', () => {
+  const rooms = normalizeMatterRooms([
+    { id: 10, name: 'Kitchen', mapId: '1732835741' },
+    { id: 11, name: 'Bedroom', mapId: '1732835741' }
+  ]);
+
+  assert.deepEqual(matterMapsFromRooms(rooms), [
+    { mapId: 1732835741, name: 'Map 1732835741' }
+  ]);
+  assert.deepEqual(matterAreasFromRooms(rooms).map(area => area.mapId), [
+    1732835741,
+    1732835741
+  ]);
 });
 
 test('room discovery parser handles nested vendor payloads', () => {
@@ -278,6 +295,43 @@ test('Matter robot startup replaces stale cached mode labels', async () => {
   assert.equal(matterAccessory.clusters.rvcRunMode.currentMode, robot.getMatterRunMode());
   assert.equal(matterAccessory.clusters.rvcCleanMode.supportedModes[0].label, 'Vacuum');
   assert.equal(matterAccessory.clusters.rvcCleanMode.currentMode, MATTER_RVC_CLEAN_MODES.VACUUM);
+  assert.deepEqual(matterAccessory.clusters.serviceArea.supportedMaps, []);
+  assert.deepEqual(matterAccessory.clusters.serviceArea.supportedAreas, []);
+});
+
+test('Matter robot startup publishes supported maps for mapped service areas', async () => {
+  const robot = createIjaiVacuumV1();
+  const accessory = new RobotCleanerMatterAccessory(
+    'Mi Robot Vacuum-Mop Pro',
+    robot,
+    'test-uuid',
+    {
+      matterRooms: [
+        { id: 10, name: 'Kitchen', mapId: '1732835741' },
+        { id: 11, name: 'Bedroom', mapId: '1732835741' }
+      ]
+    },
+    {
+      matter: {
+        deviceTypes: {
+          RoboticVacuumCleaner: 'robotic-vacuum-cleaner'
+        },
+        clusterNames: {}
+      }
+    },
+    silentLogger
+  );
+
+  await accessory.init();
+
+  const serviceArea = accessory.getMatterAccessory().clusters.serviceArea;
+  assert.deepEqual(serviceArea.supportedMaps, [
+    { mapId: 1732835741, name: 'Map 1732835741' }
+  ]);
+  assert.deepEqual(serviceArea.supportedAreas.map(area => area.mapId), [
+    1732835741,
+    1732835741
+  ]);
 });
 
 test('ijai v1 room discovery uses current map id for room list', async () => {
