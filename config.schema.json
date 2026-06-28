@@ -48,7 +48,7 @@
           },
           "useCachedSession": {
             "title": "Use cached MiCloud session",
-            "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
+            "description": "Use the cached session to connect to MiCloud. Use the UI to log in and save a session; the plugin refreshes the cached service token when credentials are configured.",
             "type": "boolean",
             "required": false
           }
@@ -150,6 +150,12 @@
                 "matter",
                 "both"
               ],
+              "enumNames": [
+                "Automatic",
+                "HomeKit only",
+                "Matter only",
+                "HomeKit and Matter"
+              ],
               "default": "auto",
               "required": false
             },
@@ -160,6 +166,10 @@
               "enum": [
                 "auto",
                 "disabled"
+              ],
+              "enumNames": [
+                "Automatic",
+                "Disabled"
               ],
               "default": "auto",
               "required": false
@@ -251,7 +261,7 @@
                 },
                 "useCachedSession": {
                   "title": "Use cached MiCloud session",
-                  "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
+                  "description": "Use the cached session to connect to MiCloud. Use the UI to log in and save a session; the plugin refreshes the cached service token when credentials are configured.",
                   "type": "boolean",
                   "required": false
                 }
@@ -601,7 +611,7 @@
         {
           "key": "devices[]",
           "type": "fieldset",
-          "title": "{{ value.title }}",
+          "title": "Device Settings",
           "items": [{
               "type": "fieldset",
               "title": "Advanced Settings",
@@ -621,7 +631,7 @@
             {
               "type": "fieldset",
               "title": "Matter Settings",
-              "description": "Configure Homebridge Matter exposure for Robot Cleaner devices.",
+              "description": "Robot Cleaner only. Matter requires Homebridge Matter and local MIOT. Use the UI to cache a MiCloud session before switching a robot to MiCloud/HAP fallback.",
               "expandable": true,
               "expanded": false,
               "items": [

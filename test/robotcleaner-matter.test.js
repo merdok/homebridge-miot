@@ -202,3 +202,45 @@ test('Matter robot power source replaces cached zero battery', () => {
   assert.equal(updatedCluster.batChargeLevel, MATTER_BATTERY_CHARGE_LEVELS.OK);
   assert.equal(updatedCluster.batReplaceability, 1);
 });
+
+test('Matter robot startup replaces stale cached mode labels', async () => {
+  const robot = createIjaiVacuumV1();
+  const accessory = new RobotCleanerMatterAccessory(
+    'Mi Robot Vacuum-Mop Pro',
+    robot,
+    'test-uuid',
+    {},
+    {
+      matter: {
+        deviceTypes: {
+          RoboticVacuumCleaner: 'robotic-vacuum-cleaner'
+        },
+        clusterNames: {}
+      }
+    },
+    silentLogger,
+    {},
+    {
+      UUID: 'test-uuid',
+      displayName: 'Mi Robot Vacuum-Mop Pro',
+      clusters: {
+        rvcRunMode: {
+          supportedModes: [{ mode: 99 }],
+          currentMode: 99
+        },
+        rvcCleanMode: {
+          supportedModes: [{ mode: 99 }],
+          currentMode: 99
+        }
+      }
+    }
+  );
+
+  await accessory.init();
+
+  const matterAccessory = accessory.getMatterAccessory();
+  assert.equal(matterAccessory.clusters.rvcRunMode.supportedModes[0].label, 'Idle');
+  assert.equal(matterAccessory.clusters.rvcRunMode.currentMode, robot.getMatterRunMode());
+  assert.equal(matterAccessory.clusters.rvcCleanMode.supportedModes[0].label, 'Vacuum');
+  assert.equal(matterAccessory.clusters.rvcCleanMode.currentMode, MATTER_RVC_CLEAN_MODES.VACUUM);
+});

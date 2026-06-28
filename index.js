@@ -16,6 +16,28 @@ const MATTER_MODE_AUTO = 'auto';
 const MATTER_MODE_HAP = 'hap';
 const MATTER_MODE_MATTER = 'matter';
 const MATTER_MODE_BOTH = 'both';
+const MATTER_MODES = [MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH];
+
+function getMatterMode(config = {}, logger = null) {
+  const mode = config.matterMode || MATTER_MODE_AUTO;
+  if (MATTER_MODES.includes(mode)) {
+    return mode;
+  }
+  if (logger && logger.warn) {
+    logger.warn(`Unknown matterMode "${mode}". Falling back to "auto".`);
+  }
+  return MATTER_MODE_AUTO;
+}
+
+function looksLikeRobotCleaner(value = '') {
+  value = String(value).toLowerCase();
+  return value.includes('vacuum') || value.includes('robot cleaner');
+}
+
+function isMiCloudForcedForConfig(deviceConfig = {}, globalMiCloudConfig = {}) {
+  const miCloudConfig = deviceConfig.micloud || {};
+  return Object.hasOwn(miCloudConfig, 'forceMiCloud') ? !!miCloudConfig.forceMiCloud : !!(globalMiCloudConfig && globalMiCloudConfig.forceMiCloud);
+}
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
@@ -96,15 +118,12 @@ class miotDeviceController {
 
     // create cached micloud session file name
     this.cachedMiCloudSessionFile = api.user.storagePath() + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+    this.miCloudConfig.cachedSessionFile = this.cachedMiCloudSessionFile;
 
     // generate uuid
-    if (this.deviceId) {
-      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME);
-      this.MatterUUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME + ':matter');
-    } else {
-      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
-      this.MatterUUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME + ':matter');
-    }
+    const uuidSeed = this.token + this.ip + (this.deviceId || '') + PLATFORM_NAME;
+    this.UUID = Homebridge.hap.uuid.generate(uuidSeed);
+    this.MatterUUID = Homebridge.hap.uuid.generate(uuidSeed + ':matter');
 
     // prepare variables
     this.miotDevice = undefined;
@@ -324,54 +343,50 @@ class miotDeviceController {
       return { hap: true, matter: false };
     }
 
-    const matterReady = this._isMatterReady();
-    const matterEligible = matterReady && !this._shouldUseMiCloudForRobotCleaner();
     const matterMode = this._getMatterMode();
+    const matterReady = this._isMatterReady();
+    const usesMiCloud = this._shouldUseMiCloudForRobotCleaner();
+    const canExposeMatter = matterReady && !usesMiCloud;
 
     if (matterMode === MATTER_MODE_HAP) {
       return { hap: true, matter: false };
     }
 
     if (matterMode === MATTER_MODE_BOTH) {
-      if (!matterReady) {
-        this._warnMatterFallback('Matter mode "both" requested, but Matter is not enabled for this bridge. Exposing the robot through HAP only.');
-      } else if (!matterEligible) {
-        this._warnMatterFallback('Matter mode "both" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so only the HAP accessory will be exposed.');
-      }
-      return { hap: true, matter: matterEligible };
+      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud);
+      return { hap: true, matter: canExposeMatter };
     }
 
-    if (matterMode === MATTER_MODE_MATTER) {
-      if (!matterReady) {
-        this._warnMatterFallback('Matter mode "matter" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.');
-      } else if (!matterEligible) {
-        this._warnMatterFallback('Matter mode "matter" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so falling back to the HAP robot switch.');
-      }
-      return { hap: !matterEligible, matter: matterEligible };
+    if (canExposeMatter) {
+      return { hap: false, matter: true };
     }
 
-    if (matterReady && !matterEligible) {
-      this._warnMatterFallback('Matter auto mode found Homebridge Matter enabled, but this robot is configured to use MiCloud. Exposing the HAP robot switch because Matter robot controls require local MIOT.');
-    }
-    return { hap: !matterEligible, matter: matterEligible };
+    this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud);
+    return { hap: true, matter: false };
   }
 
   _getMatterMode() {
-    const mode = this.config.matterMode || MATTER_MODE_AUTO;
-    if ([MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH].includes(mode)) {
-      return mode;
+    return getMatterMode(this.config, this.logger);
+  }
+
+  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud) {
+    if (matterReady && !usesMiCloud) {
+      return;
     }
-    this.logger.warn(`Unknown matterMode "${mode}". Falling back to "auto".`);
-    return MATTER_MODE_AUTO;
+
+    if (!matterReady && matterMode !== MATTER_MODE_AUTO) {
+      this._warnMatterFallback(`Matter mode "${matterMode}" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.`);
+    } else if (usesMiCloud && matterMode === MATTER_MODE_BOTH) {
+      this._warnMatterFallback('Matter mode "both" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so only the HAP accessory will be exposed.');
+    } else if (usesMiCloud && matterMode === MATTER_MODE_MATTER) {
+      this._warnMatterFallback('Matter mode "matter" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so falling back to the HAP robot switch.');
+    } else if (usesMiCloud && matterMode === MATTER_MODE_AUTO) {
+      this._warnMatterFallback('Matter auto mode found Homebridge Matter enabled, but this robot is configured to use MiCloud. Exposing the HAP robot switch because Matter robot controls require local MIOT.');
+    }
   }
 
   _isMatterReady() {
-    return !!(this.api &&
-      this.api.isMatterAvailable &&
-      this.api.isMatterAvailable() &&
-      this.api.isMatterEnabled &&
-      this.api.isMatterEnabled() &&
-      this.api.matter);
+    return !!(this.api?.isMatterAvailable?.() && this.api?.isMatterEnabled?.() && this.api.matter);
   }
 
   _warnMatterFallback(message) {
@@ -422,11 +437,7 @@ class miotDeviceController {
   }
 
   _isRobotCleanerCandidate() {
-    return (this.device && this.device.getType() === DevTypes.ROBOT_CLEANER) || this._looksLikeRobotCleanerModel(this.model || this.cachedDeviceInfo.model);
-  }
-
-  _looksLikeRobotCleanerModel(model) {
-    return typeof model === 'string' && model.includes('.vacuum.');
+    return (this.device && this.device.getType() === DevTypes.ROBOT_CLEANER) || looksLikeRobotCleaner(this.model || this.cachedDeviceInfo.model);
   }
 
   async _createDirIfNeeded(dir) {
@@ -640,69 +651,17 @@ class miotPlatform {
     }
 
     for (const deviceConfig of this.config.devices) {
-      if (!this._shouldExpectMatterAccessoryForConfig(deviceConfig)) {
+      const matterMode = getMatterMode(deviceConfig);
+      const shouldExpectMatter = looksLikeRobotCleaner(`${deviceConfig.model || ''} ${deviceConfig.name || ''}`) &&
+        (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH || (matterMode !== MATTER_MODE_HAP && !isMiCloudForcedForConfig(deviceConfig, this.config.micloud)));
+      if (!shouldExpectMatter || !deviceConfig.ip || !deviceConfig.token) {
         continue;
       }
 
-      const uuid = this._getMatterAccessoryUuidForConfig(deviceConfig);
-      if (uuid) {
-        uuids.add(uuid);
-      }
+      uuids.add(Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + (deviceConfig.deviceId || '') + PLATFORM_NAME + ':matter'));
     }
 
     return uuids;
   }
-
-  _shouldExpectMatterAccessoryForConfig(deviceConfig = {}) {
-    if (!this._looksLikeRobotCleanerConfig(deviceConfig)) {
-      return false;
-    }
-
-    const matterMode = this._getMatterModeForConfig(deviceConfig);
-    if (matterMode === MATTER_MODE_HAP) {
-      return false;
-    }
-
-    if (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH) {
-      return true;
-    }
-
-    return !this._isMiCloudForcedForConfig(deviceConfig);
-  }
-
-  _getMatterModeForConfig(deviceConfig = {}) {
-    const mode = deviceConfig.matterMode || MATTER_MODE_AUTO;
-    if ([MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH].includes(mode)) {
-      return mode;
-    }
-    return MATTER_MODE_AUTO;
-  }
-
-  _isMiCloudForcedForConfig(deviceConfig = {}) {
-    if (deviceConfig.micloud && Object.prototype.hasOwnProperty.call(deviceConfig.micloud, 'forceMiCloud')) {
-      return !!deviceConfig.micloud.forceMiCloud;
-    }
-
-    return !!(this.config.micloud && this.config.micloud.forceMiCloud);
-  }
-
-  _looksLikeRobotCleanerConfig(deviceConfig = {}) {
-    const model = String(deviceConfig.model || '').toLowerCase();
-    const name = String(deviceConfig.name || '').toLowerCase();
-    return model.includes('.vacuum.') || name.includes('vacuum') || name.includes('robot cleaner') || name.includes('robot vacuum');
-  }
-
-  _getMatterAccessoryUuidForConfig(deviceConfig = {}) {
-    if (!deviceConfig.ip || !deviceConfig.token) {
-      return null;
-    }
-
-    if (deviceConfig.deviceId) {
-      return Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + deviceConfig.deviceId + PLATFORM_NAME + ':matter');
-    }
-
-    return Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + PLATFORM_NAME + ':matter');
-  }
-
 
 }

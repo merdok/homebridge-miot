@@ -32,6 +32,8 @@ Robot cleaners can use local MIOT or MiCloud. Matter robot controls require loca
 
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
 
+To enable Matter from the plugin UI, open **Matter setup & status** and choose **Enable Matter** for the robot. This sets `matterMode` to `matter` and disables forced MiCloud for that device. If local MIOT is unreliable, choose **Use MiCloud/HAP** instead. That mode requires either a cached MiCloud session or configured MiCloud username/password. Use **Cache MiCloud session** to log in once; the plugin stores the MiCloud service token under Homebridge storage and refreshes the cached token on restart when credentials are available and the cached session fails.
+
 Matter room discovery is best-effort because Xiaomi/Roborock/Dreame/Viomi/IJAI expose rooms differently. It is intentionally local-only to avoid MiCloud rate limits. If discovery cannot find names, the plugin uses stable labels such as `Room 80001026443`. Use `matterRooms` to rename discovered rooms or to supply room IDs manually.
 
 ### Room cleaning

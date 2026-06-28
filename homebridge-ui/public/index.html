@@ -156,6 +156,11 @@
 
     <div aria-labelledby="matterSetup" class="collapse" data-parent="#accordion" id="matterSetupSection">
       <div class="card-body">
+        <div class="alert alert-info" role="alert">
+          <strong>Matter setup</strong><br>
+          Robot cleaner Matter support requires Homebridge Matter and a working local MIOT connection. Use MiCloud/HAP when local control is unreliable. For MiCloud/HAP, log in under Cache MiCloud session first or keep MiCloud credentials in config; the plugin stores the MiCloud service token in Homebridge storage and refreshes it when credentials are available.
+        </div>
+
         <div id="matterDiagnosticSummary" class="alert alert-secondary" role="alert">
           Loading plugin diagnostics...
         </div>
@@ -339,6 +344,13 @@
     }
     const configuration = pluginConfig[0];
     configuration.devices = configuration.devices || [];
+    const matterModeLabels = {
+      auto: 'Automatic',
+      hap: 'HomeKit only',
+      matter: 'Matter only',
+      both: 'HomeKit and Matter'
+    };
+    let cachedMiCloudSession = null;
 
     function createForm(configSchema, configuration) {
       const configForm = homebridge.createForm(configSchema, configuration);
@@ -355,8 +367,10 @@
     async function updateCachedMiCloudSessionInfo() {
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
+        cachedMiCloudSession = cachedSessionResult.cachedSession;
         $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
       } else {
+        cachedMiCloudSession = null;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
     }
@@ -437,16 +451,16 @@
         robotDevices.forEach(({ device, index }) => {
           const actions = `
             <div class="miot-action-group">
-              <button class="btn btn-sm btn-primary matter-config-action" data-device-index="${index}" data-action="matter-local" type="button">Matter local</button>
-              <button class="btn btn-sm btn-warning matter-config-action" data-device-index="${index}" data-action="hap-micloud" type="button">MiCloud HAP</button>
-              <button class="btn btn-sm btn-secondary matter-config-action" data-device-index="${index}" data-action="both-local" type="button">Both local</button>
-              <button class="btn btn-sm btn-outline-secondary matter-config-action" data-device-index="${index}" data-action="disable-room-discovery" type="button">No room discovery</button>
+              <button class="btn btn-sm btn-primary matter-config-action" data-device-index="${index}" data-action="matter-local" type="button">Enable Matter</button>
+              <button class="btn btn-sm btn-warning matter-config-action" data-device-index="${index}" data-action="hap-micloud" type="button">Use MiCloud/HAP</button>
+              <button class="btn btn-sm btn-secondary matter-config-action" data-device-index="${index}" data-action="both-local" type="button">Matter + HomeKit</button>
+              <button class="btn btn-sm btn-outline-secondary matter-config-action" data-device-index="${index}" data-action="disable-room-discovery" type="button">Disable rooms</button>
             </div>`;
           tbody.append(`
             <tr>
               <th scope="row">${escapeHtml(device.name || 'Unnamed device')}</th>
               <td>${escapeHtml(device.model || 'Unknown')}</td>
-              <td>${escapeHtml(device.matterMode || 'auto')}</td>
+              <td>${escapeHtml(matterModeLabels[device.matterMode || 'auto'] || device.matterMode || 'Automatic')}</td>
               <td>${escapeHtml(getMiCloudModeLabel(device))}</td>
               <td>${actions}</td>
             </tr>`);
@@ -470,11 +484,18 @@
 
       device.micloud = device.micloud || {};
       if (action === 'hap-micloud') {
+        const globalMiCloud = configuration.micloud || {};
+        const hasCredentials = (device.micloud.username && device.micloud.password) || (globalMiCloud.username && globalMiCloud.password);
+        if (!cachedMiCloudSession && !hasCredentials) {
+          $('#miCloudSession').collapse('show');
+          homebridge.toast.error('Cache a MiCloud session or configure MiCloud username and password before switching this robot to MiCloud/HAP.', 'MiCloud login required');
+          return;
+        }
         device.matterMode = 'hap';
         device.micloud.forceMiCloud = true;
         device.micloud.useCachedSession = true;
       } else if (action === 'matter-local') {
-        device.matterMode = 'auto';
+        device.matterMode = 'matter';
         device.micloud.forceMiCloud = false;
         device.micloud.useCachedSession = false;
       } else if (action === 'both-local') {

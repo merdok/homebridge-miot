@@ -226,6 +226,8 @@ Enables additional more detailed debug log. Useful when trying to figure out iss
 When enabled all log output will only appear in debug mode. **Default: false**
 - `deviceEnabled` [optional]
 Whether the device is enabled. Disabling the device will not initiate polling. Useful when a device is longer offline and it should not automatically reconnect. **Default: true**
+- `matterMode` [optional]
+Robot Cleaner only. Controls whether the robot is exposed through Homebridge Matter. Matter requires Homebridge Matter and local MIOT; use MiCloud/HAP fallback with a cached MiCloud session when local control is unreliable. See the [Robot Cleaner guide](https://github.com/merdok/homebridge-miot/blob/main/docs/robotcleaner.md). **Default: auto**
 - `customAccessory` [optional]
 Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `onlyMainService` [optional]
