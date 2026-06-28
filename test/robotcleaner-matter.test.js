@@ -210,6 +210,33 @@ test('ijai v1 go home uses the model-specific go charging action', async () => {
   }]);
 });
 
+test('ijai v1 identify writes alarm play even when cached value is already play', async () => {
+  const robot = createIjaiVacuumV1();
+  const miotDevice = robot.getMiotDevice();
+  const sentCommands = [];
+
+  miotDevice.localConnected = true;
+  miotDevice.pollProperties = () => {};
+  robot.alarmProp().updateInternalValue(1);
+  miotDevice.miioProtocol.send = async (ip, methodName, params) => {
+    sentCommands.push({ ip, methodName, params });
+    return [{ code: 0 }];
+  };
+
+  await robot.identifyMatterAccessory();
+
+  assert.deepEqual(sentCommands, [{
+    ip: '127.0.0.1',
+    methodName: 'set_properties',
+    params: [{
+      did: 'test-did',
+      siid: 4,
+      piid: 1,
+      value: 1
+    }]
+  }]);
+});
+
 test('Matter robot battery ignores the initial unsynced zero', () => {
   const robot = createIjaiVacuumV1();
 
@@ -297,6 +324,7 @@ test('Matter robot startup replaces stale cached mode labels', async () => {
   assert.equal(matterAccessory.clusters.rvcCleanMode.currentMode, MATTER_RVC_CLEAN_MODES.VACUUM);
   assert.deepEqual(matterAccessory.clusters.serviceArea.supportedMaps, []);
   assert.deepEqual(matterAccessory.clusters.serviceArea.supportedAreas, []);
+  assert.equal(typeof matterAccessory.handlers.identify.identify, 'function');
 });
 
 test('Matter robot startup publishes supported maps for mapped service areas', async () => {
