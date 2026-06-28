@@ -123,13 +123,48 @@ test('room discovery parser handles nested vendor payloads', () => {
   ]);
 });
 
-test('ijai v1 reports charging before stale fault values for Matter', () => {
+test('ijai v1 reports active status before transient fault values for Matter', () => {
   const robot = createIjaiVacuumV1();
+
+  robot.statusProp().updateInternalValue(5);
+  robot.faultProp().updateInternalValue(2110);
+  assert.equal(robot.getMatterOperationalState(), MATTER_RVC_OPERATIONAL_STATES.RUNNING);
+
+  robot.statusProp().updateInternalValue(2);
+  robot.faultProp().updateInternalValue(2108);
+  assert.equal(robot.getMatterOperationalState(), MATTER_RVC_OPERATIONAL_STATES.PAUSED);
+
   robot.statusProp().updateInternalValue(4);
   robot.faultProp().updateInternalValue(2103);
 
   assert.equal(robot.getDeviceName(), 'Mi Robot Vacuum-Mop Pro');
   assert.equal(robot.getMatterOperationalState(), MATTER_RVC_OPERATIONAL_STATES.CHARGING);
+});
+
+test('ijai v1 pause uses stop sweeping action', async () => {
+  const robot = createIjaiVacuumV1();
+  const miotDevice = robot.getMiotDevice();
+  const sentCommands = [];
+
+  miotDevice.localConnected = true;
+  miotDevice.pollProperties = () => {};
+  miotDevice.miioProtocol.send = async (ip, methodName, params) => {
+    sentCommands.push({ ip, methodName, params });
+    return { code: 0 };
+  };
+
+  await robot.pauseMatterCleaning();
+
+  assert.deepEqual(sentCommands, [{
+    ip: '127.0.0.1',
+    methodName: 'action',
+    params: {
+      did: 'test-did',
+      siid: 2,
+      aiid: 2,
+      in: []
+    }
+  }]);
 });
 
 test('ijai v1 go home uses the model-specific go charging action', async () => {
@@ -243,4 +278,36 @@ test('Matter robot startup replaces stale cached mode labels', async () => {
   assert.equal(matterAccessory.clusters.rvcRunMode.currentMode, robot.getMatterRunMode());
   assert.equal(matterAccessory.clusters.rvcCleanMode.supportedModes[0].label, 'Vacuum');
   assert.equal(matterAccessory.clusters.rvcCleanMode.currentMode, MATTER_RVC_CLEAN_MODES.VACUUM);
+});
+
+test('ijai v1 room discovery uses current map id for room list', async () => {
+  const robot = createIjaiVacuumV1();
+  const miotDevice = robot.getMiotDevice();
+
+  miotDevice.localConnected = true;
+  miotDevice.pollProperties = () => {};
+  miotDevice.miioProtocol.send = async (ip, methodName, params) => {
+    assert.equal(methodName, 'action');
+    if (params.aiid === 1) {
+      return {
+        code: 0,
+        out: [{ piid: 4, value: '[{"name":"Map 1","id":1696994385,"cur":false},{"name":"Map 2","id":1732835741,"cur":true}]' }]
+      };
+    }
+    if (params.aiid === 13) {
+      assert.deepEqual(params.in, [{ piid: 2, value: 1732835741 }]);
+      return {
+        code: 0,
+        out: [{ piid: 17, value: '[{"name":"Kitchen","id":13},{"name":"Living Room","id":12}]' }]
+      };
+    }
+    throw new Error(`Unexpected action ${params.aiid}`);
+  };
+
+  const rooms = await robot.discoverMatterRooms();
+
+  assert.deepEqual(rooms, [
+    { id: '13', name: 'Kitchen', mapId: '1732835741', areaId: undefined, areaType: undefined },
+    { id: '12', name: 'Living Room', mapId: '1732835741', areaId: undefined, areaType: undefined }
+  ]);
 });
