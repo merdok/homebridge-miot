@@ -199,7 +199,7 @@ This is a global configuration object for the MiCloud connection. When specified
     - *password* - [required] the MiCloud password
     - *country* - [optional] the country where the servers are located for your devices. **Default: "cn"**
     - *forceMiCloud* - [optional] forces to use MiCloud even when the device supports local commands. **Default: false**
-    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account. Use the homebrige ui to create a session. **Default: false**
+    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account. Use the homebrige ui to create a session. The recommended flow is the QR code login because Xiaomi's password login can now require a browser-only auth flow. **Default: false**
     - *timeout* - [optional] set a custom request timeout in milliseconds. **Default: 5000**
 #### General device configuration fields
 - `name` [required]

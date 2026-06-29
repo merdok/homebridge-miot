@@ -18,6 +18,8 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/generate-device-class', this.generateDeviceClass.bind(this));
     this.onRequest('/get-device-metadata', this.getDeviceMetadata.bind(this));
     this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
+    this.onRequest('/create-micloud-qr-login', this.createMiCloudQrLogin.bind(this));
+    this.onRequest('/poll-micloud-qr-login', this.pollMiCloudQrLogin.bind(this));
     this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
@@ -183,20 +185,8 @@ class UiServer extends HomebridgePluginUiServer {
 
     const serviceToken = miCloud.getServiceToken();
 
-    // check if the output directory exists, if not then create it recursively
-    const storagePath = this.homebridgeStoragePath + '/.miot_micloud/';
     try {
-      await fs.access(storagePath)
-    } catch (err) {
-      await fs.mkdir(storagePath, {
-        recursive: true
-      });
-    }
-
-    try {
-      const cachedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
-      const fileContent = JSON.stringify(serviceToken);
-      await fs.writeFile(cachedMiCloudSessionFile, fileContent, 'utf8');
+      await this.saveCachedMiCloudSession(serviceToken);
     } catch (err) {
       return {
         success: false,
@@ -208,6 +198,77 @@ class UiServer extends HomebridgePluginUiServer {
       success: true
     }
 
+  }
+
+  async createMiCloudQrLogin(params) {
+    const miCloud = new MiCloud(new Logger());
+    miCloud.setRequestTimeout(10000);
+
+    try {
+      const qrLogin = await miCloud.createQrLogin(params.locale || 'zh_CN');
+      return {
+        success: true,
+        qr: qrLogin.qr,
+        lp: qrLogin.lp,
+        loginUrl: qrLogin.loginUrl,
+        timeout: qrLogin.timeout,
+        timeInterval: qrLogin.timeInterval
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to create MiCloud QR login: ` + err.message
+      };
+    }
+  }
+
+  async pollMiCloudQrLogin(params) {
+    const miCloud = new MiCloud(new Logger());
+    miCloud.setRequestTimeout(10000);
+
+    try {
+      const qrLoginData = await miCloud.pollQrLogin(params.lp);
+      if (!qrLoginData.success) {
+        return {
+          success: false,
+          pending: true,
+          code: qrLoginData.code,
+          desc: qrLoginData.desc
+        };
+      }
+
+      await miCloud.completeQrLogin(qrLoginData);
+      const serviceToken = miCloud.getServiceToken();
+      await this.saveCachedMiCloudSession(serviceToken);
+
+      return {
+        success: true,
+        cachedSession: {
+          loggedInAt: serviceToken.loggedInAt,
+          timestamp: serviceToken.timestamp
+        }
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to complete MiCloud QR login: ` + err.message
+      };
+    }
+  }
+
+  async saveCachedMiCloudSession(serviceToken) {
+    const storagePath = this.homebridgeStoragePath + '/.miot_micloud/';
+    try {
+      await fs.access(storagePath)
+    } catch (err) {
+      await fs.mkdir(storagePath, {
+        recursive: true
+      });
+    }
+
+    const cachedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+    const fileContent = JSON.stringify(serviceToken);
+    await fs.writeFile(cachedMiCloudSessionFile, fileContent, 'utf8');
   }
 
   async getCachedMiCloudSession(params) {
