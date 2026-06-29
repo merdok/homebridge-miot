@@ -283,15 +283,19 @@
       })
     }
 
-    // check wheter we have a cached micloud session
+    let hasCachedMiCloudSession = false;
+
+    // check whether we have a cached micloud session
     await updateCachedMiCloudSessionInfo();
 
     // helper to update the current micloud session cache info
     async function updateCachedMiCloudSessionInfo() {
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
+        hasCachedMiCloudSession = true;
         $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
       } else {
+        hasCachedMiCloudSession = false;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
     }
@@ -433,7 +437,7 @@
       let verifyUrl = twoFactorAuthLink.attr('href');
       let twoFaTicket = ticketInput.val();
 
-      if (username && password) {
+      if (hasCachedMiCloudSession || (username && password)) {
         $('.miot-message').hide();
         btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
         usernameInput.prop('disabled', true);
@@ -485,7 +489,7 @@
           showAllDevicesCheckbox.prop('disabled', false);
         })
       } else {
-        homebridge.toast.error('A username and password must be provided.', 'Error');
+        homebridge.toast.error('Login with QR code first, or provide a username and password.', 'Error');
       }
     });
 

@@ -37,7 +37,7 @@ class UiServer extends HomebridgePluginUiServer {
     const twoFaTicket = params.twoFaTicket;
     const isShowAll = !!params.isShowAll;
 
-    // try to login
+    // Continue an interactive 2FA login if the legacy password flow requested it.
     if (verifyUrl && twoFaTicket) {
       try {
         await miCloud.loginTwoFa(verifyUrl, twoFaTicket);
@@ -47,7 +47,17 @@ class UiServer extends HomebridgePluginUiServer {
           error: `2FA login failed with error: ` + err.message
         };
       }
+    } else if (await this.setCachedMiCloudSession(miCloud)) {
+      // Prefer the shared cached session created by QR login.
+      miCloud.logger.debug(`Using cached MiCloud session to fetch all devices.`);
     } else {
+      if (!username || !password) {
+        return {
+          success: false,
+          error: `No cached MiCloud session found. Please login with QR code or provide username and password.`
+        };
+      }
+
       try {
         await miCloud.login(username, password);
       } catch (err) {
@@ -290,6 +300,27 @@ class UiServer extends HomebridgePluginUiServer {
       }
     }
 
+  }
+
+  async setCachedMiCloudSession(miCloud) {
+    const cachedMiCloudSessionFile = this.homebridgeStoragePath + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+
+    try {
+      const cachedSession = await fs.readFile(cachedMiCloudSessionFile, 'utf8');
+      if (!cachedSession) {
+        return false;
+      }
+
+      const cachedSessionParsed = JSON.parse(cachedSession);
+      if (!cachedSessionParsed) {
+        return false;
+      }
+
+      miCloud.setServiceToken(cachedSessionParsed);
+      return miCloud.isLoggedIn();
+    } catch (err) {
+      return false;
+    }
   }
 
 }
