@@ -245,6 +245,12 @@
   </div>
 </div>
 
+<div id="matterMiCloudSessionWarning" class="alert alert-warning mt-3" role="alert" style="display: none">
+  <strong>Matter robot setup warning.</strong>
+  <span class="matter-micloud-session-warning-text"></span>
+  <button class="btn btn-sm btn-warning ml-2" id="openMiCloudSessionCache" type="button">Cache MiCloud session</button>
+</div>
+
 
 <script>
   const homebridge = window.homebridge;
@@ -262,13 +268,92 @@
     }
     const configuration = pluginConfig[0];
     configuration.devices = configuration.devices || [];
+    let currentConfiguration = configuration;
+    let cachedMiCloudSession = null;
+    let lastMatterMiCloudWarningKey = null;
+
+    function hasOwnProperty(obj, key) {
+      return !!obj && Object.prototype.hasOwnProperty.call(obj, key);
+    }
+
+    function escapeHtml(value) {
+      return $('<div>').text(value).html();
+    }
+
+    function usesExplicitMatterMode(device = {}) {
+      return device.matterMode === 'matter' || device.matterMode === 'both';
+    }
+
+    function getEffectiveMiCloudConfigProp(config = {}, device = {}, key) {
+      if (hasOwnProperty(device.micloud, key)) {
+        return device.micloud[key];
+      }
+      if (hasOwnProperty(config.micloud, key)) {
+        return config.micloud[key];
+      }
+      return null;
+    }
+
+    function getMatterMiCloudSessionWarnings(config = {}) {
+      const devices = Array.isArray(config.devices) ? config.devices : [];
+      return devices
+        .map((device, index) => {
+          return {
+            index,
+            device,
+            label: device.name || device.model || `device ${index + 1}`,
+            hasCredentials: !!(getEffectiveMiCloudConfigProp(config, device, 'username') && getEffectiveMiCloudConfigProp(config, device, 'password')),
+            useCachedSession: getEffectiveMiCloudConfigProp(config, device, 'useCachedSession') === true
+          };
+        })
+        .filter(entry => usesExplicitMatterMode(entry.device))
+        .filter(entry => !entry.hasCredentials && !(cachedMiCloudSession && entry.useCachedSession));
+    }
+
+    function showMatterMiCloudSessionWarning(config = {}, showToast = false) {
+      const warnings = getMatterMiCloudSessionWarnings(config);
+      const warningEl = $('#matterMiCloudSessionWarning');
+      if (warnings.length === 0) {
+        warningEl.hide();
+        lastMatterMiCloudWarningKey = null;
+        return;
+      }
+
+      const labels = warnings.map(entry => escapeHtml(entry.label)).join(', ');
+      const subject = warnings.length === 1 ? `${labels} has` : `${labels} have`;
+      let message = `Matter robot controls use local MIOT, but ${subject} Matter enabled and MiCloud fallback will not be available until `;
+      if (!cachedMiCloudSession) {
+        message += 'you configure MiCloud credentials or log in from Cache MiCloud session and save a cached session.';
+      } else {
+        message += 'you configure MiCloud credentials or enable Use cached MiCloud session in the relevant device or global MiCloud settings.';
+      }
+
+      warningEl.find('.matter-micloud-session-warning-text').html(message);
+      warningEl.show();
+
+      const warningKey = warnings
+        .map(entry => `${entry.index}:${entry.device.matterMode}:${entry.hasCredentials}:${entry.useCachedSession}`)
+        .join('|') + `:${!!cachedMiCloudSession}`;
+      if (showToast && warningKey !== lastMatterMiCloudWarningKey) {
+        homebridge.toast.warning(message, 'Matter MiCloud setup');
+      }
+      lastMatterMiCloudWarningKey = warningKey;
+    }
 
     function createForm(configSchema, configuration) {
+      currentConfiguration = configuration;
       const configForm = homebridge.createForm(configSchema, configuration);
       configForm.onChange(async (changes) => {
+        currentConfiguration = changes;
+        showMatterMiCloudSessionWarning(currentConfiguration, true);
         await homebridge.updatePluginConfig([changes]);
       })
+      showMatterMiCloudSessionWarning(configuration);
     }
+
+    $('#openMiCloudSessionCache').on('click', () => {
+      $('#miCloudSession').collapse('show');
+    });
 
     // check wheter we have a cached micloud session
     await updateCachedMiCloudSessionInfo();
@@ -277,10 +362,13 @@
     async function updateCachedMiCloudSessionInfo() {
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
+        cachedMiCloudSession = cachedSessionResult.cachedSession;
         $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
       } else {
+        cachedMiCloudSession = null;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
+      showMatterMiCloudSessionWarning(currentConfiguration);
     }
 
     // cloud devices helper
