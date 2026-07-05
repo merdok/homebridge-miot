@@ -2,40 +2,6 @@
 <script crossorigin="anonymous" src="js/popper.js"></script>
 <script crossorigin="anonymous" src="js/bootstrap.js"></script>
 
-<style>
-  .btn-loading {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    min-width: 10rem;
-    white-space: nowrap;
-  }
-
-  .btn-login {
-    min-width: 12rem;
-    white-space: nowrap;
-  }
-
-  .miot-action-group {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.4rem;
-  }
-
-  .miot-diagnostics-list {
-    max-height: 16rem;
-    overflow: auto;
-    text-align: left;
-  }
-
-  .miot-diagnostics-list code {
-    white-space: normal;
-    word-break: break-word;
-  }
-</style>
-
 <div id="accordion">
   <div class="card">
 
@@ -46,9 +12,6 @@
         </button>
         <button aria-controls="miCloudSession" aria-expanded="true" class="btn btn-primary" data-target="#miCloudSession" data-toggle="collapse">
           Cache MiCloud session
-        </button>
-        <button aria-controls="matterSetupSection" aria-expanded="true" class="btn btn-secondary" data-target="#matterSetupSection" data-toggle="collapse">
-          Matter setup & status
         </button>
         <button aria-controls="deviceClassGeneratorSection" aria-expanded="true" class="btn btn-secondary" data-target="#deviceClassGeneratorSection" data-toggle="collapse">
           Generate device class
@@ -145,55 +108,10 @@
           </div>
           <div class="text-center micloud-session miot-message" style="display: none">
             <div class="alert alert-success" role="alert">
-              MiCloud session successfully saved! Use Matter setup & status to apply MiCloud/HAP robot settings, then save and restart Homebridge.
+              MiCloud session successfully saved! Please restart homebridge and add 'useCachedSession' to your micloud config!
             </div>
           </div>
         </form>
-      </div>
-    </div>
-
-    <!-- MATTER SETUP -->
-
-    <div aria-labelledby="matterSetup" class="collapse" data-parent="#accordion" id="matterSetupSection">
-      <div class="card-body">
-        <div class="alert alert-info" role="alert">
-          <strong>Matter setup</strong><br>
-          Robot cleaner Matter support requires Homebridge Matter and a working local MIOT connection. Use MiCloud/HAP when local control is unreliable. For MiCloud/HAP, log in under Cache MiCloud session first or keep MiCloud credentials in config; the plugin stores the MiCloud service token in Homebridge storage and refreshes it when credentials are available.
-        </div>
-
-        <div id="matterDiagnosticSummary" class="alert alert-secondary" role="alert">
-          Loading plugin diagnostics...
-        </div>
-
-        <div class="text-center mt-sm-3">
-          <button class="btn btn-secondary" id="refreshMatterSetup" type="button">Refresh status</button>
-        </div>
-
-        <div class="matter-device-table table-responsive mt-3">
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th scope="col">Device</th>
-                <th scope="col">Model</th>
-                <th scope="col">Matter mode</th>
-                <th scope="col">MiCloud mode</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="5">No robot cleaners found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="recent-diagnostics mt-3">
-          <h6>Recent plugin diagnostics</h6>
-          <div id="recentDiagnosticsList" class="miot-diagnostics-list">
-            <div class="text-muted">No diagnostics loaded.</div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -344,13 +262,6 @@
     }
     const configuration = pluginConfig[0];
     configuration.devices = configuration.devices || [];
-    const matterModeLabels = {
-      auto: 'Automatic',
-      hap: 'HomeKit only',
-      matter: 'Matter only',
-      both: 'HomeKit and Matter'
-    };
-    let cachedMiCloudSession = null;
 
     function createForm(configSchema, configuration) {
       const configForm = homebridge.createForm(configSchema, configuration);
@@ -361,155 +272,15 @@
 
     // check wheter we have a cached micloud session
     await updateCachedMiCloudSessionInfo();
-    await refreshMatterSetup();
 
     // helper to update the current micloud session cache info
     async function updateCachedMiCloudSessionInfo() {
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
-        cachedMiCloudSession = cachedSessionResult.cachedSession;
         $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
       } else {
-        cachedMiCloudSession = null;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
-    }
-
-    function setButtonLoading(btn, isLoading, label) {
-      btn = $(btn);
-      if (isLoading) {
-        btn.data('original-html', btn.html());
-        btn.prop('disabled', true).addClass('btn-loading').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span><span>${label || 'Loading...'}</span>`);
-      } else {
-        btn.prop('disabled', false).removeClass('btn-loading').html(btn.data('original-html') || btn.text());
-      }
-    }
-
-    function escapeHtml(value) {
-      return String(value == null ? '' : value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function isRobotCleanerConfig(device) {
-      const model = (device.model || '').toLowerCase();
-      const name = (device.name || '').toLowerCase();
-      return model.includes('.vacuum.') || name.includes('vacuum') || name.includes('robot cleaner') || name.includes('robot vacuum');
-    }
-
-    function getEffectiveMiCloudConfig(device) {
-      return {
-        forceMiCloud: !!(device.micloud && Object.keys(device.micloud).includes('forceMiCloud') ? device.micloud.forceMiCloud : configuration.micloud && configuration.micloud.forceMiCloud),
-        useCachedSession: !!(device.micloud && Object.keys(device.micloud).includes('useCachedSession') ? device.micloud.useCachedSession : configuration.micloud && configuration.micloud.useCachedSession),
-        country: (device.micloud && device.micloud.country) || (configuration.micloud && configuration.micloud.country) || 'cn'
-      };
-    }
-
-    function getMiCloudModeLabel(device) {
-      const micloud = getEffectiveMiCloudConfig(device);
-      if (micloud.forceMiCloud) {
-        return `MiCloud${micloud.useCachedSession ? ' + cached session' : ''}`;
-      }
-      if (micloud.useCachedSession) {
-        return 'Local preferred, cached session ready';
-      }
-      return 'Local preferred';
-    }
-
-    async function refreshMatterSetup() {
-      const diagnostics = await homebridge.request('/get-plugin-diagnostics', {
-        limit: 30
-      });
-      renderMatterSetup(diagnostics);
-    }
-
-    function renderMatterSetup(diagnostics) {
-      const status = diagnostics && diagnostics.status ? diagnostics.status : {};
-      const severityClass = {
-        success: 'alert-success',
-        warning: 'alert-warning',
-        error: 'alert-danger',
-        unknown: 'alert-secondary'
-      }[status.severity] || 'alert-secondary';
-      $('#matterDiagnosticSummary')
-        .removeClass('alert-success alert-warning alert-danger alert-secondary')
-        .addClass(severityClass)
-        .html(`<strong>${escapeHtml(status.title || 'Plugin status')}</strong><br>${escapeHtml(status.message || 'No diagnostics available.')}`);
-
-      const tbody = $('.matter-device-table table tbody');
-      tbody.empty();
-      const robotDevices = configuration.devices
-        .map((device, index) => ({ device, index }))
-        .filter(item => isRobotCleanerConfig(item.device));
-
-      if (robotDevices.length === 0) {
-        tbody.append(`<tr><td colspan="5">No robot cleaners found.</td></tr>`);
-      } else {
-        robotDevices.forEach(({ device, index }) => {
-          const actions = `
-            <div class="miot-action-group">
-              <button class="btn btn-sm btn-primary matter-config-action" data-device-index="${index}" data-action="matter-local" type="button">Enable Matter</button>
-              <button class="btn btn-sm btn-warning matter-config-action" data-device-index="${index}" data-action="hap-micloud" type="button">Use MiCloud/HAP</button>
-              <button class="btn btn-sm btn-secondary matter-config-action" data-device-index="${index}" data-action="both-local" type="button">Matter + HomeKit</button>
-              <button class="btn btn-sm btn-outline-secondary matter-config-action" data-device-index="${index}" data-action="disable-room-discovery" type="button">Disable rooms</button>
-            </div>`;
-          tbody.append(`
-            <tr>
-              <th scope="row">${escapeHtml(device.name || 'Unnamed device')}</th>
-              <td>${escapeHtml(device.model || 'Unknown')}</td>
-              <td>${escapeHtml(matterModeLabels[device.matterMode || 'auto'] || device.matterMode || 'Automatic')}</td>
-              <td>${escapeHtml(getMiCloudModeLabel(device))}</td>
-              <td>${actions}</td>
-            </tr>`);
-        });
-      }
-
-      const entries = diagnostics && Array.isArray(diagnostics.entries) ? diagnostics.entries : [];
-      if (entries.length === 0) {
-        $('#recentDiagnosticsList').html('<div class="text-muted">No recent homebridge-miot diagnostics found.</div>');
-      } else {
-        $('#recentDiagnosticsList').html(entries.map(entry => `<div><code>${escapeHtml(entry)}</code></div>`).join(''));
-      }
-    }
-
-    async function applyMatterConfigAction(deviceIndex, action) {
-      const device = configuration.devices[deviceIndex];
-      if (!device) {
-        homebridge.toast.error('Could not find the selected device.', 'Error');
-        return;
-      }
-
-      device.micloud = device.micloud || {};
-      if (action === 'hap-micloud') {
-        const globalMiCloud = configuration.micloud || {};
-        const hasCredentials = (device.micloud.username && device.micloud.password) || (globalMiCloud.username && globalMiCloud.password);
-        if (!cachedMiCloudSession && !hasCredentials) {
-          $('#miCloudSession').collapse('show');
-          homebridge.toast.error('Cache a MiCloud session or configure MiCloud username and password before switching this robot to MiCloud/HAP.', 'MiCloud login required');
-          return;
-        }
-        device.matterMode = 'hap';
-        device.micloud.forceMiCloud = true;
-        device.micloud.useCachedSession = true;
-      } else if (action === 'matter-local') {
-        device.matterMode = 'matter';
-        device.micloud.forceMiCloud = false;
-        device.micloud.useCachedSession = false;
-      } else if (action === 'both-local') {
-        device.matterMode = 'both';
-        device.micloud.forceMiCloud = false;
-        device.micloud.useCachedSession = false;
-      } else if (action === 'disable-room-discovery') {
-        device.matterRoomDiscovery = 'disabled';
-      }
-
-      await homebridge.updatePluginConfig([configuration]);
-      createForm(configSchema, configuration);
-      await refreshMatterSetup();
-      homebridge.toast.success('Updated robot cleaner config. Save and restart Homebridge to apply changes.');
     }
 
     // cloud devices helper
@@ -631,32 +402,6 @@
       return ' - ';
     }
 
-    $('#refreshMatterSetup').on('click', async function(e) {
-      e.preventDefault();
-      const btn = $(this);
-      try {
-        setButtonLoading(btn, true, 'Refreshing...');
-        await refreshMatterSetup();
-      } catch (err) {
-        homebridge.toast.error('Failed to refresh plugin diagnostics: ' + err.message, 'Error');
-      } finally {
-        setButtonLoading(btn, false);
-      }
-    });
-
-    $(document).on('click', '.matter-config-action', async function(e) {
-      e.preventDefault();
-      const btn = $(this);
-      try {
-        setButtonLoading(btn, true, 'Updating...');
-        await applyMatterConfigAction(Number(btn.data('device-index')), btn.data('action'));
-      } catch (err) {
-        homebridge.toast.error('Failed to update robot cleaner config: ' + err.message, 'Error');
-      } finally {
-        setButtonLoading(btn, false);
-      }
-    });
-
     // get all cloud devices
     $('#getAllDevices').on('click', function(e) {
       e.preventDefault();
@@ -677,7 +422,7 @@
 
       if (username && password) {
         $('.miot-message').hide();
-        setButtonLoading(btn, true);
+        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
         usernameInput.prop('disabled', true);
         passwordInput.prop('disabled', true);
         autoAddToHomebridgeCheckbox.prop('disabled', true);
@@ -719,10 +464,8 @@
           if (data.warning) {
             homebridge.toast.warning(data.warning);
           }
-        }).catch(err => {
-          homebridge.toast.error('Could not discover devices: ' + err.message, 'Error');
-        }).finally(() => {
-          setButtonLoading(btn, false);
+
+          btn.prop('disabled', false).html("Discover all devices via MiCloud");
           usernameInput.prop('disabled', false);
           passwordInput.prop('disabled', false);
           autoAddToHomebridgeCheckbox.prop('disabled', false);
@@ -749,7 +492,7 @@
 
       if (username && password) {
         $('.miot-message').hide();
-        setButtonLoading(btn, true);
+        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
         usernameInput.prop('disabled', true);
         passwordInput.prop('disabled', true);
 
@@ -772,10 +515,8 @@
           } else {
             homebridge.toast.error('Could not login due to an unknown error.', 'Unknown Error');
           }
-        }).catch(err => {
-          homebridge.toast.error('Could not login to MiCloud: ' + err.message, 'Login Error');
-        }).finally(() => {
-          setButtonLoading(btn, false);
+
+          btn.prop('disabled', false).html("Login to MiCloud");
           usernameInput.prop('disabled', false);
           passwordInput.prop('disabled', false);
         })
@@ -801,7 +542,7 @@
         let valid = regex.test(deviceModel);
         if (valid) {
           $('.miot-message').hide();
-          setButtonLoading(btn, true);
+          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
           modelInput.prop('disabled', true);
           nameInput.prop('disabled', true);
           requiresMiCloudCheckbox.prop('disabled', true);
@@ -824,10 +565,7 @@
               $('.device-class-generated').show();
               homebridge.toast.success('Device class generated!');
             }
-          }).catch(err => {
-            homebridge.toast.error('Generate failed! Error: ' + err.message, 'Error');
-          }).finally(() => {
-            setButtonLoading(btn, false);
+            btn.prop('disabled', false).html("Generate");
             modelInput.prop('disabled', false);
             nameInput.prop('disabled', false);
             requiresMiCloudCheckbox.prop('disabled', false);
@@ -853,7 +591,7 @@
         let valid = regex.test(deviceModel);
         if (valid) {
           $('.miot-message').hide();
-          setButtonLoading(btn, true);
+          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
           modelInput.prop('disabled', true);
 
           homebridge.request('/get-device-metadata', {
@@ -867,10 +605,7 @@
               showMetadataTable(data.metadata);
               homebridge.toast.success(`Got metada for a ${data.metadata.description} device!`);
             }
-          }).catch(err => {
-            homebridge.toast.error('Failed to get device metadata! Error: ' + err.message, 'Error');
-          }).finally(() => {
-            setButtonLoading(btn, false);
+            btn.prop('disabled', false).html("Fetch metadata");
             modelInput.prop('disabled', false);
           })
         } else {

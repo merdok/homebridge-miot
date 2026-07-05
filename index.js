@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-const path = require('path');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
@@ -32,11 +31,6 @@ function getMatterMode(config = {}, logger = null) {
 function looksLikeRobotCleaner(value = '') {
   value = String(value).toLowerCase();
   return value.includes('vacuum') || value.includes('robot cleaner');
-}
-
-function isMiCloudForcedForConfig(deviceConfig = {}, globalMiCloudConfig = {}) {
-  const miCloudConfig = deviceConfig.micloud || {};
-  return Object.hasOwn(miCloudConfig, 'forceMiCloud') ? !!miCloudConfig.forceMiCloud : !!(globalMiCloudConfig && globalMiCloudConfig.forceMiCloud);
 }
 
 module.exports = function(homebridge) {
@@ -409,7 +403,7 @@ class miotDeviceController {
     if (this._shouldUseMiCloudForRobotCleaner()) {
       this.logger.info('Robot cleaner is configured to use MiCloud. HAP control can use MiCloud; Matter robot controls require a local MIOT connection.');
     } else {
-      this.logger.info('Robot cleaner will use local MIOT. If local connection fails, use the plugin UI Matter setup to switch this robot to MiCloud/HAP.');
+      this.logger.info('Robot cleaner will use local MIOT. If local connection fails, switch this robot to HAP or MiCloud in config.');
     }
   }
 
@@ -519,8 +513,6 @@ class miotPlatform {
       this.log.info('-------------------------------------------');
     }
 
-    await this.removeStaleExternalMatterAccessories();
-
     // remove all accessories which are still left over
     this.removeAccessories();
     await this.removeMatterAccessories();
@@ -580,88 +572,6 @@ class miotPlatform {
     } finally {
       this.cachedMatterAccessories = [];
     }
-  }
-
-  async removeStaleExternalMatterAccessories() {
-    if (!this.api || !this.api.user || !this.api.user.storagePath) {
-      return;
-    }
-
-    const matterPath = path.join(this.api.user.storagePath(), 'matter');
-    const backupPath = path.join(this.api.user.storagePath(), '.miot_matter_stale');
-    const expectedMatterUuids = this._getExpectedMatterAccessoryUuids();
-    let matterEntries = [];
-
-    try {
-      matterEntries = await fs.readdir(matterPath, { withFileTypes: true });
-    } catch (err) {
-      return;
-    }
-
-    for (const entry of matterEntries) {
-      if (!entry.isDirectory() || !/^[A-F0-9]{12}$/i.test(entry.name)) {
-        continue;
-      }
-
-      const matterBridgePath = path.join(matterPath, entry.name);
-      const accessoriesPath = path.join(matterBridgePath, 'accessories.json');
-      let accessories = [];
-
-      try {
-        accessories = JSON.parse(await fs.readFile(accessoriesPath, 'utf8'));
-      } catch (err) {
-        continue;
-      }
-
-      if (!Array.isArray(accessories)) {
-        continue;
-      }
-
-      const staleAccessories = accessories.filter(accessory => {
-        const uuid = accessory.uuid || accessory.UUID;
-        return accessory.plugin === PLUGIN_NAME && uuid && !expectedMatterUuids.has(uuid);
-      });
-
-      if (staleAccessories.length === 0) {
-        continue;
-      }
-
-      await fs.mkdir(backupPath, { recursive: true });
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const backupEntryPath = path.join(backupPath, `${entry.name}-${timestamp}`);
-      const staleNames = staleAccessories.map(accessory => `${accessory.displayName || 'Unnamed Matter accessory'} (${accessory.uuid || accessory.UUID})`).join(', ');
-
-      if (staleAccessories.length === accessories.length) {
-        await fs.rename(matterBridgePath, backupEntryPath);
-        this.log.info(`Moved stale external Matter storage for ${staleNames} to ${backupEntryPath}`);
-        continue;
-      }
-
-      const remainingAccessories = accessories.filter(accessory => !staleAccessories.includes(accessory));
-      await fs.writeFile(path.join(backupPath, `${entry.name}-${timestamp}-accessories.json`), JSON.stringify(accessories, null, 2), 'utf8');
-      await fs.writeFile(accessoriesPath, JSON.stringify(remainingAccessories, null, 2), 'utf8');
-      this.log.info(`Removed stale Matter cache entries no longer present in config: ${staleNames}`);
-    }
-  }
-
-  _getExpectedMatterAccessoryUuids() {
-    const uuids = new Set();
-    if (!this.config.devices || !Array.isArray(this.config.devices)) {
-      return uuids;
-    }
-
-    for (const deviceConfig of this.config.devices) {
-      const matterMode = getMatterMode(deviceConfig);
-      const shouldExpectMatter = looksLikeRobotCleaner(`${deviceConfig.model || ''} ${deviceConfig.name || ''}`) &&
-        (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH || (matterMode !== MATTER_MODE_HAP && !isMiCloudForcedForConfig(deviceConfig, this.config.micloud)));
-      if (!shouldExpectMatter || !deviceConfig.ip || !deviceConfig.token) {
-        continue;
-      }
-
-      uuids.add(Homebridge.hap.uuid.generate(deviceConfig.token + deviceConfig.ip + (deviceConfig.deviceId || '') + PLATFORM_NAME + ':matter'));
-    }
-
-    return uuids;
   }
 
 }
