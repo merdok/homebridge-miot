@@ -293,7 +293,8 @@
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
         hasCachedMiCloudSession = true;
-        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
+        const loginMethod = cachedSessionResult.cachedSession.loginMethod || 'unknown';
+        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt + ". Login method : " + loginMethod);
       } else {
         hasCachedMiCloudSession = false;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");

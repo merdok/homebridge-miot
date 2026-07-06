@@ -255,7 +255,8 @@ class UiServer extends HomebridgePluginUiServer {
         success: true,
         cachedSession: {
           loggedInAt: serviceToken.loggedInAt,
-          timestamp: serviceToken.timestamp
+          timestamp: serviceToken.timestamp,
+          loginMethod: serviceToken.loginMethod || 'unknown'
         }
       };
     } catch (err) {
