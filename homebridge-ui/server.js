@@ -7,6 +7,7 @@ const Constants = require('../lib/constants/Constants.js');
 const MiotSpecClassGenerator = require('../lib/tools/MiotSpecClassGenerator');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher');
 const Logger = require("../lib/utils/Logger");
+const TimeUtils = require('../lib/utils/TimeUtils.js');
 const fs = require('fs').promises;
 
 class UiServer extends HomebridgePluginUiServer {
@@ -289,6 +290,7 @@ class UiServer extends HomebridgePluginUiServer {
       const cachedSession = await fs.readFile(cachedMiCloudSessionFile, 'utf8');
       if (cachedSession) {
         let cachedSessionParsed = JSON.parse(cachedSession);
+        cachedSessionParsed.displayLoggedInAt = TimeUtils.getSessionLoginTime(cachedSessionParsed);
         return {
           success: true,
           cachedSession: cachedSessionParsed

@@ -47,7 +47,7 @@ function printSessionMetadata(storage, storagePath, tokenJson) {
 
   const metadata = MiCloudHelper.getSessionMetadata(tokenJson);
   log.success(`MiCloud session found: yes`);
-  log.info(`Login time: ${metadata.loggedInAt}`);
+  log.info(`Login time: ${metadata.displayLoggedInAt}`);
   log.info(`Login method: ${metadata.loginMethod}`);
   log.info(`Timestamp age: ${metadata.age}`);
 

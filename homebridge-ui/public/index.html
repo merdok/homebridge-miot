@@ -294,7 +294,8 @@
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
         hasCachedMiCloudSession = true;
         const loginMethod = cachedSessionResult.cachedSession.loginMethod || 'unknown';
-        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt + ". Login method : " + loginMethod);
+        const loggedInAt = cachedSessionResult.cachedSession.displayLoggedInAt || cachedSessionResult.cachedSession.loggedInAt || 'unknown';
+        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + loggedInAt + ". Login method : " + loginMethod);
       } else {
         hasCachedMiCloudSession = false;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
