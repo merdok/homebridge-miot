@@ -16,10 +16,6 @@ exports.builder = {
     default: 'zh_CN',
     description: 'Locale to use for QR login'
   },
-  'homebridge-storage': {
-    type: 'string',
-    description: 'Homebridge storage path where the cached MiCloud session should also be saved'
-  },
   username: {
     alias: 'u',
     type: 'string',
@@ -41,14 +37,13 @@ exports.handler = async argv => {
   let {
     qr,
     locale,
-    homebridgeStorage,
     username,
     password,
     file
   } = argv;
 
   if (qr) {
-    await loginWithQr(locale, homebridgeStorage);
+    await loginWithQr(locale);
     process.exit(0);
   }
 
@@ -82,7 +77,6 @@ exports.handler = async argv => {
   try {
     await MiCloudHelper.login(username, password);
     log.success(`Successfully logged in to MiCloud with username ${chalk.yellow.bold(username)}`);
-    saveHomebridgeSession(homebridgeStorage);
   } catch (err) {
     log.error(err.message);
   }
@@ -90,7 +84,7 @@ exports.handler = async argv => {
   process.exit(0);
 };
 
-async function loginWithQr(locale, homebridgeStorage) {
+async function loginWithQr(locale) {
   try {
     log.info(`Creating MiCloud QR login session...`);
     const qrLogin = await MiCloudHelper.createQrLogin(locale);
@@ -113,7 +107,6 @@ async function loginWithQr(locale, homebridgeStorage) {
       if (qrLoginData.success) {
         await MiCloudHelper.completeQrLogin(qrLoginData);
         log.success(`Successfully logged in to MiCloud using QR code.`);
-        saveHomebridgeSession(homebridgeStorage);
         return;
       }
 
@@ -132,13 +125,4 @@ async function loginWithQr(locale, homebridgeStorage) {
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function saveHomebridgeSession(homebridgeStorage) {
-  if (!homebridgeStorage) {
-    return;
-  }
-
-  MiCloudHelper.setHomebridgeCachedSession(homebridgeStorage, MiCloudHelper.getServiceToken());
-  log.success(`Successfully saved the MiCloud session to Homebridge storage at ${chalk.green.bold(homebridgeStorage)}`);
 }

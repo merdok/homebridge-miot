@@ -350,9 +350,11 @@ miot cloud list-devices
 
 miot cloud login --qr
 
-miot cloud login --qr --homebridge-storage /var/lib/homebridge
+miot cloud session
 
-miot cloud logout --homebridge-storage /var/lib/homebridge
+miot cloud session --storage homebridge --homebridge-storage /var/lib/homebridge
+
+miot cloud copy-session --from cli --to homebridge --homebridge-storage /var/lib/homebridge
 
 miot cloud get-props '[{"siid":2,"piid":2,"did":"<DID>"}]'
 
