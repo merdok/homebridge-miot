@@ -58,7 +58,7 @@ exports.handler = async argv => {
     const micloudFile = await fs.readFile(file, 'utf8');
     if (micloudFile) {
       log.info(`Found mi cloud credentials file at ${chalk.green.bold(file)}`);
-      micloudJson = JSON.parse(micloudFile);
+      const micloudJson = JSON.parse(micloudFile);
       username = micloudJson.username;
       password = micloudJson.password;
     } else {
