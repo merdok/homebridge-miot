@@ -28,11 +28,11 @@ Example:
 ]
 ```
 
-Robot cleaners can use local MIOT or MiCloud. Matter robot controls require local MIOT, so a robot configured with `micloud.forceMiCloud`, `micloud.useCachedSession` plus a model-level MiCloud requirement, or another MiCloud-only path is exposed through the existing HAP robot switch instead of Matter.
+Robot cleaners can use local MIOT or MiCloud. Matter robot controls currently require local MIOT, so a robot configured with `micloud.forceMiCloud`, `micloud.useCachedSession` plus a model-level MiCloud requirement, or another MiCloud-only path is exposed through the existing HAP robot switch instead of Matter. This is an implementation choice to provide strict command results without adding Matter traffic to MiCloud rate limits, not a limitation of Matter itself.
 
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
 
-Matter room discovery is best-effort because Xiaomi/Roborock/Dreame/Viomi/IJAI expose rooms differently. It is intentionally local-only to avoid MiCloud rate limits. If discovery cannot find names, the plugin uses stable labels such as `Room 80001026443`. Use `matterRooms` to rename discovered rooms or to supply room IDs manually.
+Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
 
 ### Room cleaning
 

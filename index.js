@@ -33,6 +33,18 @@ function looksLikeRobotCleaner(value = '') {
   return value.includes('vacuum') || value.includes('robot cleaner');
 }
 
+function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud) {
+  if (deviceType !== DevTypes.ROBOT_CLEANER || matterMode === MATTER_MODE_HAP) {
+    return { hap: true, matter: false };
+  }
+
+  const canExposeMatter = matterReady && !usesMiCloud;
+  if (matterMode === MATTER_MODE_BOTH) {
+    return { hap: true, matter: canExposeMatter };
+  }
+  return canExposeMatter ? { hap: false, matter: true } : { hap: true, matter: false };
+}
+
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
@@ -193,7 +205,6 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
-        this._applyRobotCleanerMatterConnectionPolicy();
         this._logRobotCleanerMiCloudPolicy();
         await this.prepareAccessoryAndStartPolling();
       } else {
@@ -333,30 +344,21 @@ class miotDeviceController {
   }
 
   _getAccessoryExposure() {
-    if (!this.device || this.device.getType() !== DevTypes.ROBOT_CLEANER) {
-      return { hap: true, matter: false };
+    const deviceType = this.device ? this.device.getType() : null;
+    if (deviceType !== DevTypes.ROBOT_CLEANER) {
+      return getAccessoryExposure(deviceType, MATTER_MODE_HAP, false, false);
     }
 
     const matterMode = this._getMatterMode();
     const matterReady = this._isMatterReady();
     const usesMiCloud = this._shouldUseMiCloudForRobotCleaner();
-    const canExposeMatter = matterReady && !usesMiCloud;
+    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud);
 
-    if (matterMode === MATTER_MODE_HAP) {
-      return { hap: true, matter: false };
-    }
-
-    if (matterMode === MATTER_MODE_BOTH) {
+    if (deviceType === DevTypes.ROBOT_CLEANER && matterMode !== MATTER_MODE_HAP && !exposure.matter) {
       this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud);
-      return { hap: true, matter: canExposeMatter };
     }
 
-    if (canExposeMatter) {
-      return { hap: false, matter: true };
-    }
-
-    this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud);
-    return { hap: true, matter: false };
+    return exposure;
   }
 
   _getMatterMode() {
@@ -405,25 +407,6 @@ class miotDeviceController {
     } else {
       this.logger.info('Robot cleaner will use local MIOT. If local connection fails, switch this robot to HAP or MiCloud in config.');
     }
-  }
-
-  _applyRobotCleanerMatterConnectionPolicy() {
-    if (!this._shouldForceLocalRobotCleanerMatter()) {
-      return;
-    }
-
-    const wasUsingMiCloud = this.miotDevice.shouldUseMiCloud();
-    this.miotDevice.forceLocalConnection();
-    if (wasUsingMiCloud) {
-      this.logger.info('Robot cleaner Matter mode selected; using local MIOT instead of MiCloud because Matter robot controls require a local connection.');
-    }
-  }
-
-  _shouldForceLocalRobotCleanerMatter() {
-    const matterMode = this._getMatterMode();
-    return this._isRobotCleanerCandidate() &&
-      this._isMatterReady() &&
-      (matterMode === MATTER_MODE_MATTER || matterMode === MATTER_MODE_BOTH);
   }
 
   _shouldUseMiCloudForRobotCleaner() {
@@ -575,3 +558,5 @@ class miotPlatform {
   }
 
 }
+
+module.exports.getAccessoryExposure = getAccessoryExposure;
