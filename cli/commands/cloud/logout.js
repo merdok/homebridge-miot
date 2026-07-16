@@ -1,5 +1,4 @@
 const log = require('../../log');
-const chalk = require('chalk');
 const MiCloudHelper = require('../../../lib/tools/MiCloudHelper');
 
 exports.command = 'logout';
