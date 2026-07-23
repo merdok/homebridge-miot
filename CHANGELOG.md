@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-07-24
+### Added
+- Added support for login to MiCloud via QR code. That should improve and simply caching of the session. Thanks @Debbie-Yuan for the contribution.
+- Prefer cached session for device discovery. No need to enter login credentials if a session is already cached. Thanks @Debbie-Yuan for the contribution.
+
+### Fixed
+- Fix cuco.plug.cp1 spec. Thanks @Debbie-Yuan for the contribution.
+
+
 ## [1.8.7] - 2026-03-01
 ### Added
 - Added support for yunmi.kettle.v19 (Xiaomi Mi Smart Kettle Pro 2) kettle Thanks @zloirog
