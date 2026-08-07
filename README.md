@@ -198,8 +198,8 @@ This is a global configuration object for the MiCloud connection. When specified
     - *username* - [required] the MiCloud username
     - *password* - [required] the MiCloud password
     - *country* - [optional] the country where the servers are located for your devices. **Default: "cn"**
-    - *forceMiCloud* - [optional] forces to use MiCloud even when the device supports local commands. Robot cleaners using MiCloud are exposed through HAP because Matter robot controls require local MIOT. **Default: false**
-    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account. Use the homebrige ui to create a session. **Default: false**
+    - *forceMiCloud* - [optional] forces to use MiCloud even when the device supports local commands. Matter-enabled robot cleaners try local MIOT first and fall back to HAP/MiCloud when local setup fails. **Default: false**
+    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account. Use the homebrige ui to create a session. The recommended flow is the QR code login because Xiaomi's password login can now require a browser-only auth flow. **Default: false**
     - *timeout* - [optional] set a custom request timeout in milliseconds. **Default: 5000**
 #### General device configuration fields
 - `name` [required]
@@ -349,6 +349,14 @@ miot send <IP> -t <TOKEN> set_properties '[{"siid":2,"piid":2,"value":1}]'
 miot send <IP> -t <TOKEN> action '{"aiid":13,"in":[],"siid":10}'
 
 miot cloud list-devices
+
+miot cloud login --qr
+
+miot cloud session
+
+miot cloud session --storage homebridge --homebridge-storage /var/lib/homebridge
+
+miot cloud copy-session --from cli --to homebridge --homebridge-storage /var/lib/homebridge
 
 miot cloud get-props '[{"siid":2,"piid":2,"did":"<DID>"}]'
 

@@ -85,6 +85,19 @@
       <div class="card-body">
         <label id="cachedMiCloudSessionStatusLbl" class="text-info fw-bold fs-5"></label>
         <form>
+          <div class="text-center mt-sm-3">
+            <button class="btn btn-success" id="createMiCloudQrLogin" type="button">Login to MiCloud with QR Code</button>
+          </div>
+          <div class="text-center mt-sm-3 qr-login-section-micloud-session miot-message" style="display: none">
+            <div class="alert alert-info" role="alert">
+              Scan this QR code with the Mi Home app or Xiaomi account app, then approve the login.
+            </div>
+            <img id="miCloudQrLoginImage" alt="MiCloud QR login" style="max-width: 260px; width: 100%; background: white; padding: 8px;">
+            <div class="mt-sm-3">
+              <a id="miCloudQrLoginUrl" href="#" target="_blank">Open QR login page</a>
+            </div>
+            <label id="miCloudQrLoginStatusLbl" class="text-info fw-bold fs-6"></label>
+          </div>
           <div class="form-row">
             <div class="col">
               <label for="userNameMiCloudSessionInput">Username</label>
@@ -270,6 +283,7 @@
     configuration.devices = configuration.devices || [];
     let currentConfiguration = configuration;
     let cachedMiCloudSession = null;
+    let hasCachedMiCloudSession = false;
     let lastMatterMiCloudWarningKey = null;
 
     function hasOwnProperty(obj, key) {
@@ -355,7 +369,7 @@
       $('#miCloudSession').collapse('show');
     });
 
-    // check wheter we have a cached micloud session
+    // check whether we have a cached micloud session
     await updateCachedMiCloudSessionInfo();
 
     // helper to update the current micloud session cache info
@@ -363,9 +377,13 @@
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
         cachedMiCloudSession = cachedSessionResult.cachedSession;
-        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + cachedSessionResult.cachedSession.loggedInAt);
+        hasCachedMiCloudSession = true;
+        const loginMethod = cachedSessionResult.cachedSession.loginMethod || 'unknown';
+        const loggedInAt = cachedSessionResult.cachedSession.displayLoggedInAt || cachedSessionResult.cachedSession.loggedInAt || 'unknown';
+        $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + loggedInAt + ". Login method : " + loginMethod);
       } else {
         cachedMiCloudSession = null;
+        hasCachedMiCloudSession = false;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
       showMatterMiCloudSessionWarning(currentConfiguration);
@@ -508,7 +526,7 @@
       let verifyUrl = twoFactorAuthLink.attr('href');
       let twoFaTicket = ticketInput.val();
 
-      if (username && password) {
+      if (hasCachedMiCloudSession || (username && password)) {
         $('.miot-message').hide();
         btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
         usernameInput.prop('disabled', true);
@@ -560,7 +578,7 @@
           showAllDevicesCheckbox.prop('disabled', false);
         })
       } else {
-        homebridge.toast.error('A username and password must be provided.', 'Error');
+        homebridge.toast.error('Login with QR code first, or provide a username and password.', 'Error');
       }
     });
 
@@ -610,6 +628,72 @@
         })
       } else {
         homebridge.toast.error('A username and password must be provided.', 'Error');
+      }
+    });
+
+    // login to MiCloud with QR code
+    $('#createMiCloudQrLogin').on('click', async function(e) {
+      e.preventDefault();
+      let btn = $(this),
+        qrSection = $('.qr-login-section-micloud-session'),
+        qrImage = $('#miCloudQrLoginImage'),
+        qrLoginUrl = $('#miCloudQrLoginUrl'),
+        qrStatus = $('#miCloudQrLoginStatusLbl');
+
+      $('.miot-message').hide();
+      btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+      qrStatus.html('');
+
+      try {
+        const data = await homebridge.request('/create-micloud-qr-login', {});
+        if (!data.success) {
+          homebridge.toast.error(data.error || 'Could not create MiCloud QR login.', 'Login Error');
+          btn.prop('disabled', false).html("Login to MiCloud with QR Code");
+          return;
+        }
+
+        qrImage.attr('src', data.qr);
+        qrLoginUrl.attr('href', data.loginUrl || data.qr);
+        qrSection.show();
+        qrStatus.html('Waiting for QR scan confirmation...');
+
+        const pollInterval = Math.max(Number(data.timeInterval || 3), 2) * 1000;
+        const timeoutAt = Date.now() + (Number(data.timeout || 300) * 1000);
+
+        const poll = async function() {
+          if (Date.now() > timeoutAt) {
+            qrStatus.html('QR login timed out. Please create a new QR code.');
+            btn.prop('disabled', false).html("Login to MiCloud with QR Code");
+            return;
+          }
+
+          const pollData = await homebridge.request('/poll-micloud-qr-login', {
+            lp: data.lp
+          });
+
+          if (pollData.success) {
+            await updateCachedMiCloudSessionInfo();
+            qrStatus.html('MiCloud session successfully saved!');
+            homebridge.toast.success('Successfully cached the MiCloud session! You may now use it for device control.');
+            $('.micloud-session.miot-message').show();
+            btn.prop('disabled', false).html("Login to MiCloud with QR Code");
+            return;
+          }
+
+          if (pollData.pending) {
+            qrStatus.html(pollData.desc || 'Waiting for QR scan confirmation...');
+            setTimeout(poll, pollInterval);
+            return;
+          }
+
+          homebridge.toast.error(pollData.error || 'Could not complete MiCloud QR login.', 'Login Error');
+          btn.prop('disabled', false).html("Login to MiCloud with QR Code");
+        };
+
+        setTimeout(poll, pollInterval);
+      } catch (err) {
+        homebridge.toast.error(err.message || String(err), 'Login Error');
+        btn.prop('disabled', false).html("Login to MiCloud with QR Code");
       }
     });
 

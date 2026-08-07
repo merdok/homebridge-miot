@@ -10,7 +10,7 @@ let Service, Characteristic, Homebridge, Accessory;
 
 const PLUGIN_NAME = 'homebridge-miot';
 const PLATFORM_NAME = 'miot';
-const PLUGIN_VERSION = '1.8.7';
+const PLUGIN_VERSION = '1.9.0';
 const MATTER_MODE_AUTO = 'auto';
 const MATTER_MODE_HAP = 'hap';
 const MATTER_MODE_MATTER = 'matter';
@@ -33,18 +33,17 @@ function looksLikeRobotCleaner(value = '') {
   return value.includes('vacuum') || value.includes('robot cleaner');
 }
 
-function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud) {
+function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady = true) {
   if (deviceType !== DevTypes.ROBOT_CLEANER || matterMode === MATTER_MODE_HAP) {
     return { hap: true, matter: false };
   }
 
-  const canExposeMatter = matterReady && !usesMiCloud;
+  const canExposeMatter = matterReady && !usesMiCloud && localReady;
   if (matterMode === MATTER_MODE_BOTH) {
     return { hap: true, matter: canExposeMatter };
   }
   return canExposeMatter ? { hap: false, matter: true } : { hap: true, matter: false };
 }
-
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
@@ -141,6 +140,8 @@ class miotDeviceController {
     this.restoredCachedMatterAccessory = null;
     this.matterModeWarningShown = false;
     this.robotCleanerMiCloudPolicyLogged = false;
+    this.robotCleanerMatterLocalReady = null;
+    this.robotCleanerMatterLocalError = null;
   }
 
 
@@ -205,6 +206,7 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
+        await this._prepareRobotCleanerMatterTransport();
         this._logRobotCleanerMiCloudPolicy();
         await this.prepareAccessoryAndStartPolling();
       } else {
@@ -352,10 +354,11 @@ class miotDeviceController {
     const matterMode = this._getMatterMode();
     const matterReady = this._isMatterReady();
     const usesMiCloud = this._shouldUseMiCloudForRobotCleaner();
-    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud);
+    const localReady = this.robotCleanerMatterLocalReady !== false;
+    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady);
 
     if (deviceType === DevTypes.ROBOT_CLEANER && matterMode !== MATTER_MODE_HAP && !exposure.matter) {
-      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud);
+      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady);
     }
 
     return exposure;
@@ -365,13 +368,22 @@ class miotDeviceController {
     return getMatterMode(this.config, this.logger);
   }
 
-  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud) {
-    if (matterReady && !usesMiCloud) {
+  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady) {
+    if (matterReady && !usesMiCloud && localReady) {
       return;
     }
 
-    if (!matterReady && matterMode !== MATTER_MODE_AUTO) {
-      this._warnMatterFallback(`Matter mode "${matterMode}" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.`);
+    if (!matterReady) {
+      if (matterMode !== MATTER_MODE_AUTO) {
+        this._warnMatterFallback(`Matter mode "${matterMode}" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.`);
+      }
+      return;
+    }
+
+    if (!localReady) {
+      const reason = this.robotCleanerMatterLocalError ? ` (${this.robotCleanerMatterLocalError})` : '';
+      const fallback = usesMiCloud ? 'HAP/MiCloud' : 'the HAP robot switch';
+      this._warnMatterFallback(`Local MIOT setup failed${reason}. Matter robot control requires a local connection, so ${matterMode === MATTER_MODE_BOTH ? 'only ' : ''}${fallback} will be used.`);
     } else if (usesMiCloud && matterMode === MATTER_MODE_BOTH) {
       this._warnMatterFallback('Matter mode "both" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so only the HAP accessory will be exposed.');
     } else if (usesMiCloud && matterMode === MATTER_MODE_MATTER) {
@@ -396,13 +408,37 @@ class miotDeviceController {
     return this.prefsDir + 'matter_rooms_' + this.ip.split('.').join('') + '_' + this.token + '.json';
   }
 
+  async _prepareRobotCleanerMatterTransport() {
+    const matterMode = this._getMatterMode();
+    if (!this._isRobotCleanerCandidate() || !this._isMatterReady() || matterMode === MATTER_MODE_HAP) {
+      return;
+    }
+
+    this.logger.info('Homebridge Matter is enabled for this robot. Trying local MIOT before MiCloud.');
+    try {
+      await this.miotDevice.tryLocalConnection();
+      this.miotDevice.forceLocalConnection();
+      this.robotCleanerMatterLocalReady = true;
+      this.robotCleanerMatterLocalError = null;
+      this.logger.info('Local MIOT connection succeeded. Matter robot control will stay local.');
+    } catch (err) {
+      this.robotCleanerMatterLocalReady = false;
+      this.robotCleanerMatterLocalError = err && err.message ? err.message : String(err);
+      this.logger.debug(`Local MIOT setup for Matter failed: ${this.robotCleanerMatterLocalError}`);
+    }
+  }
+
   _logRobotCleanerMiCloudPolicy() {
     if (!this._isRobotCleanerCandidate() || !this.miotDevice || this.robotCleanerMiCloudPolicyLogged) {
       return;
     }
 
     this.robotCleanerMiCloudPolicyLogged = true;
-    if (this._shouldUseMiCloudForRobotCleaner()) {
+    if (this.robotCleanerMatterLocalReady === true) {
+      this.logger.info('Robot cleaner is connected through local MIOT for Homebridge Matter.');
+    } else if (this.robotCleanerMatterLocalReady === false && this._shouldUseMiCloudForRobotCleaner()) {
+      this.logger.info('Robot cleaner local MIOT setup failed. Using the HAP/MiCloud fallback.');
+    } else if (this._shouldUseMiCloudForRobotCleaner()) {
       this.logger.info('Robot cleaner is configured to use MiCloud. HAP control can use MiCloud; Matter robot controls require a local MIOT connection.');
     } else {
       this.logger.info('Robot cleaner will use local MIOT. If local connection fails, switch this robot to HAP or MiCloud in config.');

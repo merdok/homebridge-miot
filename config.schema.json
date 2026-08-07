@@ -36,7 +36,7 @@
           },
           "forceMiCloud": {
             "title": "Force MiCloud connection",
-            "description": "Use MiCloud instead of local connection even for devices that do not require it. Robot cleaners using MiCloud are exposed through HAP only because Matter robot controls require local MIOT.",
+            "description": "Use MiCloud instead of local connection even for devices that do not require it. Matter-enabled robot cleaners try local MIOT first and use HAP/MiCloud when local setup fails.",
             "type": "boolean",
             "required": false
           },
@@ -142,7 +142,7 @@
             },
             "matterMode": {
               "title": "Matter mode",
-              "description": "Robot Cleaner only. Controls whether robot vacuums are exposed through Homebridge Matter when Homebridge 2.x Matter is enabled. Matter robot controls require local MIOT; use MiCloud/HAP when local connection times out.",
+              "description": "Robot Cleaner only. Controls whether robot vacuums are exposed through Homebridge Matter when Homebridge 2.x Matter is enabled. The plugin tries local MIOT first and falls back to HAP/MiCloud when local setup fails.",
               "type": "string",
               "enum": [
                 "auto",
@@ -249,7 +249,7 @@
                 },
                 "forceMiCloud": {
                   "title": "Force MiCloud connection",
-                  "description": "Use MiCloud instead of local connection even for devices that do not require it. Robot cleaners using MiCloud are exposed through HAP only because Matter robot controls require local MIOT.",
+                  "description": "Use MiCloud instead of local connection even for devices that do not require it. Matter-enabled robot cleaners try local MIOT first and use HAP/MiCloud when local setup fails.",
                   "type": "boolean",
                   "required": false
                 },

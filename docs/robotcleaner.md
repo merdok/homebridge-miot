@@ -28,7 +28,7 @@ Example:
 ]
 ```
 
-Robot cleaners can use local MIOT or MiCloud. Matter robot controls currently require local MIOT, so a robot configured with `micloud.forceMiCloud`, `micloud.useCachedSession` plus a model-level MiCloud requirement, or another MiCloud-only path is exposed through the existing HAP robot switch instead of Matter. This is an implementation choice to provide strict command results without adding Matter traffic to MiCloud rate limits, not a limitation of Matter itself.
+Robot cleaners can use local MIOT or MiCloud. When Homebridge Matter is enabled and `matterMode` is not `hap`, the plugin tries a local MIOT connection first, even when `micloud.forceMiCloud` or a model-level MiCloud requirement is configured. A successful connection stays local for Matter commands. If local setup fails, the plugin exposes the existing HAP robot switch and keeps the configured MiCloud path available as the fallback. This provides strict Matter command results without adding Matter traffic to MiCloud rate limits; it is an implementation choice, not a limitation of Matter itself.
 
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
 
