@@ -32,6 +32,8 @@ Robot cleaners can use local MIOT or MiCloud. When Homebridge Matter is enabled 
 
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. If Matter is disabled or unavailable, `auto`, `matter`, and `both` fall back to the existing HomeKit switch; `hap` always uses the existing HomeKit switch.
 
+When the robot reports charging complete, or reports 100% while charging, its Matter operational state is `Ready`. Robots that are still charging continue to report `Charging`.
+
 Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
 
 ### Room cleaning
