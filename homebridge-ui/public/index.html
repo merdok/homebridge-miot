@@ -285,6 +285,7 @@
     let cachedMiCloudSession = null;
     let hasCachedMiCloudSession = false;
     let lastMatterMiCloudWarningKey = null;
+    let matterBridgeStatus = null;
 
     function hasOwnProperty(obj, key) {
       return !!obj && Object.prototype.hasOwnProperty.call(obj, key);
@@ -294,8 +295,53 @@
       return $('<div>').text(value).html();
     }
 
-    function usesExplicitMatterMode(device = {}) {
-      return device.matterMode === 'matter' || device.matterMode === 'both';
+    function usesMatter(device = {}) {
+      if (typeof device.matterEnabled === 'boolean') {
+        return device.matterEnabled;
+      }
+      return ['auto', 'matter', 'both'].includes(device.matterMode);
+    }
+
+    function usesMatterCloud(device = {}) {
+      return usesMatter(device) && (device.matterConnection || 'auto') !== 'local';
+    }
+
+    function migrateLegacyMatterSettings(config = {}) {
+      (Array.isArray(config.devices) ? config.devices : []).forEach(device => {
+        if (typeof device.matterEnabled !== 'boolean' && device.matterMode) {
+          device.matterEnabled = device.matterMode !== 'hap';
+          device.matterConnection = device.matterConnection || 'auto';
+        }
+      });
+    }
+
+    function findLayoutItem(items, title) {
+      for (const item of items || []) {
+        if (item && item.title === title) {
+          return item;
+        }
+        const nested = item && Array.isArray(item.items) ? findLayoutItem(item.items, title) : null;
+        if (nested) {
+          return nested;
+        }
+      }
+      return null;
+    }
+
+    function updateMatterStatusDescription() {
+      const fieldset = findLayoutItem(configSchema.layout, 'Matter Settings');
+      if (!fieldset) {
+        return;
+      }
+
+      if (!matterBridgeStatus || !matterBridgeStatus.success) {
+        fieldset.description = 'Robot Cleaner only. Matter status could not be verified. Use Homebridge 2.x and enable Matter on the main bridge or this plugin child bridge.';
+      } else if (matterBridgeStatus.enabled) {
+        fieldset.description = `Homebridge Matter is enabled on this ${matterBridgeStatus.scope}.`;
+      } else {
+        const location = matterBridgeStatus.scope === 'plugin child bridge' ? 'this plugin\'s child bridge settings' : 'Homebridge Settings';
+        fieldset.description = `Homebridge Matter is not enabled on this ${matterBridgeStatus.scope}. Enable Matter in ${location}, then restart Homebridge.`;
+      }
     }
 
     function getEffectiveMiCloudConfigProp(config = {}, device = {}, key) {
@@ -320,7 +366,7 @@
             useCachedSession: getEffectiveMiCloudConfigProp(config, device, 'useCachedSession') === true
           };
         })
-        .filter(entry => usesExplicitMatterMode(entry.device))
+        .filter(entry => usesMatterCloud(entry.device))
         .filter(entry => !entry.hasCredentials && !(cachedMiCloudSession && entry.useCachedSession));
     }
 
@@ -368,6 +414,14 @@
     $('#openMiCloudSessionCache').on('click', () => {
       $('#miCloudSession').collapse('show');
     });
+
+    migrateLegacyMatterSettings(configuration);
+    try {
+      matterBridgeStatus = await homebridge.request('/get-matter-status', {});
+    } catch (err) {
+      matterBridgeStatus = null;
+    }
+    updateMatterStatusDescription();
 
     // check whether we have a cached micloud session
     await updateCachedMiCloudSessionInfo();

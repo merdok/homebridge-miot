@@ -22,6 +22,7 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/create-micloud-qr-login', this.createMiCloudQrLogin.bind(this));
     this.onRequest('/poll-micloud-qr-login', this.pollMiCloudQrLogin.bind(this));
     this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
+    this.onRequest('/get-matter-status', this.getMatterStatus.bind(this));
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -154,6 +155,30 @@ class UiServer extends HomebridgePluginUiServer {
         success: false,
         error: err.message
       }
+    }
+  }
+
+  async getMatterStatus() {
+    try {
+      const configPath = this.homebridgeConfigPath || this.homebridgeStoragePath + '/config.json';
+      const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+      const platform = Array.isArray(config.platforms) ? config.platforms.find(item => item && item.platform === 'miot') : null;
+      const childBridge = platform && platform._bridge;
+      const scope = childBridge ? 'plugin child bridge' : 'main bridge';
+      const matterConfig = childBridge ? childBridge.matter : config.bridge && config.bridge.matter;
+      const enabled = matterConfig === true || !!(matterConfig && matterConfig.enabled !== false && matterConfig.externalsOnly !== true);
+
+      return {
+        success: true,
+        enabled,
+        scope
+      };
+    } catch (err) {
+      return {
+        success: false,
+        enabled: false,
+        error: err.message
+      };
     }
   }
 

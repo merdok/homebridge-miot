@@ -16,9 +16,17 @@ const MATTER_MODE_HAP = 'hap';
 const MATTER_MODE_MATTER = 'matter';
 const MATTER_MODE_BOTH = 'both';
 const MATTER_MODES = [MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH];
+const MATTER_CONNECTION_AUTO = 'auto';
+const MATTER_CONNECTION_LOCAL = 'local';
+const MATTER_CONNECTION_CLOUD = 'cloud';
+const MATTER_CONNECTIONS = [MATTER_CONNECTION_AUTO, MATTER_CONNECTION_LOCAL, MATTER_CONNECTION_CLOUD];
 
 function getMatterMode(config = {}, logger = null) {
-  const mode = config.matterMode || MATTER_MODE_AUTO;
+  if (typeof config.matterEnabled === 'boolean') {
+    return config.matterEnabled ? MATTER_MODE_MATTER : MATTER_MODE_HAP;
+  }
+
+  const mode = config.matterMode || MATTER_MODE_HAP;
   if (MATTER_MODES.includes(mode)) {
     return mode;
   }
@@ -28,17 +36,38 @@ function getMatterMode(config = {}, logger = null) {
   return MATTER_MODE_AUTO;
 }
 
+function getMatterConnection(config = {}, logger = null) {
+  const connection = config.matterConnection || MATTER_CONNECTION_AUTO;
+  if (MATTER_CONNECTIONS.includes(connection)) {
+    return connection;
+  }
+  if (logger && logger.warn) {
+    logger.warn(`Unknown matterConnection "${connection}". Falling back to "auto".`);
+  }
+  return MATTER_CONNECTION_AUTO;
+}
+
 function looksLikeRobotCleaner(value = '') {
   value = String(value).toLowerCase();
   return value.includes('vacuum') || value.includes('robot cleaner');
 }
 
-function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady = true) {
+function canUseMatterTransport(connection, usesMiCloud, localReady) {
+  if (connection === MATTER_CONNECTION_CLOUD) {
+    return usesMiCloud;
+  }
+  if (connection === MATTER_CONNECTION_LOCAL) {
+    return localReady;
+  }
+  return localReady || usesMiCloud;
+}
+
+function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady = true, connection = MATTER_CONNECTION_AUTO) {
   if (deviceType !== DevTypes.ROBOT_CLEANER || matterMode === MATTER_MODE_HAP) {
     return { hap: true, matter: false };
   }
 
-  const canExposeMatter = matterReady && !usesMiCloud && localReady;
+  const canExposeMatter = matterReady && canUseMatterTransport(connection, usesMiCloud, localReady);
   if (matterMode === MATTER_MODE_BOTH) {
     return { hap: true, matter: canExposeMatter };
   }
@@ -81,6 +110,12 @@ class miotDeviceController {
     this.miCloudConfig = {};
     this.miCloudConfig.global = globalmicloudconfig;
     this.miCloudConfig.device = config.micloud;
+    this.matterConnection = getMatterConnection(config, this.logger);
+    if (getMatterMode(config) !== MATTER_MODE_HAP && this.matterConnection !== MATTER_CONNECTION_AUTO) {
+      this.miCloudConfig.device = Object.assign({}, config.micloud, {
+        forceMiCloud: this.matterConnection === MATTER_CONNECTION_CLOUD
+      });
+    }
     this.pollingInterval = config.pollingInterval || Constants.DEFAULT_POLLING_INTERVAL;
     if (this.pollingInterval < 500) {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
@@ -355,10 +390,11 @@ class miotDeviceController {
     const matterReady = this._isMatterReady();
     const usesMiCloud = this._shouldUseMiCloudForRobotCleaner();
     const localReady = this.robotCleanerMatterLocalReady !== false;
-    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady);
+    const matterConnection = this._getMatterConnection();
+    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady, matterConnection);
 
     if (deviceType === DevTypes.ROBOT_CLEANER && matterMode !== MATTER_MODE_HAP && !exposure.matter) {
-      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady);
+      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady, matterConnection);
     }
 
     return exposure;
@@ -368,8 +404,12 @@ class miotDeviceController {
     return getMatterMode(this.config, this.logger);
   }
 
-  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady) {
-    if (matterReady && !usesMiCloud && localReady) {
+  _getMatterConnection() {
+    return this.matterConnection;
+  }
+
+  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady, matterConnection) {
+    if (matterReady && canUseMatterTransport(matterConnection, usesMiCloud, localReady)) {
       return;
     }
 
@@ -380,16 +420,12 @@ class miotDeviceController {
       return;
     }
 
-    if (!localReady) {
+    if (matterConnection === MATTER_CONNECTION_CLOUD) {
+      this._warnMatterFallback('Matter Cloud connection requested, but MiCloud is unavailable. Falling back to the HAP robot switch.');
+    } else if (!localReady) {
       const reason = this.robotCleanerMatterLocalError ? ` (${this.robotCleanerMatterLocalError})` : '';
       const fallback = usesMiCloud ? 'HAP/MiCloud' : 'the HAP robot switch';
-      this._warnMatterFallback(`Local MIOT setup failed${reason}. Matter robot control requires a local connection, so ${matterMode === MATTER_MODE_BOTH ? 'only ' : ''}${fallback} will be used.`);
-    } else if (usesMiCloud && matterMode === MATTER_MODE_BOTH) {
-      this._warnMatterFallback('Matter mode "both" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so only the HAP accessory will be exposed.');
-    } else if (usesMiCloud && matterMode === MATTER_MODE_MATTER) {
-      this._warnMatterFallback('Matter mode "matter" requested, but this robot is configured to use MiCloud. Matter robot controls require local MIOT, so falling back to the HAP robot switch.');
-    } else if (usesMiCloud && matterMode === MATTER_MODE_AUTO) {
-      this._warnMatterFallback('Matter auto mode found Homebridge Matter enabled, but this robot is configured to use MiCloud. Exposing the HAP robot switch because Matter robot controls require local MIOT.');
+      this._warnMatterFallback(`Local MIOT setup failed${reason}, and no MiCloud fallback is available. ${matterMode === MATTER_MODE_BOTH ? 'Only ' : ''}${fallback} will be used.`);
     }
   }
 
@@ -411,6 +447,11 @@ class miotDeviceController {
   async _prepareRobotCleanerMatterTransport() {
     const matterMode = this._getMatterMode();
     if (!this._isRobotCleanerCandidate() || !this._isMatterReady() || matterMode === MATTER_MODE_HAP) {
+      return;
+    }
+
+    if (this._getMatterConnection() === MATTER_CONNECTION_CLOUD) {
+      this.logger.info('Homebridge Matter is enabled for this robot. Using the selected MiCloud connection.');
       return;
     }
 
@@ -437,11 +478,11 @@ class miotDeviceController {
     if (this.robotCleanerMatterLocalReady === true) {
       this.logger.info('Robot cleaner is connected through local MIOT for Homebridge Matter.');
     } else if (this.robotCleanerMatterLocalReady === false && this._shouldUseMiCloudForRobotCleaner()) {
-      this.logger.info('Robot cleaner local MIOT setup failed. Using the HAP/MiCloud fallback.');
+      this.logger.info('Robot cleaner local MIOT setup failed. Using MiCloud for Homebridge Matter.');
     } else if (this._shouldUseMiCloudForRobotCleaner()) {
-      this.logger.info('Robot cleaner is configured to use MiCloud. HAP control can use MiCloud; Matter robot controls require a local MIOT connection.');
+      this.logger.info('Robot cleaner is connected through MiCloud for Homebridge Matter.');
     } else {
-      this.logger.info('Robot cleaner will use local MIOT. If local connection fails, switch this robot to HAP or MiCloud in config.');
+      this.logger.info('Robot cleaner will use local MIOT. If local connection fails, select Auto or Cloud and configure MiCloud.');
     }
   }
 
@@ -596,3 +637,5 @@ class miotPlatform {
 }
 
 module.exports.getAccessoryExposure = getAccessoryExposure;
+module.exports.getMatterConnection = getMatterConnection;
+module.exports.getMatterMode = getMatterMode;
