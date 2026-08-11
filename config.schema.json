@@ -48,7 +48,7 @@
           },
           "useCachedSession": {
             "title": "Use cached MiCloud session",
-            "description": "Use the cached session to connect to MiCloud. Use the UI to log in and save a session; the plugin refreshes the cached service token when credentials are configured.",
+            "description": "Use the cached session to connect to MiCloud or check Matter robot reachability. The UI can cache the previous discovery login or guide you through login; the plugin refreshes the token when credentials are configured.",
             "type": "boolean",
             "required": false
           }
@@ -285,7 +285,7 @@
                 },
                 "useCachedSession": {
                   "title": "Use cached MiCloud session",
-                  "description": "Use the cached session to connect to MiCloud. Use the UI to log in and save a session; the plugin refreshes the cached service token when credentials are configured.",
+                  "description": "Use the cached session to connect to MiCloud or check Matter robot reachability. The UI can cache the previous discovery login or guide you through login; the plugin refreshes the token when credentials are configured.",
                   "type": "boolean",
                   "required": false
                 }
@@ -655,7 +655,7 @@
             {
               "type": "fieldset",
               "title": "Matter Settings",
-              "description": "Robot Cleaner only. Homebridge 2.x Matter must also be enabled on the main bridge or this plugin's child bridge.",
+              "description": "Robot Cleaner only. Homebridge 2.x Matter must also be enabled on the main bridge or this plugin's child bridge. Auto and Cloud can use a cached MiCloud session for connection fallback and reachability checks.",
               "expandable": true,
               "expanded": false,
               "items": [

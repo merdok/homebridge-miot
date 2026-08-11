@@ -30,12 +30,15 @@ Example:
 ```
 
 Robot cleaners can use local MIOT or MiCloud. `auto` prefers local MIOT even when `micloud.forceMiCloud` or a model-level MiCloud requirement is configured, and uses MiCloud for Matter only if local setup fails. `local` overrides MiCloud forcing for the robot, while `cloud` forces MiCloud for the robot.
+The local path includes the legacy command adapter used by the Roborock S5 and first-generation Xiaomi/Roborock vacuums. For `auto` and `cloud`, a configured credential pair or cached MiCloud session is also used for rate-limited reachability checks. If neither the LAN path nor MiCloud responds, Matter reads fail and the operational state changes to Error instead of continuing to serve stale state. The settings UI can reuse the most recent successful discovery/2FA login when **Cache MiCloud session** is pressed; if no prior login is available it opens the login flow and then enables the cache for Matter robots.
 
 Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. These bridge settings are independent. If Matter is disabled, unavailable, or the selected connection cannot be established, the plugin falls back to the existing HomeKit robot switch. The older `matterMode` setting remains accepted for configuration compatibility but is no longer shown in the settings UI.
 
 When the robot reports charging complete, or reports 100% while charging, its Matter operational state is `Ready`. Robots that are still charging continue to report `Charging`.
 
 Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
+
+When a robot is removed or its identity changes, the plugin moves its orphaned external Matter storage into `~/.homebridge/.miot_matter_stale` (or the equivalent Homebridge storage path). This removes the old robot from the external-accessory pairing list while keeping the storage recoverable.
 
 ### Room cleaning
 

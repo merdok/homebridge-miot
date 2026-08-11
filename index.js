@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const path = require('path');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
@@ -555,6 +556,8 @@ class miotPlatform {
   async initDevices() {
     this.log.info('Initializing devices');
 
+    await this.quarantineStaleExternalMatterStorage();
+
     // read from config.devices
     if (this.config.devices && Array.isArray(this.config.devices)) {
       for (let deviceConfig of this.config.devices) {
@@ -631,6 +634,72 @@ class miotPlatform {
       await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, accessories);
     } finally {
       this.cachedMatterAccessories = [];
+    }
+  }
+
+  async quarantineStaleExternalMatterStorage() {
+    if (!this.api?.user?.storagePath || !Array.isArray(this.config.devices)) {
+      return;
+    }
+
+    const expectedMatterUuids = new Set(this.config.devices
+      .filter(device => device)
+      .filter(device => getMatterMode(device) !== MATTER_MODE_HAP)
+      .filter(device => device.ip && device.token)
+      .map(device => {
+        const uuidSeed = device.token + device.ip + (device.deviceId || '') + PLATFORM_NAME;
+        return Homebridge.hap.uuid.generate(uuidSeed + ':matter');
+      }));
+
+    const storagePath = this.api.user.storagePath();
+    const matterStoragePath = path.join(storagePath, 'matter');
+    let entries;
+    try {
+      entries = await fs.readdir(matterStoragePath, { withFileTypes: true });
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        this.log.warn(`Could not inspect Matter accessory storage for stale MIOT robots: ${err.message}`);
+      }
+      return;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+
+      const externalStoragePath = path.join(matterStoragePath, entry.name);
+      const cacheFile = path.join(externalStoragePath, 'accessories.json');
+      let cachedAccessories;
+      try {
+        cachedAccessories = JSON.parse(await fs.readFile(cacheFile, 'utf8'));
+      } catch (err) {
+        continue;
+      }
+
+      if (!Array.isArray(cachedAccessories) || cachedAccessories.length === 0) {
+        continue;
+      }
+      const belongsToMiot = cachedAccessories.every(accessory =>
+        accessory.plugin === PLUGIN_NAME &&
+        accessory.context?.plugin === PLUGIN_NAME &&
+        accessory.context?.deviceType === DevTypes.ROBOT_CLEANER);
+      const isStale = cachedAccessories.every(accessory => !expectedMatterUuids.has(accessory.uuid));
+      if (!belongsToMiot || !isStale) {
+        continue;
+      }
+
+      const quarantineRoot = path.join(storagePath, '.miot_matter_stale');
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const quarantinePath = path.join(quarantineRoot, `${entry.name}-${timestamp}`);
+      try {
+        await fs.mkdir(quarantineRoot, { recursive: true });
+        await fs.rename(externalStoragePath, quarantinePath);
+        const names = cachedAccessories.map(accessory => accessory.displayName || accessory.uuid).join(', ');
+        this.log.info(`Quarantined stale external Matter robot storage for ${names}. It can be recovered from ${quarantinePath}.`);
+      } catch (err) {
+        this.log.warn(`Could not quarantine stale external Matter robot storage ${externalStoragePath}: ${err.message}`);
+      }
     }
   }
 

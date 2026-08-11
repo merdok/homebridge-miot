@@ -199,7 +199,7 @@ This is a global configuration object for the MiCloud connection. When specified
     - *password* - [required] the MiCloud password
     - *country* - [optional] the country where the servers are located for your devices. **Default: "cn"**
     - *forceMiCloud* - [optional] forces to use MiCloud even when the device supports local commands. Matter-enabled robot cleaners try local MIOT first and fall back to HAP/MiCloud when local setup fails. **Default: false**
-    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account. Use the homebrige ui to create a session. The recommended flow is the QR code login because Xiaomi's password login can now require a browser-only auth flow. **Default: false**
+    - *useCachedSession* - [optional] use a cached MiCloud session. Useful when 2FA is needed for the account and as a connection/reachability fallback for Matter robots. The recommended QR-code flow handles Xiaomi's browser-only authentication; the UI can also reuse the latest successful discovery login when **Cache MiCloud session** is pressed. **Default: false**
     - *timeout* - [optional] set a custom request timeout in milliseconds. **Default: 5000**
 #### General device configuration fields
 - `name` [required]
@@ -229,7 +229,7 @@ Whether the device is enabled. Disabling the device will not initiate polling. U
 - `matterEnabled` [optional]
 Robot Cleaner only. Exposes the robot through Homebridge Matter. Homebridge 2.x Matter must also be enabled on the main bridge or this plugin's child bridge. **Default: false**
 - `matterConnection` [optional]
-Robot Cleaner only. Selects `auto`, `local`, or `cloud`. Auto tries local MIOT first and uses configured MiCloud as a fallback. See the [Robot Cleaner guide](https://github.com/merdok/homebridge-miot/blob/main/docs/robotcleaner.md). **Default: auto**
+Robot Cleaner only. Selects `auto`, `local`, or `cloud`. Auto tries local MIOT first and uses configured MiCloud as a fallback. If neither path responds, Matter reports the robot unavailable instead of serving stale state. See the [Robot Cleaner guide](https://github.com/merdok/homebridge-miot/blob/main/docs/robotcleaner.md). **Default: auto**
 - `customAccessory` [optional]
 Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `onlyMainService` [optional]

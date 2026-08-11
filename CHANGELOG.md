@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added local Matter support for the Roborock S5 legacy miIO command set.
+- Added MiCloud reachability fallback for Matter robot polling.
+
+### Fixed
+- Reused the most recent discovery/2FA login when caching a MiCloud session and enabled the cache for Matter robots.
+- Removed vertically rendered loading text from custom UI spinners.
+- Quarantined removed robots' stale external Matter storage so old vacuums no longer remain in the pairing list.
+
 ## [1.9.0] - 2026-07-24
 ### Added
 - Added support for login to MiCloud via QR code. That should improve and simply caching of the session. Thanks @Debbie-Yuan for the contribution.
@@ -13,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix cuco.plug.cp1 spec. Thanks @Debbie-Yuan for the contribution.
-
 
 ## [1.8.7] - 2026-03-01
 ### Added

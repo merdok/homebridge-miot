@@ -21,8 +21,11 @@ class UiServer extends HomebridgePluginUiServer {
     this.onRequest('/login-to-micloud', this.loginToMiCloud.bind(this));
     this.onRequest('/create-micloud-qr-login', this.createMiCloudQrLogin.bind(this));
     this.onRequest('/poll-micloud-qr-login', this.pollMiCloudQrLogin.bind(this));
+    this.onRequest('/cache-last-micloud-session', this.cacheLastMiCloudSession.bind(this));
     this.onRequest('/get-cached-micloud-session', this.getCachedMiCloudSession.bind(this));
     this.onRequest('/get-matter-status', this.getMatterStatus.bind(this));
+
+    this.lastMiCloudSession = null;
 
     // this.ready() must be called to let the UI know you are ready to accept api calls
     this.ready();
@@ -77,6 +80,10 @@ class UiServer extends HomebridgePluginUiServer {
         };
       }
     }
+
+    // Keep the successful discovery login available to the explicit cache
+    // button. This avoids making the user repeat Xiaomi's 2FA flow.
+    this.lastMiCloudSession = miCloud.getServiceToken();
 
     let warningMsg = null;
 
@@ -223,6 +230,7 @@ class UiServer extends HomebridgePluginUiServer {
 
     try {
       await this.saveCachedMiCloudSession(serviceToken);
+      this.lastMiCloudSession = serviceToken;
     } catch (err) {
       return {
         success: false,
@@ -258,6 +266,26 @@ class UiServer extends HomebridgePluginUiServer {
     }
   }
 
+  async cacheLastMiCloudSession() {
+    if (!this.lastMiCloudSession) {
+      return {
+        success: false,
+        loginRequired: true,
+        error: 'No successful MiCloud login is available to cache. Please log in first.'
+      };
+    }
+
+    try {
+      await this.saveCachedMiCloudSession(this.lastMiCloudSession);
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        error: `Failed to save MiCloud session! Error: ` + err.message
+      };
+    }
+  }
+
   async pollMiCloudQrLogin(params) {
     const miCloud = new MiCloud(new Logger());
     miCloud.setRequestTimeout(10000);
@@ -276,6 +304,7 @@ class UiServer extends HomebridgePluginUiServer {
       await miCloud.completeQrLogin(qrLoginData);
       const serviceToken = miCloud.getServiceToken();
       await this.saveCachedMiCloudSession(serviceToken);
+      this.lastMiCloudSession = serviceToken;
 
       return {
         success: true,
