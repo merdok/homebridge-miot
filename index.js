@@ -460,6 +460,7 @@ class miotDeviceController {
     try {
       await this.miotDevice.tryLocalConnection();
       this.miotDevice.forceLocalConnection();
+      await this.device.detectLocalCapabilities?.();
       this.robotCleanerMatterLocalReady = true;
       this.robotCleanerMatterLocalError = null;
       this.logger.info('Local MIOT connection succeeded. Matter robot control will stay local.');

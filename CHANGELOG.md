@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added local Matter support for the Roborock S5 legacy miIO command set.
+- Added capability-driven local Matter fallbacks for robots that expose the legacy miIO command set.
 - Added MiCloud reachability fallback for Matter robot polling.
 
 ### Fixed
