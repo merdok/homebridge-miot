@@ -164,6 +164,13 @@
               "default": "auto",
               "required": false
             },
+            "matterHomeKitDockSwitch": {
+              "title": "Add HomeKit Return-to-Dock Switch",
+              "description": "Adds a momentary HomeKit switch for sending this Matter robot back to its dock from Apple Home automations and Shortcuts. The Homebridge bridge must also be paired with Apple Home.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
             "matterMode": {
               "title": "Legacy Matter mode",
               "description": "Deprecated compatibility setting. Use Enable Matter and Connection instead.",
@@ -661,6 +668,7 @@
               "items": [
                 "devices[].matterEnabled",
                 "devices[].matterConnection",
+                "devices[].matterHomeKitDockSwitch",
                 {
                   "type": "fieldset",
                   "title": "Advanced Matter Settings",

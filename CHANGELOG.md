@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added capability-driven local Matter fallbacks for robots that expose the legacy miIO command set.
 - Added MiCloud reachability fallback for Matter robot polling.
+- Added an optional HomeKit Return-to-Dock switch for Matter robot automations and Shortcuts.
 
 ### Fixed
 - Reused the most recent discovery/2FA login when caching a MiCloud session and enabled the cache for Matter robots.

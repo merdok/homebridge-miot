@@ -256,26 +256,35 @@ class miotDeviceController {
 
   async prepareAccessoryAndStartPolling() {
     const exposure = this._getAccessoryExposure();
+    const exposeHomeKitDockSwitch = exposure.matter && this.config.matterHomeKitDockSwitch === true;
+    const exposeHap = exposure.hap || exposeHomeKitDockSwitch;
     let hasRegisteredAccessory = false;
 
     // first unregister a cached HAP accessory if present and HAP is enabled for this device.
-    if (this.restoredCachedAccessory && exposure.hap) {
+    if (this.restoredCachedAccessory && exposeHap) {
       this.logger.debug('Found cached accessory for this device! Unregistering it first!');
       this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
       this.restoredCachedAccessory = null;
     }
 
-    if (this.restoredCachedAccessory && !exposure.hap) {
+    if (this.restoredCachedAccessory && !exposeHap) {
       this.logger.info('Removing stale HAP accessory because this robot is configured for Matter.');
       this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
       this.restoredCachedAccessory = null;
     }
 
-    if (exposure.hap) {
-      this.device.initDeviceAccessory(this.getAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo);
+    if (exposeHap) {
+      const accessoryConfig = exposeHomeKitDockSwitch
+        ? {
+          ...this.config,
+          _matterHomeKitDockSwitchEnabled: true,
+          _matterHomeKitDockSwitchOnly: !exposure.hap
+        }
+        : this.config;
+      this.device.initDeviceAccessory(this.getAccessoryUuid(), accessoryConfig, this.api, this.cachedDeviceInfo);
     }
 
-    if (exposure.hap && this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
+    if (exposeHap && this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
       this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.device.getAccessories());
       hasRegisteredAccessory = true;

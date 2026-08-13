@@ -230,6 +230,8 @@ Whether the device is enabled. Disabling the device will not initiate polling. U
 Robot Cleaner only. Exposes the robot through Homebridge Matter. Homebridge 2.x Matter must also be enabled on the main bridge or this plugin's child bridge. **Default: false**
 - `matterConnection` [optional]
 Robot Cleaner only. Selects `auto`, `local`, or `cloud`. Auto tries local MIOT first and uses configured MiCloud as a fallback. If neither path responds, Matter reports the robot unavailable instead of serving stale state. See the [Robot Cleaner guide](https://github.com/merdok/homebridge-miot/blob/main/docs/robotcleaner.md). **Default: auto**
+- `matterHomeKitDockSwitch` [optional]
+Robot Cleaner only. Adds a momentary HomeKit **Return to Dock** switch alongside a Matter robot so Apple Home automations and Shortcuts can send it home. The Homebridge bridge must also be paired with Apple Home. **Default: false**
 - `customAccessory` [optional]
 Creates a custom empty accessory for the device which can be manually populated with services. Requires ***actionButtons***, ***propertyControl*** or ***propertyMonitor*** to be set. **Default: false**
 - `onlyMainService` [optional]
