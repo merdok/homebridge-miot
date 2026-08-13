@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const { createHash } = require('crypto');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
@@ -61,6 +62,10 @@ function canUseMatterTransport(connection, usesMiCloud, localReady) {
     return localReady;
   }
   return localReady || usesMiCloud;
+}
+
+function getExternalMatterStorageId(accessoryUuid) {
+  return createHash('sha1').update(accessoryUuid).digest('hex').slice(0, 12).toUpperCase();
 }
 
 function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady = true, connection = MATTER_CONNECTION_AUTO) {
@@ -660,6 +665,7 @@ class miotPlatform {
         const uuidSeed = device.token + device.ip + (device.deviceId || '') + PLATFORM_NAME;
         return Homebridge.hap.uuid.generate(uuidSeed + ':matter');
       }));
+    const expectedStorageIds = new Map(Array.from(expectedMatterUuids, uuid => [getExternalMatterStorageId(uuid), uuid]));
 
     const storagePath = this.api.user.storagePath();
     const matterStoragePath = path.join(storagePath, 'matter');
@@ -680,10 +686,29 @@ class miotPlatform {
 
       const externalStoragePath = path.join(matterStoragePath, entry.name);
       const cacheFile = path.join(externalStoragePath, 'accessories.json');
+      const expectedUuid = expectedStorageIds.get(entry.name.toUpperCase());
       let cachedAccessories;
       try {
         cachedAccessories = JSON.parse(await fs.readFile(cacheFile, 'utf8'));
       } catch (err) {
+        if (expectedUuid) {
+          await this._quarantineExternalMatterStorage(
+            externalStoragePath,
+            entry.name,
+            'Homebridge removed its Matter accessory cache. The robot will be published again with fresh pairing credentials.'
+          );
+        }
+        continue;
+      }
+
+      const expectedAccessoryIsMissing = expectedUuid && (!Array.isArray(cachedAccessories) ||
+        !cachedAccessories.some(accessory => (accessory.uuid || accessory.UUID) === expectedUuid));
+      if (expectedAccessoryIsMissing) {
+        await this._quarantineExternalMatterStorage(
+          externalStoragePath,
+          entry.name,
+          'Homebridge removed this configured Matter robot. It will be published again with fresh pairing credentials.'
+        );
         continue;
       }
 
@@ -699,22 +724,28 @@ class miotPlatform {
         continue;
       }
 
-      const quarantineRoot = path.join(storagePath, '.miot_matter_stale');
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const quarantinePath = path.join(quarantineRoot, `${entry.name}-${timestamp}`);
-      try {
-        await fs.mkdir(quarantineRoot, { recursive: true });
-        await fs.rename(externalStoragePath, quarantinePath);
-        const names = cachedAccessories.map(accessory => accessory.displayName || accessory.uuid).join(', ');
-        this.log.info(`Quarantined stale external Matter robot storage for ${names}. It can be recovered from ${quarantinePath}.`);
-      } catch (err) {
-        this.log.warn(`Could not quarantine stale external Matter robot storage ${externalStoragePath}: ${err.message}`);
-      }
+      const names = cachedAccessories.map(accessory => accessory.displayName || accessory.uuid).join(', ');
+      await this._quarantineExternalMatterStorage(externalStoragePath, entry.name, `The stored MIOT robot (${names}) is no longer present in config.`);
+    }
+  }
+
+  async _quarantineExternalMatterStorage(externalStoragePath, storageId, reason) {
+    const quarantineRoot = path.join(this.api.user.storagePath(), '.miot_matter_stale');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const quarantinePath = path.join(quarantineRoot, `${storageId}-${timestamp}`);
+    try {
+      await fs.mkdir(quarantineRoot, { recursive: true });
+      await fs.rename(externalStoragePath, quarantinePath);
+      this.log.info(`${reason} Quarantined its old external Matter storage at ${quarantinePath}.`);
+    } catch (err) {
+      this.log.warn(`Could not quarantine stale external Matter robot storage ${externalStoragePath}: ${err.message}`);
     }
   }
 
 }
 
 module.exports.getAccessoryExposure = getAccessoryExposure;
+module.exports.getExternalMatterStorageId = getExternalMatterStorageId;
 module.exports.getMatterConnection = getMatterConnection;
 module.exports.getMatterMode = getMatterMode;
+module.exports.miotPlatform = miotPlatform;

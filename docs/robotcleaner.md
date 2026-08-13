@@ -42,7 +42,7 @@ When the robot reports charging complete, or reports 100% while charging, its Ma
 
 Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
 
-When a robot is removed or its identity changes, the plugin moves its orphaned external Matter storage into `~/.homebridge/.miot_matter_stale` (or the equivalent Homebridge storage path). This removes the old robot from the external-accessory pairing list while keeping the storage recoverable.
+When a robot is removed or its identity changes, the plugin moves its orphaned external Matter storage into `~/.homebridge/.miot_matter_stale` (or the equivalent Homebridge storage path). If a configured robot is removed from Homebridge's Matter accessory cache, the plugin also quarantines the old commissioned storage before publishing it again, so it returns to the external-accessory list with fresh pairing credentials. The old storage remains recoverable.
 
 ### Room cleaning
 

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reused the most recent discovery/2FA login when caching a MiCloud session and enabled the cache for Matter robots.
 - Removed vertically rendered loading text from custom UI spinners.
 - Quarantined removed robots' stale external Matter storage so old vacuums no longer remain in the pairing list.
+- Recreated configured Matter robots with fresh pairing credentials after they are removed from Homebridge's Matter accessory cache.
 
 ## [1.9.0] - 2026-07-24
 ### Added
