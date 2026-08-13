@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed vertically rendered loading text from custom UI spinners.
 - Quarantined removed robots' stale external Matter storage so old vacuums no longer remain in the pairing list.
 - Recreated configured Matter robots with fresh pairing credentials after they are removed from Homebridge's Matter accessory cache.
+- Reported fully charged robots as the standard Matter docked state so Homebridge accepts the accessory definition.
 
 ## [1.9.0] - 2026-07-24
 ### Added
