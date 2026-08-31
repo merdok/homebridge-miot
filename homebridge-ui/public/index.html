@@ -309,7 +309,7 @@
     function migrateLegacyMatterSettings(config = {}) {
       (Array.isArray(config.devices) ? config.devices : []).forEach(device => {
         if (typeof device.matterEnabled !== 'boolean' && device.matterMode) {
-          device.matterEnabled = device.matterMode !== 'hap';
+          device.matterEnabled = ['auto', 'matter', 'both'].includes(device.matterMode);
           device.matterConnection = device.matterConnection || 'auto';
         }
       });

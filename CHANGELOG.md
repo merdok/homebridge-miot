@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added an optional HomeKit Return-to-Dock switch for Matter robot automations and Shortcuts.
 
 ### Fixed
+- Kept Matter robot exposure disabled unless it is explicitly enabled and Homebridge provides the complete robot Matter API.
 - Reused the most recent discovery/2FA login when caching a MiCloud session and enabled the cache for Matter robots.
 - Removed vertically rendered loading text from custom UI spinners.
 - Quarantined removed robots' stale external Matter storage so old vacuums no longer remain in the pairing list.

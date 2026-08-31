@@ -33,9 +33,9 @@ function getMatterMode(config = {}, logger = null) {
     return mode;
   }
   if (logger && logger.warn) {
-    logger.warn(`Unknown matterMode "${mode}". Falling back to "auto".`);
+    logger.warn(`Unknown matterMode "${mode}". Matter will remain disabled.`);
   }
-  return MATTER_MODE_AUTO;
+  return MATTER_MODE_HAP;
 }
 
 function getMatterConnection(config = {}, logger = null) {
@@ -62,6 +62,17 @@ function canUseMatterTransport(connection, usesMiCloud, localReady) {
     return localReady;
   }
   return localReady || usesMiCloud;
+}
+
+function isMatterReady(api) {
+  const matter = api?.matter;
+  return !!(
+    api?.isMatterAvailable?.() &&
+    api?.isMatterEnabled?.() &&
+    matter?.deviceTypes?.RoboticVacuumCleaner &&
+    ['registerPlatformAccessories', 'unregisterPlatformAccessories', 'updateAccessoryState']
+      .every(method => typeof matter[method] === 'function')
+  );
 }
 
 function getExternalMatterStorageId(accessoryUuid) {
@@ -445,7 +456,7 @@ class miotDeviceController {
   }
 
   _isMatterReady() {
-    return !!(this.api?.isMatterAvailable?.() && this.api?.isMatterEnabled?.() && this.api.matter);
+    return isMatterReady(this.api);
   }
 
   _warnMatterFallback(message) {
@@ -637,7 +648,7 @@ class miotPlatform {
       return;
     }
 
-    if (!this.api.matter) {
+    if (!isMatterReady(this.api)) {
       this.log.warn(`Cannot remove ${this.cachedMatterAccessories.length} stale Matter accessor${this.cachedMatterAccessories.length === 1 ? 'y' : 'ies'} because Homebridge Matter is unavailable.`);
       return;
     }
@@ -653,7 +664,7 @@ class miotPlatform {
   }
 
   async quarantineStaleExternalMatterStorage() {
-    if (!this.api?.user?.storagePath || !Array.isArray(this.config.devices)) {
+    if (!isMatterReady(this.api) || !this.api?.user?.storagePath || !Array.isArray(this.config.devices)) {
       return;
     }
 
@@ -719,7 +730,7 @@ class miotPlatform {
         accessory.plugin === PLUGIN_NAME &&
         accessory.context?.plugin === PLUGIN_NAME &&
         accessory.context?.deviceType === DevTypes.ROBOT_CLEANER);
-      const isStale = cachedAccessories.every(accessory => !expectedMatterUuids.has(accessory.uuid));
+      const isStale = cachedAccessories.every(accessory => !expectedMatterUuids.has(accessory.uuid || accessory.UUID));
       if (!belongsToMiot || !isStale) {
         continue;
       }
@@ -748,4 +759,5 @@ module.exports.getAccessoryExposure = getAccessoryExposure;
 module.exports.getExternalMatterStorageId = getExternalMatterStorageId;
 module.exports.getMatterConnection = getMatterConnection;
 module.exports.getMatterMode = getMatterMode;
+module.exports.isMatterReady = isMatterReady;
 module.exports.miotPlatform = miotPlatform;

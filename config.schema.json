@@ -187,7 +187,7 @@
                 "Matter only",
                 "HomeKit and Matter"
               ],
-              "default": "auto",
+              "default": "hap",
               "required": false
             },
             "matterRoomDiscovery": {

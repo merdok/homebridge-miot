@@ -7,7 +7,7 @@ const test = require('node:test');
 
 const plugin = require('../index.js');
 
-function createHarness(storagePath) {
+function createHarness(storagePath, options = {}) {
   const messages = [];
   const homebridge = {
     hap: {
@@ -30,7 +30,7 @@ function createHarness(storagePath) {
       ip: '192.168.20.29',
       token: 'test-token',
       deviceId: '1023306548',
-      matterEnabled: true
+      matterEnabled: options.matterEnabled ?? true
     }]
   };
   const log = {
@@ -40,7 +40,15 @@ function createHarness(storagePath) {
   };
   const api = {
     on() {},
-    user: { storagePath: () => storagePath }
+    user: { storagePath: () => storagePath },
+    isMatterAvailable: () => true,
+    isMatterEnabled: () => options.matterBridgeEnabled ?? true,
+    matter: {
+      deviceTypes: { RoboticVacuumCleaner: {} },
+      registerPlatformAccessories() {},
+      unregisterPlatformAccessories() {},
+      updateAccessoryState() {}
+    }
   };
 
   return { platform: new plugin.miotPlatform(log, config, api), config, messages };
@@ -66,10 +74,22 @@ test('keeps external Matter storage during a normal restart', async t => {
   const harness = createHarness(storagePath);
   const expected = await expectedStorage(harness, storagePath);
   await fs.writeFile(path.join(expected.storageDir, 'accessories.json'), JSON.stringify([{
-    uuid: expected.uuid,
+    UUID: expected.uuid,
     plugin: 'homebridge-miot',
     context: { plugin: 'homebridge-miot', deviceType: 'RobotCleaner' }
   }]));
+
+  await harness.platform.quarantineStaleExternalMatterStorage();
+
+  await fs.access(expected.storageDir);
+  assert.equal(harness.messages.length, 0);
+});
+
+test('does not run reset recovery when Homebridge Matter is disabled', async t => {
+  const storagePath = await fs.mkdtemp(path.join(os.tmpdir(), 'miot-matter-test-'));
+  t.after(() => fs.rm(storagePath, { recursive: true, force: true }));
+  const harness = createHarness(storagePath, { matterBridgeEnabled: false });
+  const expected = await expectedStorage(harness, storagePath);
 
   await harness.platform.quarantineStaleExternalMatterStorage();
 
