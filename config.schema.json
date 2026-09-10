@@ -36,7 +36,7 @@
           },
           "forceMiCloud": {
             "title": "Force MiCloud connection",
-            "description": "Use MiCloud instead of local connection even for devices that do not require it.",
+            "description": "Use MiCloud instead of local connection even for devices that do not require it. Matter-enabled robot cleaners try local MIOT first and use HAP/MiCloud when local setup fails.",
             "type": "boolean",
             "required": false
           },
@@ -48,7 +48,7 @@
           },
           "useCachedSession": {
             "title": "Use cached MiCloud session",
-            "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
+            "description": "Use the cached session to connect to MiCloud or check Matter robot reachability. The UI can cache the previous discovery login or guide you through login; the plugin refreshes the token when credentials are configured.",
             "type": "boolean",
             "required": false
           }
@@ -140,6 +140,118 @@
               "type": "boolean",
               "default": true
             },
+            "matterEnabled": {
+              "title": "Enable Matter",
+              "description": "Expose this Robot Cleaner through Homebridge Matter. Homebridge 2.x Matter must also be enabled on this bridge.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "matterConnection": {
+              "title": "Connection",
+              "description": "Auto tries local MIOT first and uses MiCloud if local setup fails. Local never uses MiCloud. Cloud always uses MiCloud and requires MiCloud credentials or a cached session.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "local",
+                "cloud"
+              ],
+              "enumNames": [
+                "Auto",
+                "Local",
+                "Cloud"
+              ],
+              "default": "auto",
+              "required": false
+            },
+            "matterHomeKitDockSwitch": {
+              "title": "Add HomeKit Return-to-Dock Switch",
+              "description": "Adds a momentary HomeKit switch for sending this Matter robot back to its dock from Apple Home automations and Shortcuts. The Homebridge bridge must also be paired with Apple Home.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
+            "matterMode": {
+              "title": "Legacy Matter mode",
+              "description": "Deprecated compatibility setting. Use Enable Matter and Connection instead.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "hap",
+                "matter",
+                "both"
+              ],
+              "enumNames": [
+                "Automatic",
+                "HomeKit only",
+                "Matter only",
+                "HomeKit and Matter"
+              ],
+              "default": "hap",
+              "required": false
+            },
+            "matterRoomDiscovery": {
+              "title": "Matter room discovery",
+              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster using local MIOT commands only.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "disabled"
+              ],
+              "enumNames": [
+                "Automatic",
+                "Disabled"
+              ],
+              "default": "auto",
+              "required": false
+            },
+            "matterRooms": {
+              "title": "Matter rooms",
+              "description": "Robot Cleaner only. Optional room overrides or manual room definitions for Matter ServiceArea.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "title": "Room id",
+                    "description": "Vendor room, segment, or area id used by the robot.",
+                    "type": [
+                      "string",
+                      "number"
+                    ],
+                    "required": true
+                  },
+                  "name": {
+                    "title": "Room name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "mapId": {
+                    "title": "Map id",
+                    "type": [
+                      "string",
+                      "number"
+                    ],
+                    "required": false
+                  },
+                  "areaType": {
+                    "title": "Matter area type",
+                    "description": "Optional Matter AreaNamespaceTag numeric value.",
+                    "type": "integer",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "matterRoomDiscoveryInterval": {
+              "title": "Matter room discovery interval",
+              "description": "Robot Cleaner only. How often to refresh room discovery, in hours.",
+              "type": "number",
+              "default": 6,
+              "minimum": 1,
+              "required": false
+            },
             "micloud": {
               "title": "MiCloud connection",
               "type": "object",
@@ -168,7 +280,7 @@
                 },
                 "forceMiCloud": {
                   "title": "Force MiCloud connection",
-                  "description": "Use MiCloud instead of local connection even for devices that do not require it.",
+                  "description": "Use MiCloud instead of local connection even for devices that do not require it. Matter-enabled robot cleaners try local MIOT first and use HAP/MiCloud when local setup fails.",
                   "type": "boolean",
                   "required": false
                 },
@@ -180,7 +292,7 @@
                 },
                 "useCachedSession": {
                   "title": "Use cached MiCloud session",
-                  "description": "Use the cached session to connect to MiCloud. Use the Ui to create/update the session.",
+                  "description": "Use the cached session to connect to MiCloud or check Matter robot reachability. The UI can cache the previous discovery login or guide you through login; the plugin refreshes the token when credentials are configured.",
                   "type": "boolean",
                   "required": false
                 }
@@ -530,7 +642,7 @@
         {
           "key": "devices[]",
           "type": "fieldset",
-          "title": "{{ value.title }}",
+          "title": "Device Settings",
           "items": [{
               "type": "fieldset",
               "title": "Advanced Settings",
@@ -546,6 +658,49 @@
                 "devices[].silentLog",
                 "devices[].deviceEnabled"
               ]
+            },
+            {
+              "type": "fieldset",
+              "title": "Matter Settings",
+              "description": "Robot Cleaner only. Homebridge 2.x Matter must also be enabled on the main bridge or this plugin's child bridge. Auto and Cloud can use a cached MiCloud session for connection fallback and reachability checks.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].matterEnabled",
+                "devices[].matterConnection",
+                "devices[].matterHomeKitDockSwitch",
+                {
+                  "type": "fieldset",
+                  "title": "Advanced Matter Settings",
+                  "description": "Optional room discovery and room overrides.",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].matterRoomDiscovery",
+                    "devices[].matterRoomDiscoveryInterval",
+                    {
+                      "key": "devices[].matterRooms",
+                      "description": "Optional room overrides for Matter ServiceArea.",
+                      "buttonText": "Add Matter room",
+                      "type": "fieldset",
+                      "expandable": true,
+                      "expanded": false,
+                      "items": [
+                        "devices[].matterRooms[].id",
+                        "devices[].matterRooms[].name",
+                        "devices[].matterRooms[].mapId",
+                        "devices[].matterRooms[].areaType"
+                      ]
+                    }
+                  ],
+                  "condition": {
+                    "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled === true || (typeof device.matterEnabled === 'undefined' && ['auto', 'matter', 'both'].indexOf(device.matterMode) !== -1);"
+                  }
+                }
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/vacuum|robot.?cleaner/i);"
+              }
             },
             {
               "type": "fieldset",
@@ -648,7 +803,10 @@
                     "devices[].propertyMonitor[].linkedPropertyValue"
                   ]
                 }
-              ]
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true;"
+              }
             },
             {
               "type": "fieldset",
@@ -680,7 +838,7 @@
                 }
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/));"
               }
             },
             {
@@ -694,7 +852,7 @@
                 "devices[].offDelayControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(opple|yeelink)\\.light\\.(fan|fanlight)([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(opple|yeelink)\\.light\\.(fan|fanlight)([^.]+)$/));"
               }
             },
             {
@@ -707,7 +865,7 @@
                 "devices[].offDelayControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/));"
               }
             },
             {
@@ -721,7 +879,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/));"
               }
             },
             {
@@ -734,7 +892,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/));"
               }
             },
             {
@@ -758,7 +916,7 @@
                 }
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/));"
               }
             },
             {
@@ -771,7 +929,7 @@
                 "devices[].motorControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dooya|leshi|lumi)\\.curtain\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(dooya|leshi|lumi)\\.curtain\\.([^.]+)$/));"
               }
             },
             {
@@ -796,7 +954,7 @@
                 "devices[].co2AbnormalThreshold"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/));"
               }
             },
             {
@@ -810,7 +968,7 @@
                 "devices[].showTemperature"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/));"
               }
             },
             {
@@ -824,7 +982,7 @@
                 "devices[].fanLevelControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/));"
               }
             },
             {
@@ -837,7 +995,7 @@
                 "devices[].motorControl"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/));"
               }
             },
             {
@@ -858,7 +1016,7 @@
                 "devices[].co2AbnormalThreshold"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/));"
               }
             },
             {
@@ -871,7 +1029,7 @@
                 "devices[].foodAmount"
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return !device.model ||  device.model.match(/^([^.]+).feeder.([^.]+)$/);"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^([^.]+).feeder.([^.]+)$/));"
               }
             }
           ]

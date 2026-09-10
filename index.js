@@ -1,4 +1,6 @@
 const fs = require('fs').promises;
+const path = require('path');
+const { createHash } = require('crypto');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
@@ -11,7 +13,83 @@ let Service, Characteristic, Homebridge, Accessory;
 const PLUGIN_NAME = 'homebridge-miot';
 const PLATFORM_NAME = 'miot';
 const PLUGIN_VERSION = '1.9.0';
+const MATTER_MODE_AUTO = 'auto';
+const MATTER_MODE_HAP = 'hap';
+const MATTER_MODE_MATTER = 'matter';
+const MATTER_MODE_BOTH = 'both';
+const MATTER_MODES = [MATTER_MODE_AUTO, MATTER_MODE_HAP, MATTER_MODE_MATTER, MATTER_MODE_BOTH];
+const MATTER_CONNECTION_AUTO = 'auto';
+const MATTER_CONNECTION_LOCAL = 'local';
+const MATTER_CONNECTION_CLOUD = 'cloud';
+const MATTER_CONNECTIONS = [MATTER_CONNECTION_AUTO, MATTER_CONNECTION_LOCAL, MATTER_CONNECTION_CLOUD];
 
+function getMatterMode(config = {}, logger = null) {
+  if (typeof config.matterEnabled === 'boolean') {
+    return config.matterEnabled ? MATTER_MODE_MATTER : MATTER_MODE_HAP;
+  }
+
+  const mode = config.matterMode || MATTER_MODE_HAP;
+  if (MATTER_MODES.includes(mode)) {
+    return mode;
+  }
+  if (logger && logger.warn) {
+    logger.warn(`Unknown matterMode "${mode}". Matter will remain disabled.`);
+  }
+  return MATTER_MODE_HAP;
+}
+
+function getMatterConnection(config = {}, logger = null) {
+  const connection = config.matterConnection || MATTER_CONNECTION_AUTO;
+  if (MATTER_CONNECTIONS.includes(connection)) {
+    return connection;
+  }
+  if (logger && logger.warn) {
+    logger.warn(`Unknown matterConnection "${connection}". Falling back to "auto".`);
+  }
+  return MATTER_CONNECTION_AUTO;
+}
+
+function looksLikeRobotCleaner(value = '') {
+  value = String(value).toLowerCase();
+  return value.includes('vacuum') || value.includes('robot cleaner');
+}
+
+function canUseMatterTransport(connection, usesMiCloud, localReady) {
+  if (connection === MATTER_CONNECTION_CLOUD) {
+    return usesMiCloud;
+  }
+  if (connection === MATTER_CONNECTION_LOCAL) {
+    return localReady;
+  }
+  return localReady || usesMiCloud;
+}
+
+function isMatterReady(api) {
+  const matter = api?.matter;
+  return !!(
+    api?.isMatterAvailable?.() &&
+    api?.isMatterEnabled?.() &&
+    matter?.deviceTypes?.RoboticVacuumCleaner &&
+    ['registerPlatformAccessories', 'unregisterPlatformAccessories', 'updateAccessoryState']
+      .every(method => typeof matter[method] === 'function')
+  );
+}
+
+function getExternalMatterStorageId(accessoryUuid) {
+  return createHash('sha1').update(accessoryUuid).digest('hex').slice(0, 12).toUpperCase();
+}
+
+function getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady = true, connection = MATTER_CONNECTION_AUTO) {
+  if (deviceType !== DevTypes.ROBOT_CLEANER || matterMode === MATTER_MODE_HAP) {
+    return { hap: true, matter: false };
+  }
+
+  const canExposeMatter = matterReady && canUseMatterTransport(connection, usesMiCloud, localReady);
+  if (matterMode === MATTER_MODE_BOTH) {
+    return { hap: true, matter: canExposeMatter };
+  }
+  return canExposeMatter ? { hap: false, matter: true } : { hap: true, matter: false };
+}
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
@@ -49,6 +127,12 @@ class miotDeviceController {
     this.miCloudConfig = {};
     this.miCloudConfig.global = globalmicloudconfig;
     this.miCloudConfig.device = config.micloud;
+    this.matterConnection = getMatterConnection(config, this.logger);
+    if (getMatterMode(config) !== MATTER_MODE_HAP && this.matterConnection !== MATTER_CONNECTION_AUTO) {
+      this.miCloudConfig.device = Object.assign({}, config.micloud, {
+        forceMiCloud: this.matterConnection === MATTER_CONNECTION_CLOUD
+      });
+    }
     this.pollingInterval = config.pollingInterval || Constants.DEFAULT_POLLING_INTERVAL;
     if (this.pollingInterval < 500) {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
@@ -91,13 +175,12 @@ class miotDeviceController {
 
     // create cached micloud session file name
     this.cachedMiCloudSessionFile = api.user.storagePath() + Constants.MICLOUD_SESSION_CACHE_LOCATION;
+    this.miCloudConfig.cachedSessionFile = this.cachedMiCloudSessionFile;
 
     // generate uuid
-    if (this.deviceId) {
-      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + this.deviceId + PLATFORM_NAME);
-    } else {
-      this.UUID = Homebridge.hap.uuid.generate(this.token + this.ip + PLATFORM_NAME);
-    }
+    const uuidSeed = this.token + this.ip + (this.deviceId || '') + PLATFORM_NAME;
+    this.UUID = Homebridge.hap.uuid.generate(uuidSeed);
+    this.MatterUUID = Homebridge.hap.uuid.generate(uuidSeed + ':matter');
 
     // prepare variables
     this.miotDevice = undefined;
@@ -106,6 +189,11 @@ class miotDeviceController {
 
     // restored cached accessory
     this.restoredCachedAccessory = null;
+    this.restoredCachedMatterAccessory = null;
+    this.matterModeWarningShown = false;
+    this.robotCleanerMiCloudPolicyLogged = false;
+    this.robotCleanerMatterLocalReady = null;
+    this.robotCleanerMatterLocalError = null;
   }
 
 
@@ -139,7 +227,9 @@ class miotDeviceController {
 
     this.miotDevice.on(Events.MIOT_DEVICE_IDENTIFIED, async (miotDevice) => {
       // init the actual device
-      this._initDevice(miotDevice);
+      this._initDevice(miotDevice).catch((err) => {
+        this.logger.error(`Failed to initialize device ${this.name}: ${err.message}`);
+      });
     });
 
     this.miotDevice.on(Events.MIOT_DEVICE_SPEC_FETCHED, (miotDevice) => {
@@ -168,7 +258,9 @@ class miotDeviceController {
         } else {
           this.logger.info(`Successfully created a ${this.device.getType()} device! It is a ${this.device.getDeviceName()}.`);
         }
-        this.prepareAccessoryAndStartPolling();
+        await this._prepareRobotCleanerMatterTransport();
+        this._logRobotCleanerMiCloudPolicy();
+        await this.prepareAccessoryAndStartPolling();
       } else {
         this.logger.warn(`Something went wrong during device creation! Initialization failed, cannot create device!`);
       }
@@ -178,27 +270,68 @@ class miotDeviceController {
 
   /*----------========== SETUP SERVICES ==========----------*/
 
-  prepareAccessoryAndStartPolling() {
-    // first unregister a cached accessory if present!
-    if (this.restoredCachedAccessory) {
+  async prepareAccessoryAndStartPolling() {
+    const exposure = this._getAccessoryExposure();
+    const exposeHomeKitDockSwitch = exposure.matter && this.config.matterHomeKitDockSwitch === true;
+    const exposeHap = exposure.hap || exposeHomeKitDockSwitch;
+    let hasRegisteredAccessory = false;
+
+    // first unregister a cached HAP accessory if present and HAP is enabled for this device.
+    if (this.restoredCachedAccessory && exposeHap) {
       this.logger.debug('Found cached accessory for this device! Unregistering it first!');
       this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
       this.restoredCachedAccessory = null;
     }
 
-    // init the accessory
-    this.device.initDeviceAccessory(this.getAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo);
+    if (this.restoredCachedAccessory && !exposeHap) {
+      this.logger.info('Removing stale HAP accessory because this robot is configured for Matter.');
+      this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedAccessory]);
+      this.restoredCachedAccessory = null;
+    }
 
-    if (this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
+    if (exposeHap) {
+      const accessoryConfig = exposeHomeKitDockSwitch
+        ? {
+          ...this.config,
+          _matterHomeKitDockSwitchEnabled: true,
+          _matterHomeKitDockSwitchOnly: !exposure.hap
+        }
+        : this.config;
+      this.device.initDeviceAccessory(this.getAccessoryUuid(), accessoryConfig, this.api, this.cachedDeviceInfo);
+    }
+
+    if (exposeHap && this.device.getAccessoryWrapper() && this.device.getAccessories().length > 0) {
       this.logger.info(`Registering ${this.device.getAccessories().length} accessories!`);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, this.device.getAccessories());
+      hasRegisteredAccessory = true;
+    }
 
-      if (this.deviceEnabled) {
-        this.logger.info('Everything looks good! Initiating property polling!');
-        this.miotDevice.startPropertyPolling();
-      } else {
-        this.logger.warn('Device disabled, property polling will not be initiated! Please enable the device in the config.');
+    if (exposure.matter) {
+      await this.device.initDeviceMatterAccessory(this.getMatterAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo, this.restoredCachedMatterAccessory, {
+        roomCacheFile: this._getMatterRoomCacheFile()
+      });
+      const matterWrapper = this.device.getMatterAccessoryWrapper();
+      const matterAccessory = matterWrapper ? matterWrapper.getMatterAccessory() : null;
+      if (matterAccessory) {
+        if (this.restoredCachedMatterAccessory) {
+          this.logger.info('Reattached cached Matter robot accessory.');
+        } else {
+          this.logger.info('Registering Matter robot accessory!');
+          await this.api.matter.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [matterAccessory]);
+        }
+        hasRegisteredAccessory = true;
       }
+    } else if (this.restoredCachedMatterAccessory && this.api.matter) {
+      this.logger.info('Removing stale Matter accessory because this robot is configured for HAP or Matter is disabled.');
+      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [this.restoredCachedMatterAccessory]);
+      this.restoredCachedMatterAccessory = null;
+    }
+
+    if (hasRegisteredAccessory && this.deviceEnabled) {
+      this.logger.info('Everything looks good! Initiating property polling!');
+      this.miotDevice.startPropertyPolling();
+    } else if (hasRegisteredAccessory) {
+      this.logger.warn('Device disabled, property polling will not be initiated! Please enable the device in the config.');
     }
   }
 
@@ -208,8 +341,16 @@ class miotDeviceController {
     return this.UUID;
   }
 
+  getMatterAccessoryUuid() {
+    return this.MatterUUID;
+  }
+
   setRestoredCachedAccessory(accessory) {
     this.restoredCachedAccessory = accessory;
+  }
+
+  setRestoredCachedMatterAccessory(accessory) {
+    this.restoredCachedMatterAccessory = accessory;
   }
 
 
@@ -265,6 +406,121 @@ class miotDeviceController {
     }
   }
 
+  _getAccessoryExposure() {
+    const deviceType = this.device ? this.device.getType() : null;
+    if (deviceType !== DevTypes.ROBOT_CLEANER) {
+      return getAccessoryExposure(deviceType, MATTER_MODE_HAP, false, false);
+    }
+
+    const matterMode = this._getMatterMode();
+    const matterReady = this._isMatterReady();
+    const usesMiCloud = this._shouldUseMiCloudForRobotCleaner();
+    const localReady = this.robotCleanerMatterLocalReady !== false;
+    const matterConnection = this._getMatterConnection();
+    const exposure = getAccessoryExposure(deviceType, matterMode, matterReady, usesMiCloud, localReady, matterConnection);
+
+    if (deviceType === DevTypes.ROBOT_CLEANER && matterMode !== MATTER_MODE_HAP && !exposure.matter) {
+      this._warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady, matterConnection);
+    }
+
+    return exposure;
+  }
+
+  _getMatterMode() {
+    return getMatterMode(this.config, this.logger);
+  }
+
+  _getMatterConnection() {
+    return this.matterConnection;
+  }
+
+  _warnIfMatterUnavailable(matterMode, matterReady, usesMiCloud, localReady, matterConnection) {
+    if (matterReady && canUseMatterTransport(matterConnection, usesMiCloud, localReady)) {
+      return;
+    }
+
+    if (!matterReady) {
+      if (matterMode !== MATTER_MODE_AUTO) {
+        this._warnMatterFallback(`Matter mode "${matterMode}" requested, but Homebridge Matter is unavailable or disabled. Falling back to the HAP robot switch.`);
+      }
+      return;
+    }
+
+    if (matterConnection === MATTER_CONNECTION_CLOUD) {
+      this._warnMatterFallback('Matter Cloud connection requested, but MiCloud is unavailable. Falling back to the HAP robot switch.');
+    } else if (!localReady) {
+      const reason = this.robotCleanerMatterLocalError ? ` (${this.robotCleanerMatterLocalError})` : '';
+      const fallback = usesMiCloud ? 'HAP/MiCloud' : 'the HAP robot switch';
+      this._warnMatterFallback(`Local MIOT setup failed${reason}, and no MiCloud fallback is available. ${matterMode === MATTER_MODE_BOTH ? 'Only ' : ''}${fallback} will be used.`);
+    }
+  }
+
+  _isMatterReady() {
+    return isMatterReady(this.api);
+  }
+
+  _warnMatterFallback(message) {
+    if (!this.matterModeWarningShown) {
+      this.logger.warn(message);
+      this.matterModeWarningShown = true;
+    }
+  }
+
+  _getMatterRoomCacheFile() {
+    return this.prefsDir + 'matter_rooms_' + this.ip.split('.').join('') + '_' + this.token + '.json';
+  }
+
+  async _prepareRobotCleanerMatterTransport() {
+    const matterMode = this._getMatterMode();
+    if (!this._isRobotCleanerCandidate() || !this._isMatterReady() || matterMode === MATTER_MODE_HAP) {
+      return;
+    }
+
+    if (this._getMatterConnection() === MATTER_CONNECTION_CLOUD) {
+      this.logger.info('Homebridge Matter is enabled for this robot. Using the selected MiCloud connection.');
+      return;
+    }
+
+    this.logger.info('Homebridge Matter is enabled for this robot. Trying local MIOT before MiCloud.');
+    try {
+      await this.miotDevice.tryLocalConnection();
+      this.miotDevice.forceLocalConnection();
+      await this.device.detectLocalCapabilities?.();
+      this.robotCleanerMatterLocalReady = true;
+      this.robotCleanerMatterLocalError = null;
+      this.logger.info('Local MIOT connection succeeded. Matter robot control will stay local.');
+    } catch (err) {
+      this.robotCleanerMatterLocalReady = false;
+      this.robotCleanerMatterLocalError = err && err.message ? err.message : String(err);
+      this.logger.debug(`Local MIOT setup for Matter failed: ${this.robotCleanerMatterLocalError}`);
+    }
+  }
+
+  _logRobotCleanerMiCloudPolicy() {
+    if (!this._isRobotCleanerCandidate() || !this.miotDevice || this.robotCleanerMiCloudPolicyLogged) {
+      return;
+    }
+
+    this.robotCleanerMiCloudPolicyLogged = true;
+    if (this.robotCleanerMatterLocalReady === true) {
+      this.logger.info('Robot cleaner is connected through local MIOT for Homebridge Matter.');
+    } else if (this.robotCleanerMatterLocalReady === false && this._shouldUseMiCloudForRobotCleaner()) {
+      this.logger.info('Robot cleaner local MIOT setup failed. Using MiCloud for Homebridge Matter.');
+    } else if (this._shouldUseMiCloudForRobotCleaner()) {
+      this.logger.info('Robot cleaner is connected through MiCloud for Homebridge Matter.');
+    } else {
+      this.logger.info('Robot cleaner will use local MIOT. If local connection fails, select Auto or Cloud and configure MiCloud.');
+    }
+  }
+
+  _shouldUseMiCloudForRobotCleaner() {
+    return this._isRobotCleanerCandidate() && this.miotDevice && this.miotDevice.shouldUseMiCloud();
+  }
+
+  _isRobotCleanerCandidate() {
+    return (this.device && this.device.getType() === DevTypes.ROBOT_CLEANER) || looksLikeRobotCleaner(this.model || this.cachedDeviceInfo.model);
+  }
+
   async _createDirIfNeeded(dir) {
     try {
       await fs.access(dir)
@@ -287,6 +543,7 @@ class miotPlatform {
     this.log = log;
     this.api = api;
     this.config = config;
+    this.cachedMatterAccessories = [];
 
     if (this.api) {
       /*
@@ -295,8 +552,12 @@ class miotPlatform {
        * after this event was fired, in order to ensure they weren't added to homebridge already.
        * This event can also be used to start discovery of new accessories.
        */
-      this.api.on("didFinishLaunching", () => {
-        this.initDevices();
+      this.api.on("didFinishLaunching", async () => {
+        try {
+          await this.initDevices();
+        } catch (err) {
+          this.log.error(`Failed to initialize devices: ${err.message}`);
+        }
       });
     }
 
@@ -311,10 +572,17 @@ class miotPlatform {
     this.cachedAccessories.push(accessory);
   }
 
+  configureMatterAccessory(accessory) {
+    this.log.debug(`Found cached Matter accessory ${accessory.displayName}`);
+    this.cachedMatterAccessories.push(accessory);
+  }
+
   // ------------ CUSTOM METHODS ------------
 
-  initDevices() {
+  async initDevices() {
     this.log.info('Initializing devices');
+
+    await this.quarantineStaleExternalMatterStorage();
 
     // read from config.devices
     if (this.config.devices && Array.isArray(this.config.devices)) {
@@ -336,17 +604,26 @@ class miotPlatform {
 
     // remove all accessories which are still left over
     this.removeAccessories();
+    await this.removeMatterAccessories();
 
   }
 
   initDevice(deviceConfig) {
     const newDevCtrl = new miotDeviceController(this.log, deviceConfig, this.config.micloud, this.api);
     const restoredAccessory = this.cachedAccessories.find(accessory => accessory.UUID === newDevCtrl.getAccessoryUuid());
+    const restoredMatterAccessoryIndex = this.cachedMatterAccessories.findIndex(accessory => accessory.UUID === newDevCtrl.getMatterAccessoryUuid());
+    const restoredMatterAccessory = restoredMatterAccessoryIndex > -1 ? this.cachedMatterAccessories[restoredMatterAccessoryIndex] : null;
     if (restoredAccessory) {
       newDevCtrl.setRestoredCachedAccessory(restoredAccessory);
       this.cachedAccessories = this.cachedAccessories.filter(item => item !== restoredAccessory); // remove the cached accessory from the list since the controller will remove it later.
     }
-    newDevCtrl.setupController(); // begin the controller setup
+    if (restoredMatterAccessory) {
+      newDevCtrl.setRestoredCachedMatterAccessory(restoredMatterAccessory);
+      this.cachedMatterAccessories.splice(restoredMatterAccessoryIndex, 1);
+    }
+    newDevCtrl.setupController().catch((err) => {
+      this.log.error(`Failed to setup device ${deviceConfig.name}: ${err.message}`);
+    }); // begin the controller setup
   }
 
   removeAccessories() {
@@ -365,5 +642,122 @@ class miotPlatform {
     this.cachedAccessories = this.cachedAccessories.filter(item => item !== accessory);
   }
 
+  async removeMatterAccessories() {
+    if (!this.cachedMatterAccessories || this.cachedMatterAccessories.length === 0) {
+      this.log.debug('No Matter accessories to remove!');
+      return;
+    }
+
+    if (!isMatterReady(this.api)) {
+      this.log.warn(`Cannot remove ${this.cachedMatterAccessories.length} stale Matter accessor${this.cachedMatterAccessories.length === 1 ? 'y' : 'ies'} because Homebridge Matter is unavailable.`);
+      return;
+    }
+
+    const accessories = this.cachedMatterAccessories;
+    const names = accessories.map(accessory => `${accessory.displayName || 'Unnamed Matter accessory'} (${accessory.UUID})`).join(', ');
+    this.log.info(`Removing ${accessories.length} stale Matter accessor${accessories.length === 1 ? 'y' : 'ies'} no longer present in config: ${names}`);
+    try {
+      await this.api.matter.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, accessories);
+    } finally {
+      this.cachedMatterAccessories = [];
+    }
+  }
+
+  async quarantineStaleExternalMatterStorage() {
+    if (!isMatterReady(this.api) || !this.api?.user?.storagePath || !Array.isArray(this.config.devices)) {
+      return;
+    }
+
+    const expectedMatterUuids = new Set(this.config.devices
+      .filter(device => device)
+      .filter(device => getMatterMode(device) !== MATTER_MODE_HAP)
+      .filter(device => device.ip && device.token)
+      .map(device => {
+        const uuidSeed = device.token + device.ip + (device.deviceId || '') + PLATFORM_NAME;
+        return Homebridge.hap.uuid.generate(uuidSeed + ':matter');
+      }));
+    const expectedStorageIds = new Map(Array.from(expectedMatterUuids, uuid => [getExternalMatterStorageId(uuid), uuid]));
+
+    const storagePath = this.api.user.storagePath();
+    const matterStoragePath = path.join(storagePath, 'matter');
+    let entries;
+    try {
+      entries = await fs.readdir(matterStoragePath, { withFileTypes: true });
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        this.log.warn(`Could not inspect Matter accessory storage for stale MIOT robots: ${err.message}`);
+      }
+      return;
+    }
+
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+
+      const externalStoragePath = path.join(matterStoragePath, entry.name);
+      const cacheFile = path.join(externalStoragePath, 'accessories.json');
+      const expectedUuid = expectedStorageIds.get(entry.name.toUpperCase());
+      let cachedAccessories;
+      try {
+        cachedAccessories = JSON.parse(await fs.readFile(cacheFile, 'utf8'));
+      } catch (err) {
+        if (expectedUuid) {
+          await this._quarantineExternalMatterStorage(
+            externalStoragePath,
+            entry.name,
+            'Homebridge removed its Matter accessory cache. The robot will be published again with fresh pairing credentials.'
+          );
+        }
+        continue;
+      }
+
+      const expectedAccessoryIsMissing = expectedUuid && (!Array.isArray(cachedAccessories) ||
+        !cachedAccessories.some(accessory => (accessory.uuid || accessory.UUID) === expectedUuid));
+      if (expectedAccessoryIsMissing) {
+        await this._quarantineExternalMatterStorage(
+          externalStoragePath,
+          entry.name,
+          'Homebridge removed this configured Matter robot. It will be published again with fresh pairing credentials.'
+        );
+        continue;
+      }
+
+      if (!Array.isArray(cachedAccessories) || cachedAccessories.length === 0) {
+        continue;
+      }
+      const belongsToMiot = cachedAccessories.every(accessory =>
+        accessory.plugin === PLUGIN_NAME &&
+        accessory.context?.plugin === PLUGIN_NAME &&
+        accessory.context?.deviceType === DevTypes.ROBOT_CLEANER);
+      const isStale = cachedAccessories.every(accessory => !expectedMatterUuids.has(accessory.uuid || accessory.UUID));
+      if (!belongsToMiot || !isStale) {
+        continue;
+      }
+
+      const names = cachedAccessories.map(accessory => accessory.displayName || accessory.uuid).join(', ');
+      await this._quarantineExternalMatterStorage(externalStoragePath, entry.name, `The stored MIOT robot (${names}) is no longer present in config.`);
+    }
+  }
+
+  async _quarantineExternalMatterStorage(externalStoragePath, storageId, reason) {
+    const quarantineRoot = path.join(this.api.user.storagePath(), '.miot_matter_stale');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const quarantinePath = path.join(quarantineRoot, `${storageId}-${timestamp}`);
+    try {
+      await fs.mkdir(quarantineRoot, { recursive: true });
+      await fs.rename(externalStoragePath, quarantinePath);
+      this.log.info(`${reason} Quarantined its old external Matter storage at ${quarantinePath}.`);
+    } catch (err) {
+      this.log.warn(`Could not quarantine stale external Matter robot storage ${externalStoragePath}: ${err.message}`);
+    }
+  }
 
 }
+
+module.exports.getAccessoryExposure = getAccessoryExposure;
+module.exports.getExternalMatterStorageId = getExternalMatterStorageId;
+module.exports.getMatterConnection = getMatterConnection;
+module.exports.getMatterMode = getMatterMode;
+module.exports.isMatterReady = isMatterReady;
+module.exports.miotPlatform = miotPlatform;

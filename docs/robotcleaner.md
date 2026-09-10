@@ -1,7 +1,48 @@
 ## Robot Cleaner
 
 ### Robot Cleaner specific configuration fields
-- none
+- `matterEnabled` - Exposes the robot through Homebridge Matter. Default: `false`.
+- `matterConnection` - Selects the robot connection used by Matter. Default: `auto`.
+  - `auto` - Tries local MIOT first, then uses MiCloud when local setup fails and MiCloud is configured.
+  - `local` - Uses local MIOT only.
+  - `cloud` - Uses MiCloud only and requires MiCloud credentials or a cached session.
+- `matterHomeKitDockSwitch` - Adds a momentary HomeKit **Return to Dock** switch alongside the Matter robot. Default: `false`.
+- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. When enabled, the plugin tries local MIOT commands only; Matter room discovery does not use MiCloud.
+- `matterRoomDiscoveryInterval` - How often to refresh room discovery, in hours. Default: `6`.
+- `matterRooms` - Optional room definitions or name overrides for Matter room cleaning. Each entry can contain `id`, `name`, `mapId`, and `areaType`.
+
+Example:
+
+```js
+"matterEnabled": true,
+"matterConnection": "auto",
+"matterHomeKitDockSwitch": true,
+"matterRoomDiscovery": "auto",
+"matterRooms": [
+  {
+    "id": "80001026443",
+    "name": "Kitchen"
+  },
+  {
+    "id": "80001057044",
+    "name": "Living Room",
+    "areaType": 7
+  }
+]
+```
+
+Robot cleaners can use local MIOT or MiCloud. `auto` prefers local MIOT even when `micloud.forceMiCloud` or a model-level MiCloud requirement is configured, and uses MiCloud for Matter only if local setup fails. `local` overrides MiCloud forcing for the robot, while `cloud` forces MiCloud for the robot.
+The local path probes the capabilities exposed by each robot. It tries standard MIOT first and only uses legacy status, command, or room-mapping methods when the device responds to them. For `auto` and `cloud`, a configured credential pair or cached MiCloud session is also used for rate-limited reachability checks. If neither the LAN path nor MiCloud responds, Matter reads fail and the operational state changes to Error instead of continuing to serve stale state. The settings UI can reuse the most recent successful discovery/2FA login when **Cache MiCloud session** is pressed; if no prior login is available it opens the login flow and then enables the cache for Matter robots.
+
+Matter support requires Homebridge 2.x with Matter enabled on the main bridge or on the plugin child bridge. These bridge settings are independent. If Matter is disabled, unavailable, or the selected connection cannot be established, the plugin falls back to the existing HomeKit robot switch. The older `matterMode` setting remains accepted for configuration compatibility but is no longer shown in the settings UI.
+
+Apple Home exposes start and stop for Matter vacuums in automations, but does not currently expose send-to-dock as an automation action. `matterHomeKitDockSwitch` fills that gap with a plain HomeKit switch named `<robot> Return to Dock`. Turning it on calls the same `goHome()` command as the Matter vacuum and then resets the switch to off. Pair the Homebridge bridge (or this plugin's child bridge) with Apple Home in addition to commissioning the Matter robot; the switch travels over HomeKit, not Matter.
+
+When the robot reports charging complete, or reports 100% while charging, its Matter operational state is `Ready`. Robots that are still charging continue to report `Charging`.
+
+Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
+
+When a robot is removed or its identity changes, the plugin moves its orphaned external Matter storage into `~/.homebridge/.miot_matter_stale` (or the equivalent Homebridge storage path). If a configured robot is removed from Homebridge's Matter accessory cache, the plugin also quarantines the old commissioned storage before publishing it again, so it returns to the external-accessory list with fresh pairing credentials. The old storage remains recoverable.
 
 ### Room cleaning
 
@@ -237,7 +278,7 @@ After that you should get 3 additional switches which will allow you to set the 
 #### ijai (Mi Robot Vacuum-Mop 2 Pro)
 #### Example room cleaning config and parameters description
 
-For **ijai** based devices the `actionButtons` entry would look as follows (MiCloud connection details should be configured):
+For **ijai** based devices the `actionButtons` entry would look as follows:
 
 ```js
 "actionButtons": [
