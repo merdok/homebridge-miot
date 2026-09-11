@@ -5,8 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.9.1] - 2026-09-11
+### Changed
+- Update zhimi.fan.za4 spec
+
 ### Fixed
-- `value` and `linkedPropertyValue` of `propertyControl` / `propertyMonitor` entries are now converted to the format of the property. The Homebridge UI form stores them as strings, which made fixed value switches never report their state and sent string values to the device.
+- `value` and `linkedPropertyValue` of `propertyControl` / `propertyMonitor` entries are now converted to the format of the property. The Homebridge UI form stores them as strings, which made fixed value switches never report their state and sent string values to the device. Thanks @maksymenkoml for the contribution.
+
 
 ## [1.9.0] - 2026-07-24
 ### Added
