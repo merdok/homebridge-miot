@@ -63,6 +63,20 @@
           ]
         }
       },
+      "nameLanguage": {
+        "title": "Generated name language",
+        "description": "Language for automatically generated MIoT and HomeKit service display names. Auto uses the effective MiCloud country. Leave unset to preserve the existing naming behavior.",
+        "type": "string",
+        "enum": [
+          "auto",
+          "zh-Hans",
+          "zh-Hant",
+          "de",
+          "ru",
+          "en"
+        ],
+        "required": false
+      },
       "devices": {
         "title": "Devices",
         "type": "array",
@@ -101,6 +115,20 @@
               "title": "The device model",
               "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
               "type": "string",
+              "required": false
+            },
+            "nameLanguage": {
+              "title": "Generated name language",
+              "description": "Overrides the platform language for automatically generated MIoT and HomeKit service display names. Auto uses this device's effective MiCloud country.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "zh-Hans",
+                "zh-Hant",
+                "de",
+                "ru",
+                "en"
+              ],
               "required": false
             },
             "prefsDir": {
@@ -505,6 +533,16 @@
   },
   "layout": [{
       "type": "fieldset",
+      "title": "Generated Name Localization",
+      "description": "Configure the language used for automatically generated service display names.",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        "nameLanguage"
+      ]
+    },
+    {
+      "type": "fieldset",
       "title": "Global MiCloud Settings",
       "description": "Configure global MiCloud connection details used for all devices.",
       "expandable": true,
@@ -539,6 +577,7 @@
               "expanded": false,
               "items": [
                 "devices[].model",
+                "devices[].nameLanguage",
                 "devices[].prefsDir",
                 "devices[].pollingInterval",
                 "devices[].propertyChunkSize",
