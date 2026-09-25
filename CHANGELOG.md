@@ -6,18 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Added capability-driven local Matter fallbacks for robots that expose the legacy miIO command set.
-- Added MiCloud reachability fallback for Matter robot polling.
-- Added an optional HomeKit Return-to-Dock switch for Matter robot automations and Shortcuts.
+## [1.9.1] - 2026-09-11
+### Changed
+- Update zhimi.fan.za4 spec
 
 ### Fixed
-- Kept Matter robot exposure disabled unless it is explicitly enabled and Homebridge provides the complete robot Matter API.
-- Reused the most recent discovery/2FA login when caching a MiCloud session and enabled the cache for Matter robots.
-- Removed vertically rendered loading text from custom UI spinners.
-- Quarantined removed robots' stale external Matter storage so old vacuums no longer remain in the pairing list.
-- Recreated configured Matter robots with fresh pairing credentials after they are removed from Homebridge's Matter accessory cache.
-- Reported fully charged robots as the standard Matter docked state so Homebridge accepts the accessory definition.
+- `value` and `linkedPropertyValue` of `propertyControl` / `propertyMonitor` entries are now converted to the format of the property. The Homebridge UI form stores them as strings, which made fixed value switches never report their state and sent string values to the device. Thanks @maksymenkoml for the contribution.
+
 
 ## [1.9.0] - 2026-07-24
 ### Added
