@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0] - 2026-09-26
 ### Added
 - Added support for xiaomi.sensor_occupy.03 (Xiaomi Human Presence Sensor) as a HomeKit occupancy sensor. Thanks @skop1986 for the implementation and testing.
 - Added a unit test suite covering the plugin's core engine (utility helpers, MiotProperty/MiotAction/MiotService parsing, MiotDevice metadata layer, and BaseDevice value conversions) to guard base functionality against regressions.
@@ -15,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed non-battery devices (air purifiers, humidifiers, air monitors, etc.) exposing a spurious `StatusLowBattery` characteristic on their sensor services. It is now only added when the device actually reports a battery level.
 - Fixed the action duplicate-name guard in MiotDevice, which incorrectly checked existing property names instead of action names.
 - Fixed zhimi.airfresh.ua1 polling failing in cold conditions. The device firmware returns corrupted data for the inlet temperature property below zero, which timed out polling and eventually stopped it; the property is no longer exposed. Thanks @mrmaximas for the detailed report.
+
 
 ## [1.9.1] - 2026-09-11
 ### Changed

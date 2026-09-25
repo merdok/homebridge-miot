@@ -12,7 +12,7 @@ let Service, Characteristic, Homebridge, Accessory;
 
 const PLUGIN_NAME = 'homebridge-miot';
 const PLATFORM_NAME = 'miot';
-const PLUGIN_VERSION = '1.9.1';
+const PLUGIN_VERSION = '2.0.0';
 const MATTER_MODE_AUTO = 'auto';
 const MATTER_MODE_HAP = 'hap';
 const MATTER_MODE_MATTER = 'matter';
