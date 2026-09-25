@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added support for ijai.vacuum.v18 (Xiaomi Robot Vacuum S20). Thanks @claudiomadureira for the contribution.
 - Added Matter support for robot cleaners. Robots can now be exposed through Homebridge Matter (Homebridge 2.x), with configurable connection mode (auto/local/cloud), room discovery for the Matter ServiceArea cluster, and an optional HomeKit "Return to Dock" switch. Disabled by default. Thanks @Kief5555 for the contribution.
 
 ## [1.9.1] - 2026-09-11

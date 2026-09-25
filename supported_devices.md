@@ -187,6 +187,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   dreame.vacuum.p2041o (Xiaomi Vacuum Mop 2 Pro+)
 -   viomi.vacuum.v8 (Xiaomi Robot Vacuum-Mop Pro) 🔵[MiCloud]
 -   ijai.vacuum.v3 (Mi Robot Vacuum-Mop 2 Pro)
+-   ijai.vacuum.v18 (Xiaomi Robot Vacuum S20) 🔵[MiCloud]
 -   dreame.vacuum.p2150o (Mijia Robot Vacuum-Mop Dirt Disposal)
 -   dreame.vacuum.p2259 (Dreame Bot D9 Max)
 -   dreame.vacuum.p2187 (Dreame D9 Pro)
