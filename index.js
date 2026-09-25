@@ -307,19 +307,27 @@ class miotDeviceController {
     }
 
     if (exposure.matter) {
-      await this.device.initDeviceMatterAccessory(this.getMatterAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo, this.restoredCachedMatterAccessory, {
-        roomCacheFile: this._getMatterRoomCacheFile()
-      });
-      const matterWrapper = this.device.getMatterAccessoryWrapper();
-      const matterAccessory = matterWrapper ? matterWrapper.getMatterAccessory() : null;
-      if (matterAccessory) {
-        if (this.restoredCachedMatterAccessory) {
-          this.logger.info('Reattached cached Matter robot accessory.');
+      // isolate Matter setup so a failure here cannot skip property polling below or take down
+      // an already-registered HAP accessory (e.g. in 'both' mode).
+      try {
+        await this.device.initDeviceMatterAccessory(this.getMatterAccessoryUuid(), this.config, this.api, this.cachedDeviceInfo, this.restoredCachedMatterAccessory, {
+          roomCacheFile: this._getMatterRoomCacheFile()
+        });
+        const matterWrapper = this.device.getMatterAccessoryWrapper();
+        const matterAccessory = matterWrapper ? matterWrapper.getMatterAccessory() : null;
+        if (matterAccessory) {
+          if (this.restoredCachedMatterAccessory) {
+            this.logger.info('Reattached cached Matter robot accessory.');
+          } else {
+            this.logger.info('Registering Matter robot accessory!');
+            await this.api.matter.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [matterAccessory]);
+          }
+          hasRegisteredAccessory = true;
         } else {
-          this.logger.info('Registering Matter robot accessory!');
-          await this.api.matter.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [matterAccessory]);
+          this.logger.warn('Matter robot accessory could not be built. The robot will not be exposed through Matter.');
         }
-        hasRegisteredAccessory = true;
+      } catch (err) {
+        this.logger.warn(`Failed to set up the Matter robot accessory: ${err.message}. The robot will not be exposed through Matter.`);
       }
     } else if (this.restoredCachedMatterAccessory && this.api.matter) {
       this.logger.info('Removing stale Matter accessory because this robot is configured for HAP or Matter is disabled.');
