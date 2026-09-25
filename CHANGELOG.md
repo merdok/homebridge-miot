@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Matter support for robot cleaners. Robots can now be exposed through Homebridge Matter (Homebridge 2.x), with configurable connection mode (auto/local/cloud), room discovery for the Matter ServiceArea cluster, and an optional HomeKit "Return to Dock" switch. Disabled by default. Thanks @Kief5555 for the contribution.
 
 ### Fixed
+- Fixed non-battery devices (air purifiers, humidifiers, air monitors, etc.) exposing a spurious `StatusLowBattery` characteristic on their sensor services. It is now only added when the device actually reports a battery level.
 - Fixed the action duplicate-name guard in MiotDevice, which incorrectly checked existing property names instead of action names.
 - Fixed zhimi.airfresh.ua1 polling failing in cold conditions. The device firmware returns corrupted data for the inlet temperature property below zero, which timed out polling and eventually stopped it; the property is no longer exposed. Thanks @mrmaximas for the detailed report.
 
