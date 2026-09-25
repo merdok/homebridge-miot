@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed the action duplicate-name guard in MiotDevice, which incorrectly checked existing property names instead of action names.
+- Fixed zhimi.airfresh.ua1 polling failing in cold conditions. The device firmware returns corrupted data for the inlet temperature property below zero, which timed out polling and eventually stopped it; the property is no longer exposed. Thanks @mrmaximas for the detailed report.
 
 ## [1.9.1] - 2026-09-11
 ### Changed
