@@ -310,6 +310,10 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   isa.magnet.dw2hl (Xiaomi Door and Windows Sensor 2)
 -   lumi.sensor_magnet.v2 (Xiaomi Mi Door and Window Sensor)
 
+### Occupancy Sensor
+
+-   xiaomi.sensor_occupy.03 (Xiaomi Human Presence Sensor)
+
 ### Gateway
 
 -   lumi.gateway.mgl03 (Xiaomi Gateway v3)
