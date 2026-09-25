@@ -177,6 +177,7 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   roborock.vacuum.a29 (Roborock Vacuum G10)
 -   roidmi.vacuum.v6 (Roidmi Eve Plus)
 -   roborock.vacuum.a10 (Roborock S6 MaxV)
+-   ijai.vacuum.v1 (Mi Robot Vacuum-Mop Pro)
 -   ijai.vacuum.v2 (Mi Robot Vacuum-Mop 2)
 -   roborock.vacuum.s5e (Roborock S5 MAX) 🔵[MiCloud]
 -   roborock.vacuum.s5 (Roborock S5) 🔵[MiCloud]

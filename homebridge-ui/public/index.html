@@ -258,6 +258,12 @@
   </div>
 </div>
 
+<div id="matterMiCloudSessionWarning" class="alert alert-warning mt-3" role="alert" style="display: none">
+  <strong>Matter robot setup warning.</strong>
+  <span class="matter-micloud-session-warning-text"></span>
+  <button class="btn btn-sm btn-warning ml-2" id="openMiCloudSessionCache" type="button">Cache MiCloud session</button>
+</div>
+
 
 <script>
   const homebridge = window.homebridge;
@@ -275,15 +281,200 @@
     }
     const configuration = pluginConfig[0];
     configuration.devices = configuration.devices || [];
+    let currentConfiguration = configuration;
+    let cachedMiCloudSession = null;
+    let hasCachedMiCloudSession = false;
+    let lastMatterMiCloudWarningKey = null;
+    let matterBridgeStatus = null;
 
-    function createForm(configSchema, configuration) {
-      const configForm = homebridge.createForm(configSchema, configuration);
-      configForm.onChange(async (changes) => {
-        await homebridge.updatePluginConfig([changes]);
-      })
+    function hasOwnProperty(obj, key) {
+      return !!obj && Object.prototype.hasOwnProperty.call(obj, key);
     }
 
-    let hasCachedMiCloudSession = false;
+    function escapeHtml(value) {
+      return $('<div>').text(value).html();
+    }
+
+    function usesMatter(device = {}) {
+      if (typeof device.matterEnabled === 'boolean') {
+        return device.matterEnabled;
+      }
+      return ['auto', 'matter', 'both'].includes(device.matterMode);
+    }
+
+    function usesMatterCloud(device = {}) {
+      return usesMatter(device) && (device.matterConnection || 'auto') !== 'local';
+    }
+
+    function migrateLegacyMatterSettings(config = {}) {
+      (Array.isArray(config.devices) ? config.devices : []).forEach(device => {
+        if (typeof device.matterEnabled !== 'boolean' && device.matterMode) {
+          device.matterEnabled = ['auto', 'matter', 'both'].includes(device.matterMode);
+          device.matterConnection = device.matterConnection || 'auto';
+        }
+      });
+    }
+
+    function findLayoutItem(items, title) {
+      for (const item of items || []) {
+        if (item && item.title === title) {
+          return item;
+        }
+        const nested = item && Array.isArray(item.items) ? findLayoutItem(item.items, title) : null;
+        if (nested) {
+          return nested;
+        }
+      }
+      return null;
+    }
+
+    function updateMatterStatusDescription() {
+      const fieldset = findLayoutItem(configSchema.layout, 'Matter Settings');
+      if (!fieldset) {
+        return;
+      }
+
+      if (!matterBridgeStatus || !matterBridgeStatus.success) {
+        fieldset.description = 'Robot Cleaner only. Matter status could not be verified. Use Homebridge 2.x and enable Matter on the main bridge or this plugin child bridge.';
+      } else if (matterBridgeStatus.enabled) {
+        fieldset.description = `Homebridge Matter is enabled on this ${matterBridgeStatus.scope}.`;
+      } else {
+        const location = matterBridgeStatus.scope === 'plugin child bridge' ? 'this plugin\'s child bridge settings' : 'Homebridge Settings';
+        fieldset.description = `Homebridge Matter is not enabled on this ${matterBridgeStatus.scope}. Enable Matter in ${location}, then restart Homebridge.`;
+      }
+    }
+
+    function getEffectiveMiCloudConfigProp(config = {}, device = {}, key) {
+      if (hasOwnProperty(device.micloud, key)) {
+        return device.micloud[key];
+      }
+      if (hasOwnProperty(config.micloud, key)) {
+        return config.micloud[key];
+      }
+      return null;
+    }
+
+    function getMatterMiCloudSessionWarnings(config = {}) {
+      const devices = Array.isArray(config.devices) ? config.devices : [];
+      return devices
+        .map((device, index) => {
+          return {
+            index,
+            device,
+            label: device.name || device.model || `device ${index + 1}`,
+            hasCredentials: !!(getEffectiveMiCloudConfigProp(config, device, 'username') && getEffectiveMiCloudConfigProp(config, device, 'password')),
+            useCachedSession: getEffectiveMiCloudConfigProp(config, device, 'useCachedSession') === true
+          };
+        })
+        .filter(entry => usesMatterCloud(entry.device))
+        .filter(entry => !entry.hasCredentials && !(cachedMiCloudSession && entry.useCachedSession));
+    }
+
+    function showMatterMiCloudSessionWarning(config = {}, showToast = false) {
+      const warnings = getMatterMiCloudSessionWarnings(config);
+      const warningEl = $('#matterMiCloudSessionWarning');
+      if (warnings.length === 0) {
+        warningEl.hide();
+        lastMatterMiCloudWarningKey = null;
+        return;
+      }
+
+      const labels = warnings.map(entry => escapeHtml(entry.label)).join(', ');
+      const subject = warnings.length === 1 ? `${labels} has` : `${labels} have`;
+      let message = `${subject} Matter enabled with Auto or Cloud selected, but MiCloud fallback and reachability checks will not be available until `;
+      if (!cachedMiCloudSession) {
+        message += 'you configure MiCloud credentials or log in from Cache MiCloud session and save a cached session.';
+      } else {
+        message += 'you configure MiCloud credentials or enable Use cached MiCloud session in the relevant device or global MiCloud settings.';
+      }
+
+      warningEl.find('.matter-micloud-session-warning-text').html(message);
+      warningEl.show();
+
+      const warningKey = warnings
+        .map(entry => `${entry.index}:${usesMatter(entry.device)}:${entry.device.matterConnection || 'auto'}:${entry.hasCredentials}:${entry.useCachedSession}`)
+        .join('|') + `:${!!cachedMiCloudSession}`;
+      if (showToast && warningKey !== lastMatterMiCloudWarningKey) {
+        homebridge.toast.warning(message, 'Matter MiCloud setup');
+      }
+      lastMatterMiCloudWarningKey = warningKey;
+    }
+
+    function createForm(configSchema, configuration) {
+      currentConfiguration = configuration;
+      const configForm = homebridge.createForm(configSchema, configuration);
+      configForm.onChange(async (changes) => {
+        currentConfiguration = changes;
+        showMatterMiCloudSessionWarning(currentConfiguration, true);
+        await homebridge.updatePluginConfig([changes]);
+      })
+      showMatterMiCloudSessionWarning(configuration);
+    }
+
+    async function enableCachedSessionForMatterRobots() {
+      let changed = false;
+      const devices = Array.isArray(currentConfiguration.devices) ? currentConfiguration.devices : [];
+      devices.forEach(device => {
+        if (!usesMatterCloud(device)) {
+          return;
+        }
+        device.micloud = device.micloud || {};
+        if (device.micloud.useCachedSession !== true) {
+          device.micloud.useCachedSession = true;
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        await homebridge.updatePluginConfig([currentConfiguration]);
+        createForm(configSchema, currentConfiguration);
+      }
+      showMatterMiCloudSessionWarning(currentConfiguration);
+    }
+
+    function openMiCloudLoginFlow() {
+      const previousUsername = $('#usernameInput').val();
+      const previousPassword = $('#passwordInput').val();
+      if (previousUsername && !$('#usernameMiCloudSessionInput').val()) {
+        $('#usernameMiCloudSessionInput').val(previousUsername);
+      }
+      if (previousPassword && !$('#passwordMiCloudSessionInput').val()) {
+        $('#passwordMiCloudSessionInput').val(previousPassword);
+      }
+      $('#miCloudSession').collapse('show');
+      $('#usernameMiCloudSessionInput').trigger('focus');
+    }
+
+    $('#openMiCloudSessionCache').on('click', async function() {
+      const btn = $(this);
+      btn.prop('disabled', true).text('Caching...');
+      try {
+        if (!cachedMiCloudSession) {
+          const result = await homebridge.request('/cache-last-micloud-session', {});
+          if (!result.success) {
+            openMiCloudLoginFlow();
+            homebridge.toast.info('Log in to MiCloud to cache a session for Matter reachability.', 'MiCloud login required');
+            return;
+          }
+          await updateCachedMiCloudSessionInfo();
+        }
+        await enableCachedSessionForMatterRobots();
+        homebridge.toast.success('MiCloud session cached and enabled for Matter robots.');
+      } catch (err) {
+        openMiCloudLoginFlow();
+        homebridge.toast.error(err.message || String(err), 'Could not cache MiCloud session');
+      } finally {
+        btn.prop('disabled', false).text('Cache MiCloud session');
+      }
+    });
+
+    migrateLegacyMatterSettings(configuration);
+    try {
+      matterBridgeStatus = await homebridge.request('/get-matter-status', {});
+    } catch (err) {
+      matterBridgeStatus = null;
+    }
+    updateMatterStatusDescription();
 
     // check whether we have a cached micloud session
     await updateCachedMiCloudSessionInfo();
@@ -292,14 +483,17 @@
     async function updateCachedMiCloudSessionInfo() {
       const cachedSessionResult = await homebridge.request('/get-cached-micloud-session', {});
       if (cachedSessionResult.success && cachedSessionResult.cachedSession) {
+        cachedMiCloudSession = cachedSessionResult.cachedSession;
         hasCachedMiCloudSession = true;
         const loginMethod = cachedSessionResult.cachedSession.loginMethod || 'unknown';
         const loggedInAt = cachedSessionResult.cachedSession.displayLoggedInAt || cachedSessionResult.cachedSession.loggedInAt || 'unknown';
         $('#cachedMiCloudSessionStatusLbl').html("Cached MiCloud session found! Login time : " + loggedInAt + ". Login method : " + loginMethod);
       } else {
+        cachedMiCloudSession = null;
         hasCachedMiCloudSession = false;
         $('#cachedMiCloudSessionStatusLbl').html("No cached MiCloud session found!");
       }
+      showMatterMiCloudSessionWarning(currentConfiguration);
     }
 
     // cloud devices helper
@@ -441,7 +635,7 @@
 
       if (hasCachedMiCloudSession || (username && password)) {
         $('.miot-message').hide();
-        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-label="Loading"></span>');
         usernameInput.prop('disabled', true);
         passwordInput.prop('disabled', true);
         autoAddToHomebridgeCheckbox.prop('disabled', true);
@@ -511,7 +705,7 @@
 
       if (username && password) {
         $('.miot-message').hide();
-        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-label="Loading"></span>');
         usernameInput.prop('disabled', true);
         passwordInput.prop('disabled', true);
 
@@ -523,6 +717,7 @@
         }).then(async data => {
           if (data.success) {
             await updateCachedMiCloudSessionInfo();
+            await enableCachedSessionForMatterRobots();
             homebridge.toast.success('Successfully cached the MiCloud session! You may now use it for device control.');
             $('.micloud-session.miot-message').show();
           } else if (!data.success && data.url) {
@@ -554,7 +749,7 @@
         qrStatus = $('#miCloudQrLoginStatusLbl');
 
       $('.miot-message').hide();
-      btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+      btn.prop('disabled', true).html('<span class="spinner-border" role="status" aria-label="Loading"></span>');
       qrStatus.html('');
 
       try {
@@ -586,6 +781,7 @@
 
           if (pollData.success) {
             await updateCachedMiCloudSessionInfo();
+            await enableCachedSessionForMatterRobots();
             qrStatus.html('MiCloud session successfully saved!');
             homebridge.toast.success('Successfully cached the MiCloud session! You may now use it for device control.');
             $('.micloud-session.miot-message').show();
@@ -627,7 +823,7 @@
         let valid = regex.test(deviceModel);
         if (valid) {
           $('.miot-message').hide();
-          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+          btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-label="Loading"></span>');
           modelInput.prop('disabled', true);
           nameInput.prop('disabled', true);
           requiresMiCloudCheckbox.prop('disabled', true);
@@ -676,7 +872,7 @@
         let valid = regex.test(deviceModel);
         if (valid) {
           $('.miot-message').hide();
-          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+          btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-label="Loading"></span>');
           modelInput.prop('disabled', true);
 
           homebridge.request('/get-device-metadata', {
