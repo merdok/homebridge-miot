@@ -75,6 +75,14 @@ function isMatterReady(api) {
   );
 }
 
+function getUuidSeed(config = {}) {
+  const stableId = ['string', 'number'].includes(typeof config.stableId) ? String(config.stableId).trim().toLowerCase() : '';
+  if (stableId) {
+    return 'stableId:' + stableId + PLATFORM_NAME;
+  }
+  return config.token + config.ip + (config.deviceId || '') + PLATFORM_NAME;
+}
+
 function getExternalMatterStorageId(accessoryUuid) {
   return createHash('sha1').update(accessoryUuid).digest('hex').slice(0, 12).toUpperCase();
 }
@@ -178,7 +186,7 @@ class miotDeviceController {
     this.miCloudConfig.cachedSessionFile = this.cachedMiCloudSessionFile;
 
     // generate uuid
-    const uuidSeed = this.token + this.ip + (this.deviceId || '') + PLATFORM_NAME;
+    const uuidSeed = getUuidSeed(config);
     this.UUID = Homebridge.hap.uuid.generate(uuidSeed);
     this.MatterUUID = Homebridge.hap.uuid.generate(uuidSeed + ':matter');
 
@@ -681,7 +689,7 @@ class miotPlatform {
       .filter(device => getMatterMode(device) !== MATTER_MODE_HAP)
       .filter(device => device.ip && device.token)
       .map(device => {
-        const uuidSeed = device.token + device.ip + (device.deviceId || '') + PLATFORM_NAME;
+        const uuidSeed = getUuidSeed(device);
         return Homebridge.hap.uuid.generate(uuidSeed + ':matter');
       }));
     const expectedStorageIds = new Map(Array.from(expectedMatterUuids, uuid => [getExternalMatterStorageId(uuid), uuid]));
@@ -767,5 +775,6 @@ module.exports.getAccessoryExposure = getAccessoryExposure;
 module.exports.getExternalMatterStorageId = getExternalMatterStorageId;
 module.exports.getMatterConnection = getMatterConnection;
 module.exports.getMatterMode = getMatterMode;
+module.exports.getUuidSeed = getUuidSeed;
 module.exports.isMatterReady = isMatterReady;
 module.exports.miotPlatform = miotPlatform;
