@@ -30,7 +30,8 @@ function createHarness(storagePath, options = {}) {
       ip: '192.168.20.29',
       token: 'test-token',
       deviceId: '1023306548',
-      matterEnabled: options.matterEnabled ?? true
+      matterEnabled: options.matterEnabled ?? true,
+      ...options.device
     }]
   };
   const log = {
@@ -82,6 +83,25 @@ test('keeps external Matter storage during a normal restart', async t => {
   await harness.platform.quarantineStaleExternalMatterStorage();
 
   await fs.access(expected.storageDir);
+  assert.equal(harness.messages.length, 0);
+});
+
+test('keeps external Matter storage of a device with a stableId after its token changes', async t => {
+  const storagePath = await fs.mkdtemp(path.join(os.tmpdir(), 'miot-matter-test-'));
+  t.after(() => fs.rm(storagePath, { recursive: true, force: true }));
+  const harness = createHarness(storagePath, { device: { token: 'new-token', stableId: 'robot-1' } });
+  const uuid = crypto.createHash('sha1').update('stableId:robot-1miot:matter').digest('hex');
+  const storageDir = path.join(storagePath, 'matter', plugin.getExternalMatterStorageId(uuid));
+  await fs.mkdir(storageDir, { recursive: true });
+  await fs.writeFile(path.join(storageDir, 'accessories.json'), JSON.stringify([{
+    UUID: uuid,
+    plugin: 'homebridge-miot',
+    context: { plugin: 'homebridge-miot', deviceType: 'RobotCleaner' }
+  }]));
+
+  await harness.platform.quarantineStaleExternalMatterStorage();
+
+  await fs.access(storageDir);
   assert.equal(harness.messages.length, 0);
 });
 

@@ -97,6 +97,12 @@
               "type": "string",
               "required": false
             },
+            "stableId": {
+              "title": "Stable accessory id",
+              "description": "Optional. Any unique value, for example the device MAC address (case does not matter). When set, the HomeKit accessory identity is derived from it instead of the token, ip and device id, so re-pairing the device in Mi Home (which issues a new token) keeps the accessory in HomeKit. Setting or changing it re-creates the accessory once.",
+              "type": "string",
+              "required": false
+            },
             "model": {
               "title": "The device model",
               "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
@@ -651,6 +657,7 @@
               "expanded": false,
               "items": [
                 "devices[].model",
+                "devices[].stableId",
                 "devices[].prefsDir",
                 "devices[].pollingInterval",
                 "devices[].propertyChunkSize",

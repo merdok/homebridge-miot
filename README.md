@@ -211,6 +211,8 @@ The ip address of your device.
 The token of your device.
 - `deviceId` [optional]
 The deviceId is required for a MiCloud connection to identify the device. If not specified an attempt will be made to retrieve it from a local connection to the device **Default: "" (not specified)**
+- `stableId` [optional]
+Any unique value, for example the device MAC address (case does not matter). When set, the HomeKit accessory identity is derived from it instead of the token, ip and deviceId, so re-pairing the device in Mi Home, which issues a new token, keeps the accessory with its room, scenes and automations. Setting or changing it re-creates the accessory once. **Default: "" (not specified)**
 - `model` [optional]
 The device model if known. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device. **Default: "" (not specified)**
 - `micloud` [optional]
