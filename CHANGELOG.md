@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Added support for dmaker.fan.p39 (Xiaomi Smart Tower Fan) and xiaomi.fan.p85 (Mijia Smart Standing Fan Pro Slim). Thanks @aashishvanand for the contribution.
-- Added the optional `stableId` device setting. When set, the HomeKit accessory identity no longer depends on the token, so re-pairing a device in Mi Home keeps it in HomeKit instead of adding it as a new accessory.
+- Added the optional `stableId` device setting. When set, the HomeKit accessory identity no longer depends on the token, so re-pairing a device in Mi Home keeps it in HomeKit instead of adding it as a new accessory. Thanks @dawidrylko for the contribution.
 
 ### Fixed
 - Robot cleaner Locate/Identify now also uses the dedicated `find-vacuum` action when present, so "play sound to locate" works on devices that expose it (e.g. xiaomi.vacuum.b108gl).
