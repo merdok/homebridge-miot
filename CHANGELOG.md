@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the optional `stableId` device setting. When set, the HomeKit accessory identity no longer depends on the token, so re-pairing a device in Mi Home keeps it in HomeKit instead of adding it as a new accessory. Thanks @dawidrylko for the contribution.
 
 ### Fixed
+- Matter robot cleaners connected through MiCloud (e.g. viomi.vacuum.v7/v8, which only work through MiCloud) now respond to start, pause, dock and mode commands. These commands previously required a local connection and always failed with "Robot cleaner is not connected locally." They now use the local connection when available and fall back to MiCloud otherwise.
 - Robot cleaner Locate/Identify now also uses the dedicated `find-vacuum` action when present, so "play sound to locate" works on devices that expose it (e.g. xiaomi.vacuum.b108gl).
 
 ## [2.0.0] - 2026-09-26
