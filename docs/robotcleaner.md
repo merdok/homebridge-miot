@@ -7,7 +7,8 @@
   - `local` - Uses local MIOT only.
   - `cloud` - Uses MiCloud only and requires MiCloud credentials or a cached session.
 - `matterHomeKitDockSwitch` - Adds a momentary HomeKit **Return to Dock** switch alongside the Matter robot. Default: `false`.
-- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. When enabled, the plugin tries local MIOT commands only; Matter room discovery does not use MiCloud.
+- `matterRoomDiscovery` - `auto` or `disabled`. Default: `auto`. Tries local MIOT commands. The optional MiCloud map fallback below runs only when local discovery returns no rooms.
+- `matterRoomDiscoveryMiCloud` - Allows automatic discovery to download Dreame saved maps through MiCloud. Default: `false`. Requires a local connection for the map reference and configured MiCloud credentials or an enabled cached session. Robot control continues to use the selected connection.
 - `matterRoomDiscoveryInterval` - How often to refresh room discovery, in hours. Default: `6`.
 - `matterRooms` - Optional room definitions or name overrides for Matter room cleaning. Each entry can contain `id`, `name`, `mapId`, and `areaType`.
 
@@ -40,7 +41,22 @@ Apple Home exposes start and stop for Matter vacuums in automations, but does no
 
 When the robot reports charging complete, or reports 100% while charging, its Matter operational state is `Ready`. Robots that are still charging continue to report `Charging`.
 
-Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Models without a discovery interface can still use `matterRooms` to provide room IDs manually. Discovery is intentionally local-only to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
+Matter room discovery is capability-driven rather than limited to one brand. The plugin uses MIOT map room-list actions or readable room metadata when a robot advertises them, plus the legacy `get_room_mapping` method for Roborock/Rockrobo models. Discovery stays local-only by default to avoid MiCloud rate limits; if a discovered room has no name, the plugin uses a stable label such as `Room 80001026443`.
+
+#### Automatic Dreame saved-map discovery
+
+Some Dreame robots, including the D9 (`dreame.vacuum.p2009`), expose a saved-map reference through `map:mult-map-info` instead of a readable room list. Enable **Allow MiCloud map discovery** under **Matter Settings → Advanced Matter Settings**, or add:
+
+```json
+"matterRoomDiscovery": "auto",
+"matterRoomDiscoveryMiCloud": true
+```
+
+Configure `micloud.country` to match the Xiaomi Home server region (for example, `us`), and provide MiCloud credentials or cache a session using the plugin UI with `micloud.useCachedSession` enabled. The plugin reads the map reference locally, downloads the saved map list through that existing account, and decodes the room names from the compressed map metadata. This supports embedded, unencrypted Dreame saved maps; encrypted maps and lists requiring separate map-object downloads remain unsupported.
+
+Only the map identified by `curr_id` is used. This value matches the binary map header ID, **not** the map's position or slot ID in the list. Room segment IDs are scoped to that active map, so rooms from other floors are not combined. Discovery populates the Matter room cache automatically; no `matterRooms` entries or edits to `config.json` are needed. Existing `matterRooms` entries still act as manual definitions/name overrides.
+
+Room discovery follows `matterRoomDiscoveryInterval` (six hours by default). After a map change, the next successful refresh replaces the discovered rooms, clears the previous room selection, and publishes the new areas to Matter. The plugin does not switch the vacuum's map when selecting a room. Failed downloads, unsupported formats, or an unknown current-map ID preserve the last successful room cache. Set `matterRoomDiscovery` to `disabled` to stop both discovery paths. Models without a supported discovery interface can still use `matterRooms` to provide room IDs manually.
 
 When a robot is removed or its identity changes, the plugin moves its orphaned external Matter storage into `~/.homebridge/.miot_matter_stale` (or the equivalent Homebridge storage path). If a configured robot is removed from Homebridge's Matter accessory cache, the plugin also quarantines the old commissioned storage before publishing it again, so it returns to the external-accessory list with fresh pairing credentials. The old storage remains recoverable.
 
