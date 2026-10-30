@@ -7,6 +7,11 @@ const DevTypes = require('./lib/constants/DevTypes.js');
 const Constants = require('./lib/constants/Constants.js');
 const Logger = require('./lib/utils/Logger.js');
 const Events = require('./lib/constants/Events.js');
+const {
+  MiotNameResolver,
+  resolveConfiguredNameLanguage,
+  resolveUrn,
+} = require('./lib/utils/MiotNameResolver.js');
 
 let Service, Characteristic, Homebridge, Accessory;
 
@@ -108,7 +113,7 @@ module.exports = function(homebridge) {
 
 
 class miotDeviceController {
-  constructor(log, config, globalmicloudconfig, api) {
+  constructor(log, config, globalmicloudconfig, globalNameLanguage, api) {
     this.log = log;
     this.config = config;
     this.api = api;
@@ -141,6 +146,12 @@ class miotDeviceController {
         forceMiCloud: this.matterConnection === MATTER_CONNECTION_CLOUD
       });
     }
+    this.localizationLanguage = resolveConfiguredNameLanguage({
+      deviceNameLanguage: config.nameLanguage,
+      globalNameLanguage,
+      deviceMiCloudConfig: config.micloud,
+      globalMiCloudConfig: globalmicloudconfig,
+    });
     this.pollingInterval = config.pollingInterval || Constants.DEFAULT_POLLING_INTERVAL;
     if (this.pollingInterval < 500) {
       this.pollingInterval = this.pollingInterval * 1000; // if less then 500 then probably those are seconds so multiply by 1000 to convert to miliseconds
@@ -177,6 +188,7 @@ class miotDeviceController {
 
     // spec dir to store device specs
     this.specDir = this.prefsDir + 'spec/';
+    this.localizationDir = this.specDir + 'localization/';
 
     // create device model info file name
     this.deviceInfoFile = this.prefsDir + 'info_' + this.ip.split('.').join('') + '_' + this.token;
@@ -259,6 +271,17 @@ class miotDeviceController {
       this.device = await DeviceFactory.createDevice(miotDevice, this.specDir, this.name, this.isCustomAccessory, this.logger);
       if (this.device) {
         await this.device.initDevice(this.propertyChunkSize);
+        const urn = resolveUrn(this.device.getMiotSpec(), this.device.getMiotSpecUrl());
+        const nameResolver = await MiotNameResolver.create({
+          language: this.localizationLanguage,
+          urn,
+          cacheDir: this.localizationDir,
+          logger: this.logger,
+        }).catch((err) => {
+          this.logger.warn(`Could not initialize generated-name localization: ${err.message}. Falling back to source names.`);
+          return new MiotNameResolver();
+        });
+        this.device.setHomeKitNameResolver(nameResolver);
         if (this.device.getType() === DevTypes.UNKNOWN) {
           this.logger.warn(`Device not supported! Using a generic device with limited properties! Consider requesting device support!`);
         } else if (this.device.getType() === DevTypes.CUSTOM) {
@@ -625,7 +648,13 @@ class miotPlatform {
   }
 
   initDevice(deviceConfig) {
-    const newDevCtrl = new miotDeviceController(this.log, deviceConfig, this.config.micloud, this.api);
+    const newDevCtrl = new miotDeviceController(
+      this.log,
+      deviceConfig,
+      this.config.micloud,
+      this.config.nameLanguage,
+      this.api,
+    );
     const restoredAccessory = this.cachedAccessories.find(accessory => accessory.UUID === newDevCtrl.getAccessoryUuid());
     const restoredMatterAccessoryIndex = this.cachedMatterAccessories.findIndex(accessory => accessory.UUID === newDevCtrl.getMatterAccessoryUuid());
     const restoredMatterAccessory = restoredMatterAccessoryIndex > -1 ? this.cachedMatterAccessories[restoredMatterAccessoryIndex] : null;
