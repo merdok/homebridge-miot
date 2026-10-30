@@ -198,7 +198,7 @@
             },
             "matterRoomDiscovery": {
               "title": "Matter room discovery",
-              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster using local MIOT commands only.",
+              "description": "Robot Cleaner only. Automatically discovers room and area IDs for the Matter ServiceArea cluster. Uses local MIOT unless the MiCloud map fallback is explicitly enabled.",
               "type": "string",
               "enum": [
                 "auto",
@@ -209,6 +209,13 @@
                 "Disabled"
               ],
               "default": "auto",
+              "required": false
+            },
+            "matterRoomDiscoveryMiCloud": {
+              "title": "Allow MiCloud map discovery",
+              "description": "Robot Cleaner only. Allows automatic discovery to download Dreame saved maps with the configured MiCloud credentials or cached session. Only rooms from the current map are exposed. Set the MiCloud country to the region used in Xiaomi Home. Robot control stays on the selected connection.",
+              "type": "boolean",
+              "default": false,
               "required": false
             },
             "matterRooms": {
@@ -684,6 +691,7 @@
                   "expanded": false,
                   "items": [
                     "devices[].matterRoomDiscovery",
+                    "devices[].matterRoomDiscoveryMiCloud",
                     "devices[].matterRoomDiscoveryInterval",
                     {
                       "key": "devices[].matterRooms",
