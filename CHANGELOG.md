@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added opt-in Dreame saved-map room discovery for Matter. Uses the configured MiCloud session and region, selects the active map by its binary header ID, and automatically caches and publishes that map's rooms.
 - Added support for dmaker.fan.p39 (Xiaomi Smart Tower Fan) and xiaomi.fan.p85 (Mijia Smart Standing Fan Pro Slim). Thanks @aashishvanand for the contribution.
 - Added the optional `stableId` device setting. When set, the HomeKit accessory identity no longer depends on the token, so re-pairing a device in Mi Home keeps it in HomeKit instead of adding it as a new accessory. Thanks @dawidrylko for the contribution.
 - Add optional localization for automatically generated MIoT and HomeKit service display names through `nameLanguage`.
