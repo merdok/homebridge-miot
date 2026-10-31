@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.1.0] - 2026-11-01
 ### Added
 - Added opt-in Dreame saved-map room discovery for Matter. Uses the configured MiCloud session and region, selects the active map by its binary header ID, and automatically caches and publishes that map's rooms. Thanks @solowalker27 for the contribution.
 - Added support for dmaker.fan.p39 (Xiaomi Smart Tower Fan) and xiaomi.fan.p85 (Mijia Smart Standing Fan Pro Slim). Thanks @aashishvanand for the contribution.
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the shutdown timer (off delay) control not appearing for zhimi.fan.za4. This fan exposes its timer as the countdown service rather than the standard off-delay property, so the control was no longer created; it is now mapped correctly.
 - Matter robot cleaners connected through MiCloud (e.g. viomi.vacuum.v7/v8, which only work through MiCloud) now respond to start, pause, dock and mode commands. These commands previously required a local connection and always failed with "Robot cleaner is not connected locally." They now use the local connection when available and fall back to MiCloud otherwise. Thanks @YoYoZ for the contribution.
 - Robot cleaner Locate/Identify now also uses the dedicated `find-vacuum` action when present, so "play sound to locate" works on devices that expose it (e.g. xiaomi.vacuum.b108gl).
+
 
 ## [2.0.0] - 2026-09-26
 ### Added
