@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add optional localization for automatically generated MIoT and HomeKit service display names through `nameLanguage`.
 
 ### Fixed
+- Fixed the shutdown timer (off delay) control not appearing for zhimi.fan.za4. This fan exposes its timer as the countdown service rather than the standard off-delay property, so the control was no longer created; it is now mapped correctly.
 - Matter robot cleaners connected through MiCloud (e.g. viomi.vacuum.v7/v8, which only work through MiCloud) now respond to start, pause, dock and mode commands. These commands previously required a local connection and always failed with "Robot cleaner is not connected locally." They now use the local connection when available and fall back to MiCloud otherwise.
 - Robot cleaner Locate/Identify now also uses the dedicated `find-vacuum` action when present, so "play sound to locate" works on devices that expose it (e.g. xiaomi.vacuum.b108gl).
 
