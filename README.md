@@ -60,7 +60,7 @@ The goal is to add Homekit support to miot devices and make them fully controlla
 
 More device types will be added!
 
-For a full list of supported devices by model check here: [all supported devices by model](https://github.com/merdok/homebridge-miot/blob/master/supported_devices.md).
+For a full list of supported devices by model check here: [all supported devices by model](https://github.com/merdok/homebridge-miot/blob/main/supported_devices.md).
 
 #### Even if your device is not on the supported devices list, worry not! The plugin will use the miot spec to categorize your device as best as possible.
 
