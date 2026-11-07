@@ -280,6 +280,7 @@ Allows to control any properties of your device. **Default: "" (not specified)**
     - *property* - [required] the property name or id
     - *name* - [optional] the name of the control
     - *value* - [optional] a fixed value which will be set to the property. When specified will create a stateless switch
+    - *bitMask* - [optional] a single-bit mask for a readable and writable `uint32` property. Creates a switch for that bit; cannot be used together with *value*. See the property control config section below.
     - *linkedProperty* - [optional] linked property used for status checking. Useful when control should only be possible when for example the device is on
     - *linkedPropertyValue* - [optional] the value of the linked property
     - *config* - [optional] a configuration object, for details see below
@@ -305,6 +306,17 @@ There are 4 ways to get the property an action names (or ids) used in ***actionB
 - You can also use the official miot spec in order to determine the names or ids [Miot Spec - Released](https://miot-spec.org/miot-spec-v2/instances?status=released)
 
 #### Property control config
+
+For readable and writable `uint32` bit fields, set `bitMask` to a mask containing one bit to create a switch. The switch reads the property before writing and preserves other bits. Do not specify `value` for a bitmask control. For example:
+
+```json
+"propertyControl": [
+  { "property": "2.3", "name": "Feature switch", "bitMask": "1" }
+]
+```
+
+Use a decimal or hexadecimal string for `bitMask` (for example, `"1"` or `"0x1"`) so that the Homebridge configuration UI can validate it. Changes from other controllers made between the read and write may still be overwritten.
+
 Some properties have a configuration which enables to change certain aspects of the resulting service.
 
 ###### Value range properties:
