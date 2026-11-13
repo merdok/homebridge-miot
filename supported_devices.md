@@ -83,6 +83,8 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 
 ### Air Purifier
 
+-   xiaomi.airp.cpa4 (Xiaomi Smart Air Purifier 4 Compact; [native controls and migration](docs/compact-air-purifier.md))
+
 -   zhimi.airpurifier.m1 (Xiaomi Mi Air Purifier 2 Mini) 🔵[MiCloud]
 -   zhimi.airpurifier.ma4 (Xiaomi Mi Air Purifier 3)
 -   zhimi.airpurifier.mb4 (Xiaomi Mi Air Purifier 3C)

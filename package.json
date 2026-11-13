@@ -62,6 +62,9 @@
     "qrcode-terminal": "^0.12.0",
     "env-paths": "^2.2.1"
   },
+  "devDependencies": {
+    "hap-nodejs": "^0.14.3"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/merdok/homebridge-miot.git"
