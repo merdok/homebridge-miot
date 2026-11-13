@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added opt-in local miIO address discovery by device ID, with authenticated connection checks and last-address fallback after DHCP changes.
 
 ## [2.1.0] - 2026-11-01
 ### Added

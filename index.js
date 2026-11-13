@@ -242,6 +242,7 @@ class miotDeviceController {
     let model = this.model || this.cachedDeviceInfo.model;
 
     this.miotDevice = new MiotDevice(this.ip, this.token, deviceId, model, this.name, this.logger);
+    this.miotDevice.setLocalDiscovery(this.config.localDiscovery);
     this.miotDevice.setPollingInterval(this.pollingInterval);
     this.miotDevice.setMiCloudConfig(this.miCloudConfig);
 
