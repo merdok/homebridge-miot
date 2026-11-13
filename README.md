@@ -212,7 +212,9 @@ The ip address of your device.
 - `token` [required]
 The token of your device.
 - `deviceId` [optional]
-The deviceId is required for a MiCloud connection to identify the device. If not specified an attempt will be made to retrieve it from a local connection to the device **Default: "" (not specified)**
+The deviceId is required for a MiCloud connection and for automatic local IP discovery. If neither is used and it is not specified, an attempt will be made to retrieve it from a local connection to the device. **Default: "" (not specified)**
+- `localDiscovery` [optional]
+Discover the current IP by numeric miIO device ID on startup and reconnection. Requires `deviceId`, the existing device token, and UDP port 54321 on the same broadcast network. Discovery uses no cloud requests; the plugin checks the device ID and authenticates the subsequent response before accepting a connection. Failed discovery falls back to the last address. Keep the saved `ip` unchanged: existing accessory identities can depend on it. This option does not change `stableId` or require re-pairing. **Default: false**
 - `stableId` [optional]
 Any unique value, for example the device MAC address (case does not matter). When set, the HomeKit accessory identity is derived from it instead of the token, ip and deviceId, so re-pairing the device in Mi Home, which issues a new token, keeps the accessory with its room, scenes and automations. Setting or changing it re-creates the accessory once. **Default: "" (not specified)**
 - `model` [optional]
