@@ -94,10 +94,17 @@
             },
             "ip": {
               "title": "Device ip address",
-              "description": "The ip address of the device.",
+              "description": "The ip address of the device. With local discovery enabled, keep this original value to preserve the Apple Home accessory identity; the current network address is discovered automatically.",
               "type": "string",
               "format": "ipv4",
               "required": true
+            },
+            "localDiscovery": {
+              "title": "Discover local IP automatically",
+              "description": "Find the device by its numeric device ID on startup and reconnection using local miIO broadcasts. Requires the same broadcast network. No Xiaomi cloud access is used.",
+              "type": "boolean",
+              "default": false,
+              "required": false
             },
             "token": {
               "title": "Device token",
@@ -107,7 +114,7 @@
             },
             "deviceId": {
               "title": "Device id",
-              "description": "The unique device id of the device. Required for MiCloud devices.",
+              "description": "The unique device id of the device. Required for MiCloud devices and automatic local IP discovery.",
               "type": "string",
               "required": false
             },
@@ -690,6 +697,7 @@
         "devices[].ip",
         "devices[].token",
         "devices[].deviceId",
+        "devices[].localDiscovery",
         {
           "key": "devices[]",
           "type": "fieldset",
