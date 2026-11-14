@@ -6,10 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Added opt-in local miIO address discovery by device ID, with authenticated connection checks and last-address fallback after DHCP changes.
+- Added opt-in local miIO address discovery by device ID, with authenticated connection checks and last-address fallback after DHCP changes. Thanks @m1h4 for the contribution.
+- Added single-bit switches for readable and writable uint32 properties through the `propertyControl` `bitMask` option. Thanks @foyoodo for the contribution.
+- Added native controls for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4). Thanks @m1h4 for the contribution.
 
-### Added
-- Added single-bit switches for readable and writable uint32 properties through the `propertyControl` `bitMask` option.
+### Fixed
+- Fixed Matter publishing for robots with only a vacuum cleaning action by providing an Auto mode to satisfy Matter's minimum of two supported clean modes. Thanks @solowalker27 for the contribution.
 
 ## [2.1.0] - 2026-11-01
 ### Added
