@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added single-bit switches for readable and writable uint32 properties through the `propertyControl` `bitMask` option.
+
 ## [2.1.0] - 2026-11-01
 ### Added
 - Added opt-in Dreame saved-map room discovery for Matter. Uses the configured MiCloud session and region, selects the active map by its binary header ID, and automatically caches and publishes that map's rooms. Thanks @solowalker27 for the contribution.

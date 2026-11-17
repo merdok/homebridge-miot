@@ -477,7 +477,15 @@
                   },
                   "value": {
                     "title": "value",
+                    "description": "A fixed property value. Do not use together with bit mask.",
                     "type": "string",
+                    "required": false
+                  },
+                  "bitMask": {
+                    "title": "bit mask",
+                    "description": "For a bit switch, enter a single-bit mask in decimal or hexadecimal (for example 262144 or 0x40000). Leave empty for a normal control.",
+                    "type": "string",
+                    "pattern": "^([0-9]+|0[xX][0-9a-fA-F]+)?$",
                     "required": false
                   },
                   "linkedProperty": {
@@ -836,6 +844,7 @@
                     "devices[].propertyControl[].property",
                     "devices[].propertyControl[].name",
                     "devices[].propertyControl[].value",
+                    "devices[].propertyControl[].bitMask",
                     "devices[].propertyControl[].linkedProperty",
                     "devices[].propertyControl[].linkedPropertyValue",
                     "devices[].propertyControl[].config"
