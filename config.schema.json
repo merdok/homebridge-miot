@@ -429,9 +429,7 @@
                   "params": {
                     "title": "params",
                     "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
+                    "items": {},
                     "required": false
                   }
                 }
@@ -457,9 +455,7 @@
                   "params": {
                     "title": "params",
                     "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
+                    "items": {},
                     "required": false
                   }
                 }
@@ -815,9 +811,7 @@
                       "key": "devices[].actionButtons[].params",
                       "type": "array",
                       "buttonText": "Add param",
-                      "items": {
-                        "type": "string"
-                      }
+                      "items": {}
                     }
                   ]
                 },
@@ -835,9 +829,7 @@
                       "key": "devices[].methodButtons[].params",
                       "type": "array",
                       "buttonText": "Add param",
-                      "items": {
-                        "type": "string"
-                      }
+                      "items": {}
                     }
                   ]
                 },
