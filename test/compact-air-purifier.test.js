@@ -31,8 +31,9 @@ async function fixture(config = {}) {
     property.updateInternalValue(v);
     return [{ code: 0 }];
   };
-  const accessory = AccessoryFactory.createAccessory('Purifier', device, uuid, config,
-    { hap, platformAccessory: hap.Accessory }, logger);
+  // the device selects its own CompactAirPurifierAccessory via initDeviceAccessory (no factory hook)
+  device.initDeviceAccessory(uuid, config, { hap, platformAccessory: hap.Accessory }, {});
+  const accessory = device.getAccessoryWrapper();
   return { miot, device, accessory, writes, value };
 }
 
@@ -87,7 +88,7 @@ test('onlyMainService keeps native controls without adding auxiliary services on
   const { accessory } = await fixture({ onlyMainService: true });
   accessory.updateAccessoryStatus();
   assert.deepEqual(accessory.getAccessory().services.map(service => service.UUID),
-    [hap.Service.AccessoryInformation.UUID, hap.Service.AirPurifier.UUID]);
+    [hap.Service.AirPurifier.UUID, hap.Service.AccessoryInformation.UUID]);
   await accessory.airPurifierService.getCharacteristic(C.RotationSpeed).handleSetRequest(20);
   assert.equal(accessory.getRotationSpeed(), 20);
 });
