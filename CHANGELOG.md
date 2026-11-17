@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added native controls for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4). Thanks @m1h4 for the contribution.
 
 ### Fixed
+- Reduced the number of DNS lookups and connections made during MiCloud polling by reusing a keep-alive connection for the recurring property requests. Previously every poll opened a new connection, which could make the plugin a large share of a network's DNS traffic.
 - Fixed Matter publishing for robots with only a vacuum cleaning action by providing an Auto mode to satisfy Matter's minimum of two supported clean modes. Thanks @solowalker27 for the contribution.
 
 ## [2.1.0] - 2026-11-01
