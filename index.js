@@ -3,6 +3,7 @@ const path = require('path');
 const { createHash } = require('crypto');
 const MiotDevice = require('./lib/protocol/MiotDevice.js');
 const DeviceFactory = require('./lib/factories/DeviceFactory.js');
+const MiotSpecUtils = require('./lib/utils/MiotSpecUtils.js');
 const DevTypes = require('./lib/constants/DevTypes.js');
 const Constants = require('./lib/constants/Constants.js');
 const Logger = require('./lib/utils/Logger.js');
@@ -436,13 +437,7 @@ class miotDeviceController {
 
   _saveMiotSpec(miotDevice) {
     if (miotDevice && miotDevice.getMiotSpec()) {
-      let fileName = this.specDir + miotDevice.getModel() + '.spec.json';
-      const miotSpec = JSON.stringify(miotDevice.getMiotSpec(), null, 2);
-      fs.writeFile(fileName, miotSpec, 'utf8').then(() => {
-        this.logger.debug('Successfully saved device miot spec!');
-      }).catch((err) => {
-        this.logger.debug(`Could not save device miot spec! Error: ${err}`);
-      });
+      MiotSpecUtils.saveCachedSpec(miotDevice.getModel(), this.specDir, miotDevice.getMiotSpec(), this.logger);
     }
   }
 

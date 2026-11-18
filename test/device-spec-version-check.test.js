@@ -239,3 +239,57 @@ test('refresh bails out when the cached spec version cannot be parsed', async ()
   }
   assert.equal(lookupCalled, false, 'no registry lookup when the cached version is unparseable');
 });
+
+
+/*----------========== loadCachedSpec / saveCachedSpec ==========----------*/
+
+test('saveCachedSpec then loadCachedSpec round-trips the spec object', async () => {
+  const { logger } = makeLogger();
+  const specDir = makeTempSpecDir();
+  const spec = { type: URN_V1, services: [{ siid: 2 }], properties: { 'a:b': { siid: 2, piid: 1 } } };
+  let loaded;
+  try {
+    await MiotSpecUtils.saveCachedSpec(MODEL, specDir, spec, logger);
+    loaded = await MiotSpecUtils.loadCachedSpec(MODEL, specDir, logger);
+  } finally {
+    fs.rmSync(specDir, { recursive: true, force: true });
+  }
+  assert.deepEqual(loaded, spec, 'the loaded spec equals what was saved');
+});
+
+test('loadCachedSpec returns null when there is no cache file', async () => {
+  const { logger } = makeLogger();
+  const specDir = makeTempSpecDir();
+  let loaded;
+  try {
+    loaded = await MiotSpecUtils.loadCachedSpec(MODEL, specDir, logger);
+  } finally {
+    fs.rmSync(specDir, { recursive: true, force: true });
+  }
+  assert.equal(loaded, null, 'missing cache file yields null, not a throw');
+});
+
+test('loadCachedSpec returns null and logs at debug on malformed json', async () => {
+  const { logger, logs } = makeLogger();
+  const specDir = makeTempSpecDir();
+  let loaded;
+  try {
+    fs.writeFileSync(specDir + MODEL + '.spec.json', '{ not valid json', 'utf8');
+    loaded = await MiotSpecUtils.loadCachedSpec(MODEL, specDir, logger);
+  } finally {
+    fs.rmSync(specDir, { recursive: true, force: true });
+  }
+  assert.equal(loaded, null, 'malformed json yields null, not a throw');
+  assert.ok(logs.debug.length >= 1, 'a debug line is logged');
+});
+
+test('saveCachedSpec is a no-op when given no spec', async () => {
+  const { logger } = makeLogger();
+  const specDir = makeTempSpecDir();
+  try {
+    await MiotSpecUtils.saveCachedSpec(MODEL, specDir, null, logger);
+    assert.equal(fs.existsSync(specDir + MODEL + '.spec.json'), false, 'nothing written for a null spec');
+  } finally {
+    fs.rmSync(specDir, { recursive: true, force: true });
+  }
+});
