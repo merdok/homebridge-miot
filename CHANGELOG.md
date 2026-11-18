@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added native controls for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4). Thanks @m1h4 for the contribution.
 
 ### Fixed
+- Fixed polling failures on slower devices that report `-30012 "busy."`. Property chunks are now requested sequentially instead of all at once (so the device is not overwhelmed), and a "busy" response is retried instead of failing the poll and dropping the device. This also fixes monitored sensors stuck reporting 0 on such devices.
 - Fixed Matter robot cleaners failing to publish ("Behaviors have errors") when a previously stored clean mode is no longer offered by the device. The current clean mode is now forced to a supported value, so a stale stored mode no longer removes the robot from HomeKit.
 - Fixed `actionButtons` / `methodButtons` params rejecting object entries (`{piid, value}`) in the config UI with "Expected string". The params schema was too strict; object params (used for example by room-clean actions) are accepted again, matching what the plugin already executes.
 - Reduced the number of DNS lookups and connections made during MiCloud polling by reusing a keep-alive connection for the recurring property requests. Previously every poll opened a new connection, which could make the plugin a large share of a network's DNS traffic.
