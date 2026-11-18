@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added native controls for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4). Thanks @m1h4 for the contribution.
 - Added a device definition for the Mi Smart Flowerpot (ymt.flowerpot.test01) that polls one property per request, as its firmware returns malformed replies for multi-property reads. This fixes its sensors reading 0 and removes the need to set `propertyChunkSize` manually. Thanks @jim-liu for the detailed mapping and testing.
 - Added a startup check that logs a warning when a device's bundled definition is behind the latest published miot spec version, so outdated definitions can be spotted and updated. The check is best-effort and never blocks or delays device startup.
+- Added a background refresh of the locally cached miot spec for devices without a dedicated definition: when a newer spec version is published the cache is re-fetched and updated so it is applied on the next restart. Previously a cached spec was fetched once and never refreshed. The refresh is best-effort and never blocks or delays device startup.
 
 ### Fixed
 - Fixed polling failures on slower devices that report `-30012 "busy."`. Property chunks are now requested sequentially instead of all at once (so the device is not overwhelmed), and a "busy" response is retried instead of failing the poll and dropping the device. This also fixes monitored sensors stuck reporting 0 on such devices.
