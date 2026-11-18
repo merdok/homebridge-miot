@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+
+## [2.2.0] - 2026-11-19
 ### Added
 - Added opt-in local miIO address discovery by device ID, with authenticated connection checks and last-address fallback after DHCP changes. Thanks @m1h4 for the contribution.
 - Added single-bit switches for readable and writable uint32 properties through the `propertyControl` `bitMask` option. Thanks @foyoodo for the contribution.
@@ -19,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `actionButtons` / `methodButtons` params rejecting object entries (`{piid, value}`) in the config UI with "Expected string". The params schema was too strict; object params (used for example by room-clean actions) are accepted again, matching what the plugin already executes.
 - Reduced the number of DNS lookups and connections made during MiCloud polling by reusing a keep-alive connection for the recurring property requests. Previously every poll opened a new connection, which could make the plugin a large share of a network's DNS traffic.
 - Fixed Matter publishing for robots with only a vacuum cleaning action by providing an Auto mode to satisfy Matter's minimum of two supported clean modes. Thanks @solowalker27 for the contribution.
+
 
 ## [2.1.0] - 2026-11-01
 ### Added
