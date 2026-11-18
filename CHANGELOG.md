@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added opt-in local miIO address discovery by device ID, with authenticated connection checks and last-address fallback after DHCP changes. Thanks @m1h4 for the contribution.
 - Added single-bit switches for readable and writable uint32 properties through the `propertyControl` `bitMask` option. Thanks @foyoodo for the contribution.
 - Added native controls for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4). Thanks @m1h4 for the contribution.
+- Added a device definition for the Mi Smart Flowerpot (ymt.flowerpot.test01) that polls one property per request, as its firmware returns malformed replies for multi-property reads. This fixes its sensors reading 0 and removes the need to set `propertyChunkSize` manually. Thanks @jim-liu for the detailed mapping and testing.
 
 ### Fixed
 - Fixed polling failures on slower devices that report `-30012 "busy."`. Property chunks are now requested sequentially instead of all at once (so the device is not overwhelmed), and a "busy" response is retried instead of failing the poll and dropping the device. This also fixes monitored sensors stuck reporting 0 on such devices.
