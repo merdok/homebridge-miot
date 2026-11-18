@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const DeviceFactory = require('../lib/factories/DeviceFactory.js');
+const SpecVersionUtils = require('../lib/utils/SpecVersionUtils.js');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher.js');
 
 // Issue #773 follow-up: bundled device definitions pin a miot spec version in
@@ -35,12 +35,12 @@ const URL_HEX = 'https://miot-spec.org/miot-spec-v2/instance?type=urn:miot-spec-
 
 
 test('_parseSpecVersionFromUrl handles both url shapes and missing urls', () => {
-  assert.equal(DeviceFactory._parseSpecVersionFromUrl(URL_V1), 1);
+  assert.equal(SpecVersionUtils.parseSpecVersionFromUrl(URL_V1), 1);
   // trailing hex template segment must not be read as the version
-  assert.equal(DeviceFactory._parseSpecVersionFromUrl(URL_HEX), 1);
-  assert.equal(DeviceFactory._parseSpecVersionFromUrl('https://x/instance?type=urn:miot-spec-v2:device:airer:0000A00D:hyd-znlyj1:2'), 2);
-  assert.equal(DeviceFactory._parseSpecVersionFromUrl(null), undefined);
-  assert.equal(DeviceFactory._parseSpecVersionFromUrl(''), undefined);
+  assert.equal(SpecVersionUtils.parseSpecVersionFromUrl(URL_HEX), 1);
+  assert.equal(SpecVersionUtils.parseSpecVersionFromUrl('https://x/instance?type=urn:miot-spec-v2:device:airer:0000A00D:hyd-znlyj1:2'), 2);
+  assert.equal(SpecVersionUtils.parseSpecVersionFromUrl(null), undefined);
+  assert.equal(SpecVersionUtils.parseSpecVersionFromUrl(''), undefined);
 });
 
 test('warns when a newer spec version is published for the model', async () => {
@@ -48,7 +48,7 @@ test('warns when a newer spec version is published for the model', async () => {
   const orig = MiotSpecFetcher.getLatestVersionForModel;
   MiotSpecFetcher.getLatestVersionForModel = async () => 3; // newer than pinned v1
   try {
-    DeviceFactory.checkSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
+    SpecVersionUtils.checkDeviceSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
     await flush();
   } finally {
     MiotSpecFetcher.getLatestVersionForModel = orig;
@@ -63,7 +63,7 @@ test('does not warn when the pinned version is current', async () => {
   const orig = MiotSpecFetcher.getLatestVersionForModel;
   MiotSpecFetcher.getLatestVersionForModel = async () => 1; // equal to pinned
   try {
-    DeviceFactory.checkSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
+    SpecVersionUtils.checkDeviceSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
     await flush();
   } finally {
     MiotSpecFetcher.getLatestVersionForModel = orig;
@@ -77,7 +77,7 @@ test('skips devices without a pinned spec url (class-less / generic)', async () 
   let fetcherCalled = false;
   MiotSpecFetcher.getLatestVersionForModel = async () => { fetcherCalled = true; return 5; };
   try {
-    DeviceFactory.checkSpecVersionIsCurrent(makeDevice('some.model.x', null), logger);
+    SpecVersionUtils.checkDeviceSpecVersionIsCurrent(makeDevice('some.model.x', null), logger);
     await flush();
   } finally {
     MiotSpecFetcher.getLatestVersionForModel = orig;
@@ -92,7 +92,7 @@ test('swallows fetch failures (best-effort, never throws, no warning)', async ()
   MiotSpecFetcher.getLatestVersionForModel = async () => { throw new Error('network down'); };
   try {
     // must not throw synchronously or reject unhandled
-    DeviceFactory.checkSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
+    SpecVersionUtils.checkDeviceSpecVersionIsCurrent(makeDevice('ymt.flowerpot.test01', URL_V1), logger);
     await flush();
   } finally {
     MiotSpecFetcher.getLatestVersionForModel = orig;
