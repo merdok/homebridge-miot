@@ -490,3 +490,13 @@ Not all of the methods might work on every device.
 - **get_segment_status**
 - **get_network_info**
 - **get_led_status**
+
+### Roidmi V60 room cleaning
+
+For `roidmi.vacuum.v60`, Matter vacuum-only room cleaning uses the vendor
+`sweep:start-sweep` action (SIID 14, AIID 1) with area mode `2` and a JSON payload
+containing `mapId` and numeric `segmentId` values. Configure a `mapId` for every
+entry in `matterRooms`. All selected rooms must belong to the same map.
+
+Mopping modes are not supported by this room-cleaning adapter. An empty room
+selection continues to use the existing whole-home cleaning path.
