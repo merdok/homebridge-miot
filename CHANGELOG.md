@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a startup check that logs a warning when a device's bundled definition is behind the latest published miot spec version, so outdated definitions can be spotted and updated. The check is best-effort and never blocks or delays device startup.
 - Added a background refresh of the locally cached miot spec for devices without a dedicated definition: when a newer spec version is published the cache is re-fetched and updated so it is applied on the next restart. Previously a cached spec was fetched once and never refreshed. The refresh is best-effort and never blocks or delays device startup.
 
+### Changed
+- Updated the zhimi.airp.vb4 (Smart Air Purifier 4) definition to miot spec v2, adding the air-quality sensor, the favorite fan level and the favorite-square property. Purely additive — no existing properties changed.
+
 ### Fixed
 - Fixed polling failures on slower devices that report `-30012 "busy."`. Property chunks are now requested sequentially instead of all at once (so the device is not overwhelmed), and a "busy" response is retried instead of failing the poll and dropping the device. This also fixes monitored sensors stuck reporting 0 on such devices.
 - Fixed Matter robot cleaners failing to publish ("Behaviors have errors") when a previously stored clean mode is no longer offered by the device. The current clean mode is now forced to a supported value, so a stale stored mode no longer removes the robot from HomeKit.
