@@ -619,6 +619,13 @@
               "type": "boolean",
               "required": false
             },
+            "detailedControls": {
+              "title": "Detailed mode and screen switches",
+              "description": "Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4) only. Adds Auto and Favorite mode switches next to Sleep, and Display Dim / Display Bright switches next to Display.",
+              "type": "boolean",
+              "default": false,
+              "required": false
+            },
             "motorControl": {
               "title": "Motor control service",
               "description": "Show motor control switches which allow to control the curtains.",
@@ -968,6 +975,7 @@
                 "devices[].screenControl",
                 "devices[].fanLevelControl",
                 "devices[].ioniserControl",
+                "devices[].detailedControls",
                 {
                   "key": "devices[].pm25Breakpoints",
                   "type": "array",
@@ -979,7 +987,7 @@
                 }
               ],
               "condition": {
-                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/));"
+                "functionBody": "var device = model.devices[arrayIndices]; return device.matterEnabled !== true && (!device.model || device.model.match(/^(hanyi|zhimi|xiaomi)\\.(airpurifier|airp)\\.([^.]+)$/));"
               }
             },
             {

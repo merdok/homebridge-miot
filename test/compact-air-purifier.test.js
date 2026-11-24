@@ -218,3 +218,68 @@ test('explicit mode requests are sent even when the cache already says Auto', as
   await accessory.setTargetAirPurifierState(C.TargetAirPurifierState.AUTO);
   assert.deepEqual(writes, [['air-purifier:mode', 0]]);
 });
+
+test('detailedControls adds Auto/Favorite and Dim/Bright switches with the generic subtypes', async () => {
+  const { accessory } = await fixture({ detailedControls: true });
+  const switches = accessory.getAccessory().services.filter(s => s.UUID === hap.Service.Switch.UUID);
+  assert.deepEqual(switches.map(s => s.displayName),
+    ['Auto', 'Sleep', 'Favorite', 'Display', 'Display Dim', 'Display Bright', 'Buzzer']);
+  assert.deepEqual(switches.map(s => s.subtype), [
+    'airPurifierModeService0', 'airPurifierModeService1', 'airPurifierModeService2',
+    'compactDisplayService', 'screenBrightnessService1', 'screenBrightnessService2', 'alarmAlarmService'
+  ]);
+});
+
+test('detailedControls still honours modeControl and screenControl', async () => {
+  const { accessory } = await fixture({ detailedControls: true, modeControl: false, screenControl: false });
+  assert.deepEqual(accessory.getAccessory().services.filter(s => s.UUID === hap.Service.Switch.UUID).map(s => s.displayName),
+    ['Buzzer']);
+});
+
+test('Auto and Favorite switches select their mode and power on; Favorite off returns to Auto', async () => {
+  const { accessory, device, writes, value } = await fixture({ detailedControls: true });
+  value('air-purifier:on', false);
+  assert.equal(accessory.getAutoMode(), false);
+  await accessory.favoriteModeService.getCharacteristic(C.On).handleSetRequest(true);
+  assert.deepEqual(writes, [['air-purifier:mode', 2], ['air-purifier:on', true]]);
+  assert.equal(accessory.getFavoriteMode(), true);
+  assert.equal(accessory.getAutoMode(), false);
+  assert.equal(accessory.favoriteModeService.getCharacteristic(C.On).value, true);
+  assert.equal(accessory.autoModeService.getCharacteristic(C.On).value, false);
+  await accessory.favoriteModeService.getCharacteristic(C.On).handleSetRequest(false);
+  assert.equal(device.getMode(), 0);
+  assert.equal(accessory.getAutoMode(), true);
+  // Turning Auto off has no target mode: nothing is written and it reports on again.
+  writes.length = 0;
+  await accessory.autoModeService.getCharacteristic(C.On).handleSetRequest(false);
+  assert.deepEqual(writes, []);
+  await new Promise(resolve => setTimeout(resolve, 150));
+  assert.equal(accessory.autoModeService.getCharacteristic(C.On).value, true);
+  await accessory.autoModeService.getCharacteristic(C.On).handleSetRequest(true);
+  assert.deepEqual(writes, [['air-purifier:mode', 0], ['air-purifier:on', true]]);
+});
+
+test('Dim and Bright switches select the screen brightness and Display restores the last one', async () => {
+  const { accessory, device } = await fixture({ detailedControls: true });
+  const brightness = () => device.getPropertyValue(device.screenBrightnessProp());
+  await accessory.displayBrightService.getCharacteristic(C.On).handleSetRequest(true);
+  assert.equal(brightness(), 2);
+  assert.equal(accessory.displayService.getCharacteristic(C.On).value, true);
+  assert.equal(accessory.displayBrightService.getCharacteristic(C.On).value, true);
+  assert.equal(accessory.displayDimService.getCharacteristic(C.On).value, false);
+  await accessory.displayDimService.getCharacteristic(C.On).handleSetRequest(true);
+  assert.equal(brightness(), 1);
+  assert.equal(accessory.displayBrightService.getCharacteristic(C.On).value, false);
+  // Turning off a level that is not active leaves the screen alone.
+  await accessory.displayBrightService.getCharacteristic(C.On).handleSetRequest(false);
+  assert.equal(brightness(), 1);
+  // Turning off the active level turns the screen off.
+  await accessory.displayDimService.getCharacteristic(C.On).handleSetRequest(false);
+  assert.equal(brightness(), 0);
+  assert.equal(accessory.displayService.getCharacteristic(C.On).value, false);
+  await accessory.displayBrightService.getCharacteristic(C.On).handleSetRequest(true);
+  await accessory.setDisplay(false);
+  await accessory.setDisplay(true);
+  assert.equal(brightness(), 2);
+  assert.equal(device.isOn(), true);
+});
