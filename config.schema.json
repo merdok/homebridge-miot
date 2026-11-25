@@ -617,18 +617,21 @@
               "title": "Screen control service",
               "description": "Whether to show led control buttons.",
               "type": "boolean",
+              "default": true,
               "required": false
             },
             "motorControl": {
               "title": "Motor control service",
               "description": "Show motor control switches which allow to control the curtains.",
               "type": "boolean",
+              "default": true,
               "required": false
             },
             "heaterControl": {
               "title": "Heater control service",
               "description": "Show a switch which allows to quickly enable the heater.",
               "type": "boolean",
+              "default": true,
               "required": false
             },
             "pm25Breakpoints": {
@@ -653,6 +656,7 @@
               "title": "Show temperature",
               "description": "Show temperature if the outlet supports temperature reporting.",
               "type": "boolean",
+              "default": true,
               "required": false
             },
             "foodAmount": {
