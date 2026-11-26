@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added an opt-in `detailedControls` option for the Xiaomi Smart Air Purifier 4 Compact (xiaomi.airp.cpa4) that brings back Auto and Favorite mode switches and adds Display Dim / Display Bright switches, so a specific mode or screen brightness can be used in HomeKit automations and scenes.
+
+### Fixed
+- Fixed the "Air Purifier specific settings" section of the config UI not being shown for xiaomi.airp.* models.
 
 
 ## [2.2.0] - 2026-11-19

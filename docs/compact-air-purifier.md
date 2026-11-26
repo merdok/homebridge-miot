@@ -22,13 +22,21 @@ the plugin's existing local or cloud connection configuration.
   Dim after a restart if the display is off. Brightness can still be selected in
   Xiaomi Home. This remains a switch so it does not join Siri's room lighting.
 - **Buzzer** remains an optional switch with its original subtype.
+- **Detailed switches (opt-in).** Set `"detailedControls": true` to also get
+  **Auto** and **Favorite** switches next to Sleep (when `modeControl` is on) and
+  **Display Dim** and **Display Bright** switches next to Display (when
+  `screenControl` is on). They reuse the subtypes the generic mode and
+  brightness switches had before this dedicated definition. Mode switches
+  power the purifier on; Favorite off returns to Auto; Auto off does nothing.
+  Turning off the active brightness level turns the display off. Useful for
+  automations and scenes that need a specific mode or brightness.
 - `modeControl`, `screenControl`, `buzzerControl`, and `childLockControl` retain
   their enable/disable roles. No configuration changes are required for this model.
 - Native air-quality and filter-maintenance services are linked to the purifier.
   Filter reset is exposed as the standard write-only maintenance characteristic,
   never as a reset switch. Its appearance depends on the HomeKit client.
 
-The Auto/Favorite switches and old three brightness switches are retired.
+By default the Auto/Favorite switches and old three brightness switches are retired.
 Automations targeting those removed switches need to use the native mode control
 or the new Display switch. The purifier, Sleep, Buzzer, air-quality and filter
 service identities remain stable.
