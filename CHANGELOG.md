@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed the "Air Purifier specific settings" section of the config UI not being shown for xiaomi.airp.* models.
+- Fixed the `screenControl`, `motorControl`, `heaterControl` and `showTemperature` options showing as unchecked in the config UI even though they are enabled by default, so the checkbox now reflects the actual default. Thanks @santiagosony for the contribution.
 
 
 ## [2.2.0] - 2026-11-19
