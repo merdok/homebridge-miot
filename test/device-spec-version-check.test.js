@@ -5,6 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 const MiotSpecUtils = require('../lib/utils/MiotSpecUtils.js');
+const MiotProtocolUtils = require('../lib/utils/MiotProtocolUtils.js');
 const MiotSpecFetcher = require('../lib/protocol/MiotSpecFetcher.js');
 
 // Issue #773 follow-up. Two best-effort, fire-and-forget behaviours around miot
@@ -60,14 +61,14 @@ const URN_V1 = 'urn:miot-spec-v2:device:flowerpot:0000A047:ymt-test01:1';
 
 
 test('parseSpecVersionFromUrl handles url shapes, raw urns and missing input', () => {
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl(URL_V1), 1);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl(URL_V1), 1);
   // trailing hex template segment must not be read as the version
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl(URL_HEX), 1);
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl('https://x/instance?type=urn:miot-spec-v2:device:airer:0000A00D:hyd-znlyj1:2'), 2);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl(URL_HEX), 1);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl('https://x/instance?type=urn:miot-spec-v2:device:airer:0000A00D:hyd-znlyj1:2'), 2);
   // works on a raw urn (cached spec .type), not just a full url
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl(URN_V1), 1);
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl(null), undefined);
-  assert.equal(MiotSpecUtils.parseSpecVersionFromUrl(''), undefined);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl(URN_V1), 1);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl(null), undefined);
+  assert.equal(MiotProtocolUtils.parseSpecVersionFromUrl(''), undefined);
 });
 
 test('warns when a newer spec version is published for the model', async () => {
