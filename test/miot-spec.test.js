@@ -90,7 +90,7 @@ test('parsing a raw fetched spec yields the same structure as MiotDevice.setMiot
   assert.deepEqual(spec.getAllServiceTypes(), dev.getAllServiceTypes());
   assert.deepEqual(spec.getAllPropertyNames().sort(), dev.getAllPropertyNames().sort());
   assert.deepEqual(spec.getAllActionNames().sort(), dev.getAllActionNames().sort());
-  assert.equal(spec.getType(), dev.getType(), 'derived type matches');
+  assert.equal(spec.getSpecType(), dev.getSpecType(), 'derived type matches');
   assert.equal(spec.getDescription(), dev.getDescription(), 'description matches');
   // resolve a property by siid.piid on both
   assert.equal(spec.getPropertyById('2.4').getName(), dev.getPropertyById('2.4').getName());
@@ -99,10 +99,10 @@ test('parsing a raw fetched spec yields the same structure as MiotDevice.setMiot
 
 /*----------========== METADATA ==========----------*/
 
-test('getType / getDescription / getVersion derive from the raw spec', () => {
+test('getSpecType / getDescription / getVersion derive from the raw spec', () => {
   const spec = newSpec();
   spec.setRaw(RAW_SPEC);
-  assert.equal(spec.getType(), 'flowerpot');
+  assert.equal(spec.getSpecType(), 'flowerpot');
   assert.equal(spec.getDescription(), 'Flowerpot');
   assert.equal(spec.getVersion(), 1);
 });
@@ -116,7 +116,7 @@ test('getVersion parses the trailing-hex urn shape', () => {
 test('metadata is safe when no raw spec is set', () => {
   const spec = newSpec();
   assert.equal(spec.getRawType(), '');
-  assert.equal(spec.getType(), null);
+  assert.equal(spec.getSpecType(), null);
   assert.equal(spec.getDescription(), '');
   assert.equal(spec.getVersion(), undefined);
 });
@@ -191,5 +191,5 @@ test('re-parsing a new raw spec resets the previous parsed structure', () => {
   // set a different, smaller spec - old entries must not linger
   spec.setRaw({ type: 'urn:miot-spec-v2:device:switch:0000A003:x-y:1', description: 'Switch', services: [{ siid: 2, type: 'urn:miot-spec-v2:service:switch:x:1', description: 'Switch' }], properties: {}, actions: {}, events: {} });
   assert.equal(spec.getAllPropertyNames().length, 0, 'previous properties were cleared');
-  assert.equal(spec.getType(), 'switch');
+  assert.equal(spec.getSpecType(), 'switch');
 });
